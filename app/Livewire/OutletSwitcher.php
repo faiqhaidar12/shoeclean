@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\Outlet;
 
 class OutletSwitcher extends Component
 {
@@ -15,26 +16,61 @@ class OutletSwitcher extends Component
 
     public function switchOutlet($outletId)
     {
-        if ($outletId === 'all') {
+        $user = auth()->user();
+        
+        if ($outletId === 'all' || $outletId === null || $outletId === '') {
             session()->forget('current_outlet_id');
             $this->currentOutletId = null;
         } else {
+            // Convert to int for consistent comparison
+            $outletId = (int) $outletId;
+            
             // Verify ownership/access
-            $outlet = \App\Models\Outlet::find($outletId);
-            if ($outlet && ($outlet->owner_id === auth()->id() || auth()->user()->outlet_id === $outlet->id)) {
+            $outlet = Outlet::find($outletId);
+            
+            if (!$outlet) {
+                session()->flash('error', 'Outlet tidak ditemukan');
+                return $this->redirect(route('dashboard'), navigate: true);
+            }
+            
+            // Check if user can access this outlet
+            $canAccess = false;
+            
+            if ($user->isOwner()) {
+                // Owner can access their owned outlets
+                $canAccess = $user->ownedOutlets->contains('id', $outletId);
+            } else {
+                // Staff can only access their assigned outlet
+                $canAccess = (int) $user->outlet_id === $outletId;
+            }
+            
+            if ($canAccess) {
                 session(['current_outlet_id' => $outletId]);
                 $this->currentOutletId = $outletId;
+            } else {
+                session()->flash('error', 'Anda tidak memiliki akses ke outlet ini');
             }
         }
 
-        return redirect(request()->header('Referer'));
+        // Redirect back to the same page - use Livewire's native redirect
+        $referer = request()->header('Referer');
+        if ($referer) {
+            return $this->redirect($referer, navigate: true);
+        }
+        
+        return $this->redirect(route('dashboard'), navigate: true);
     }
 
     public function render()
     {
-        $outlets = auth()->user()->ownedOutlets;
-        // If staff/admin, they might only see their assigned outlet? 
-        // For now owner sees all.
+        $user = auth()->user();
+        
+        if ($user->isOwner()) {
+            $outlets = $user->ownedOutlets;
+        } else {
+            // Staff only sees their assigned outlet
+            $outlets = $user->outlet ? collect([$user->outlet]) : collect();
+        }
         
         return view('livewire.outlet-switcher', [
             'outlets' => $outlets

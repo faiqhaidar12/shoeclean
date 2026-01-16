@@ -11,6 +11,12 @@
         </a>
     </div>
 
+    @if(session('success'))
+        <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg">
+            {{ session('success') }}
+        </div>
+    @endif
+
     @if($services->isEmpty())
         <div class="card text-center py-12">
             <div class="text-5xl mb-4">🧼</div>
@@ -20,17 +26,18 @@
         <!-- Responsive Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @foreach($services as $service)
-                <div class="card hover:shadow-md transition-shadow">
+                <div class="card hover:shadow-md transition-shadow {{ $service->status === 'inactive' ? 'opacity-60' : '' }}">
                     <div class="flex items-start justify-between">
                         <div class="flex-1">
-                            <h3 class="font-semibold text-gray-900">{{ $service->name }}</h3>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h3 class="font-semibold text-gray-900">{{ $service->name }}</h3>
+                                @if($service->status === 'inactive')
+                                    <span class="badge badge-danger text-xs">Inactive</span>
+                                @endif
+                            </div>
                             <p class="text-2xl font-bold text-primary-600 mt-2">Rp {{ number_format($service->price, 0, ',', '.') }}</p>
                             <p class="text-sm text-gray-500 mt-1">
-                                @if($service->is_per_item)
-                                    <span class="badge badge-info">Per Item</span>
-                                @else
-                                    <span class="badge bg-gray-100 text-gray-600">Flat Rate</span>
-                                @endif
+                                <span class="badge bg-gray-100 text-gray-600">Per {{ ucfirst($service->unit) }}</span>
                             </p>
                         </div>
                         <div class="flex items-center gap-1">
@@ -47,8 +54,10 @@
                             </button>
                         </div>
                     </div>
-                    @if($service->description)
-                        <p class="text-sm text-gray-500 mt-3 border-t pt-3">{{ $service->description }}</p>
+                    @if($service->outlet)
+                        <p class="text-xs text-gray-400 mt-3 pt-3 border-t">
+                            📍 {{ $service->outlet->name }}
+                        </p>
                     @endif
                 </div>
             @endforeach

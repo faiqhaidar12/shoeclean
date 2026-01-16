@@ -19,6 +19,7 @@ class CreatePromo extends Component
     public $max_uses;
     public $start_date;
     public $end_date;
+    public $is_active = true;
 
     public function mount()
     {
@@ -49,6 +50,7 @@ class CreatePromo extends Component
             'max_uses' => $this->max_uses,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
+            'is_active' => $this->is_active,
         ]);
 
         return redirect()->route('promos.index');

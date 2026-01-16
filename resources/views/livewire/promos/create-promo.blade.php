@@ -17,6 +17,25 @@
                 @error('code') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
             </div>
 
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Promo *</label>
+                <input type="text" wire:model="name" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Diskon Hari Raya">
+                @error('name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            @if($outlets->count() > 0)
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Berlaku di Outlet</label>
+                <select wire:model="outlet_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <option value="">Semua Outlet</option>
+                    @foreach($outlets as $outlet)
+                        <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
+                    @endforeach
+                </select>
+                <p class="text-xs text-gray-500 mt-1">Kosongkan untuk berlaku di semua outlet</p>
+            </div>
+            @endif
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Tipe *</label>
@@ -49,17 +68,24 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Max. Usage</label>
-                    <input type="number" wire:model="max_usage" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Kosongkan jika unlimited">
+                    <input type="number" wire:model="max_uses" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Kosongkan jika unlimited">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Berlaku Sampai</label>
-                    <input type="date" wire:model="valid_until" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai *</label>
+                    <input type="date" wire:model="start_date" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                    @error('start_date') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
 
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Berakhir *</label>
+                <input type="date" wire:model="end_date" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                @error('end_date') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+            </div>
+
             <div class="flex items-center gap-3">
-                <input type="checkbox" wire:model="is_active" id="is_active" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500" checked>
+                <input type="checkbox" wire:model="is_active" id="is_active" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
                 <label for="is_active" class="text-sm text-gray-700">Aktifkan promo ini</label>
             </div>
 
