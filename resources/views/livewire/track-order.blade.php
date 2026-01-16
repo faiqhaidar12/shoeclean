@@ -1,179 +1,165 @@
 <div class="min-h-screen flex flex-col">
     <!-- Header -->
-    <header class="p-4 sm:p-6">
-        <div class="max-w-2xl mx-auto">
-            <a href="/" class="inline-flex items-center gap-3 group">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl sm:rounded-2xl flex items-center justify-center text-white text-xl sm:text-2xl shadow-lg group-hover:scale-105 transition-transform">
-                    👟
+    <header class="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center text-white text-xl shadow-lg shadow-primary-600/20 group-hover:scale-105 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                 </div>
-                <span class="text-xl sm:text-2xl font-bold text-white">Shoe Clean</span>
+                <span class="text-xl font-bold text-gray-900 tracking-tight">Shoe Clean<span class="text-primary-600">.</span></span>
+            </a>
+            <a href="/" class="text-sm font-semibold text-gray-600 hover:text-primary-600 transition-colors">
+                Kembali
             </a>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="flex-1 flex items-start sm:items-center justify-center p-4 sm:p-6">
-        <div class="w-full max-w-2xl">
+    <main class="flex-1 pt-32 pb-16 px-6">
+        <div class="max-w-2xl mx-auto">
             <!-- Search Card -->
-            <div class="bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-white/20 shadow-2xl mb-6">
-                <div class="text-center mb-6">
-                    <h1 class="text-2xl sm:text-3xl font-bold text-white mb-2">🔍 Lacak Pesanan</h1>
-                    <p class="text-white/60 text-sm sm:text-base">Masukkan nomor invoice untuk cek status</p>
-                </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center mb-8">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Lacak Pesanan</h1>
+                <p class="text-gray-500 mb-6">Masukkan nomor invoice tracking sepatu Anda</p>
                 
-                <form wire:submit="search">
-                    <div class="flex flex-col gap-3">
+                <form wire:submit="search" class="max-w-md mx-auto">
+                    <div class="flex gap-2">
                         <input 
                             type="text" 
                             wire:model="invoice" 
-                            placeholder="Contoh: INV/20260115/1/0001"
-                            class="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white/10 border border-white/20 rounded-xl sm:rounded-2xl text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-sm sm:text-base"
+                            placeholder="INV/2026/..."
+                            class="flex-1 px-4 py-3 bg-gray-50 border-transparent focus:bg-white focus:border-primary-500 focus:ring-0 rounded-xl text-gray-900 placeholder-gray-400 font-medium transition-all"
                         >
-                        <button type="submit" class="w-full px-6 py-3 sm:py-4 bg-gradient-to-r from-primary-600 to-purple-600 text-white font-semibold rounded-xl sm:rounded-2xl hover:from-primary-700 hover:to-purple-700 transition-all shadow-lg shadow-primary-500/30 text-sm sm:text-base">
-                            🔍 Lacak Sekarang
+                        <button type="submit" class="px-6 py-3 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors shadow-lg shadow-primary-600/20">
+                            Cek
                         </button>
                     </div>
                 </form>
                 
                 @if($error)
-                    <div class="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-xl">
-                        <p class="text-red-300 text-sm text-center">❌ {{ $error }}</p>
+                    <div class="mt-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm font-medium">
+                        {{ $error }}
                     </div>
                 @endif
             </div>
 
             <!-- Order Result -->
             @if($order)
-                <div class="bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
-                    <!-- Order Header -->
-                    <div class="bg-gradient-to-r from-primary-600 to-purple-600 p-4 sm:p-6">
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                            <div>
-                                <p class="text-primary-100 text-xs sm:text-sm mb-1">Nomor Invoice</p>
-                                <h2 class="text-base sm:text-xl font-mono font-bold text-white break-all">{{ $order->invoice_number }}</h2>
-                                <p class="text-primary-200 text-xs sm:text-sm mt-1">{{ $order->created_at->format('d M Y, H:i') }}</p>
-                            </div>
-                            <div class="flex items-center gap-2 self-start sm:self-auto">
-                                <span class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold
-                                    {{ match($order->status) {
-                                        'completed', 'picked_up' => 'bg-emerald-500',
-                                        'cancelled' => 'bg-red-500',
-                                        'ready' => 'bg-blue-400',
-                                        'processing' => 'bg-amber-400 text-gray-800',
-                                        default => 'bg-gray-400'
-                                    } }}">
-                                    <span class="text-base">{{ match($order->status) {
-                                        'pending' => '⏳',
-                                        'processing' => '⚙️',
-                                        'ready' => '📦',
-                                        'picked_up' => '✅',
-                                        'completed' => '✅',
-                                        'cancelled' => '❌',
-                                    } }}</span>
-                                    {{ strtoupper(str_replace('_', ' ', $order->status)) }}
-                                </span>
-                            </div>
+                <div class="bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-100 overflow-hidden animate-fade-in relative">
+                    <!-- Status Header -->
+                    <div class="p-6 border-b border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Invoice</p>
+                            <h2 class="text-xl font-mono font-bold text-gray-900">{{ $order->invoice_number }}</h2>
+                        </div>
+                        <div class="flex items-center gap-2">
+                             <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold shadow-sm
+                                {{ match($order->status) {
+                                    'completed', 'picked_up' => 'bg-emerald-100 text-emerald-700 border border-emerald-200',
+                                    'cancelled' => 'bg-red-100 text-red-700 border border-red-200',
+                                    'ready' => 'bg-blue-100 text-blue-700 border border-blue-200',
+                                    default => 'bg-amber-100 text-amber-700 border border-amber-200'
+                                } }}">
+                                {{ match($order->status) {
+                                    'pending' => '⏳ Pending',
+                                    'processing' => '⚙️ Dikerjakan',
+                                    'ready' => '📦 Siap Ambil',
+                                    'picked_up' => '✅ Diambil',
+                                    'completed' => '✅ Selesai',
+                                    'cancelled' => '❌ Batal',
+                                    default => ucfirst($order->status)
+                                } }}
+                            </span>
                         </div>
                     </div>
 
-                    <!-- Status Progress -->
-                    <div class="p-4 sm:p-6 border-b border-gray-100">
-                        <h3 class="text-sm sm:text-base font-semibold text-gray-900 mb-4">📍 Progress Status</h3>
-                        
+                    <!-- Progress Timeline -->
+                    <div class="p-8 border-b border-gray-100">
                         @php
                             $statuses = ['pending', 'processing', 'ready', 'picked_up'];
-                            $labels = ['Diterima', 'Dikerjakan', 'Siap Ambil', 'Selesai'];
-                            $icons = ['📥', '🔧', '📦', '✅'];
+                            $labels = ['Diterima', 'Dikerjakan', 'Siap', 'Selesai'];
                             $currentIndex = array_search($order->status, $statuses);
+                            if ($order->status === 'completed') $currentIndex = 3; 
                             if ($order->status === 'cancelled') $currentIndex = -1;
-                            if ($order->status === 'completed') $currentIndex = 3;
                         @endphp
 
-                        <!-- Mobile: Vertical Timeline -->
-                        <div class="block sm:hidden space-y-3">
-                            @foreach($statuses as $index => $status)
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg flex-shrink-0
-                                        {{ $currentIndex >= $index ? 'bg-primary-600 text-white shadow-lg' : 'bg-gray-200 text-gray-400' }}">
-                                        @if($currentIndex >= $index) ✓ @else {{ $icons[$index] }} @endif
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="font-medium {{ $currentIndex >= $index ? 'text-primary-600' : 'text-gray-400' }}">
-                                            {{ $labels[$index] }}
-                                        </p>
-                                    </div>
-                                    @if($currentIndex == $index && !in_array($order->status, ['cancelled', 'completed', 'picked_up']))
-                                        <span class="text-xs bg-primary-100 text-primary-700 px-2 py-1 rounded-full animate-pulse">Saat ini</span>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
+                        <div class="relative flex items-center justify-between w-full">
+                            <!-- Line Background -->
+                            <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-1 bg-gray-100 rounded-full -z-0"></div>
+                            
+                            <!-- Active Line -->
+                            @if($currentIndex >= 0)
+                            <div class="absolute left-0 top-1/2 transform -translate-y-1/2 h-1 bg-primary-600 rounded-full -z-0 transition-all duration-500"
+                                style="width: {{ ($currentIndex / (count($statuses) - 1)) * 100 }}%"></div>
+                            @endif
 
-                        <!-- Desktop: Horizontal Timeline -->
-                        <div class="hidden sm:flex items-center justify-between">
                             @foreach($statuses as $index => $status)
-                                <div class="flex flex-col items-center z-10">
-                                    <div class="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold transition-all
-                                        {{ $currentIndex >= $index ? 'bg-primary-600 text-white shadow-lg shadow-primary-500/30' : 'bg-gray-200 text-gray-500' }}">
-                                        @if($currentIndex >= $index) ✓ @else {{ $index + 1 }} @endif
+                                <div class="relative z-10 flex flex-col items-center group">
+                                    <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 transition-all duration-300
+                                        {{ $currentIndex >= $index 
+                                            ? 'bg-primary-600 border-primary-600 text-white shadow-lg shadow-primary-600/30 scale-110' 
+                                            : 'bg-white border-gray-200 text-gray-300' }}">
+                                        @if($currentIndex > $index)
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                                        @elseif($currentIndex == $index)
+                                            <div class="w-2.5 h-2.5 bg-white rounded-full"></div>
+                                        @else
+                                            <div class="w-2.5 h-2.5 bg-gray-100 rounded-full"></div>
+                                        @endif
                                     </div>
-                                    <span class="text-xs mt-2 text-center {{ $currentIndex >= $index ? 'text-primary-600 font-semibold' : 'text-gray-400' }}">
+                                    <span class="absolute top-10 text-xs font-semibold whitespace-nowrap transition-colors duration-300
+                                        {{ $currentIndex >= $index ? 'text-primary-700' : 'text-gray-400' }}">
                                         {{ $labels[$index] }}
                                     </span>
                                 </div>
-                                @if(!$loop->last)
-                                    <div class="flex-1 h-1 mx-2 rounded {{ $currentIndex > $index ? 'bg-primary-600' : 'bg-gray-200' }}"></div>
-                                @endif
                             @endforeach
                         </div>
-
-                        @if($order->status === 'cancelled')
-                            <div class="mt-4 p-3 bg-red-50 border border-red-200 rounded-xl text-center">
-                                <p class="text-red-600 font-bold text-sm">❌ Order ini telah dibatalkan</p>
+                         @if($order->status === 'cancelled')
+                            <div class="mt-8 text-center text-red-600 font-medium p-3 bg-red-50 rounded-lg">
+                                Pesanan ini dibatalkan.
                             </div>
                         @endif
                     </div>
 
-                    <!-- Info Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 sm:p-6 border-b border-gray-100">
-                        <div class="bg-gray-50 rounded-xl p-4">
-                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Customer</p>
-                            <p class="font-semibold text-gray-900">{{ $order->customer->name }}</p>
-                            <p class="text-sm text-gray-600">{{ substr($order->customer->phone, 0, 4) . '****' . substr($order->customer->phone, -4) }}</p>
-                        </div>
-                        <div class="bg-gray-50 rounded-xl p-4">
-                            <p class="text-xs font-medium text-gray-500 uppercase mb-1">Outlet</p>
-                            <p class="font-semibold text-gray-900">{{ $order->outlet->name }}</p>
-                            <p class="text-sm text-gray-600">📞 {{ $order->outlet->phone ?? '-' }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Items -->
-                    <div class="p-4 sm:p-6">
-                        <h4 class="text-xs font-medium text-gray-500 uppercase mb-3">Detail Items</h4>
-                        <div class="space-y-2">
-                            @foreach($order->items as $item)
-                                <div class="flex justify-between items-center py-2 {{ !$loop->last ? 'border-b border-gray-100' : '' }}">
-                                    <div>
-                                        <p class="font-medium text-gray-900 text-sm sm:text-base">{{ $item->service->name }}</p>
-                                        <p class="text-xs text-gray-500">{{ $item->quantity }} × Rp {{ number_format($item->price, 0, ',', '.') }}</p>
-                                    </div>
-                                    <p class="font-bold text-gray-900 text-sm sm:text-base">Rp {{ number_format($item->total_price, 0, ',', '.') }}</p>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <!-- Total -->
-                        <div class="mt-4 pt-4 border-t-2 border-gray-200">
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600 font-medium">Total Pembayaran</span>
-                                <span class="text-xl sm:text-2xl font-bold text-primary-600">Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
+                    <!-- Details -->
+                    <div class="p-6">
+                        <div class="grid sm:grid-cols-2 gap-6 mb-8">
+                             <div>
+                                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Detail Pengerjaan</h4>
+                                <ul class="space-y-3">
+                                    @foreach($order->items as $item)
+                                        <li class="flex justify-between text-sm">
+                                            <span class="text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap pr-2">{{ $item->service->name }} <span class="text-gray-400">x{{ $item->quantity }}</span></span>
+                                            <span class="font-medium text-gray-900">Rp {{ number_format($item->total_price, 0, ',', '.') }}</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
-                            <div class="mt-2 flex justify-between items-center">
-                                <span class="text-gray-500 text-sm">Status Pembayaran</span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold
-                                    {{ $order->payment_status === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700' }}">
-                                    {{ $order->payment_status === 'paid' ? '✅ LUNAS' : '⏳ BELUM BAYAR' }}
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Info Outlet</h4>
+                                <div class="flex items-start gap-3">
+                                    <div class="p-2 bg-primary-50 text-primary-600 rounded-lg">
+                                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-semibold text-gray-900">{{ $order->outlet->name }}</p>
+                                        <p class="text-sm text-gray-500">{{ $order->outlet->address ?? 'Alamat tidak tersedia' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer Info -->
+                        <div class="flex items-center justify-between pt-6 border-t border-gray-100">
+                             <div>
+                                <p class="text-xs text-gray-400">Total Tagihan</p>
+                                <p class="text-2xl font-bold text-gray-900">Rp {{ number_format($order->total_price, 0, ',', '.') }}</p>
+                            </div>
+                            <div class="text-right">
+                                 <p class="text-xs text-gray-400 mb-1">Status Pembayaran</p>
+                                 <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold
+                                    {{ $order->payment_status === 'paid' ? 'bg-emerald-50 text-emerald-700' : 'bg-gray-100 text-gray-600' }}">
+                                    {{ $order->payment_status === 'paid' ? 'LUNAS' : 'BELUM BAYAR' }}
                                 </span>
                             </div>
                         </div>
@@ -184,12 +170,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="p-4 sm:p-6">
-        <div class="max-w-2xl mx-auto text-center">
-            <a href="/" class="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-                Kembali ke Home
-            </a>
-        </div>
+    <footer class="py-6 text-center text-sm text-gray-400">
+        &copy; {{ date('Y') }} Shoe Clean.
     </footer>
 </div>

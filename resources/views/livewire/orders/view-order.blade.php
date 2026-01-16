@@ -24,15 +24,31 @@
     } }}">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div class="flex items-center gap-3">
-                <span class="text-3xl">
-                    {{ match($order->status) {
-                        'completed', 'picked_up' => '✅',
-                        'cancelled' => '❌',
-                        'ready' => '📦',
-                        'processing' => '⚙️',
-                        default => '⏳'
-                    } }}
-                </span>
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center {{ match($order->status) {
+                    'completed', 'picked_up' => 'bg-emerald-100 text-emerald-600',
+                    'cancelled' => 'bg-red-100 text-red-600',
+                    'ready' => 'bg-blue-100 text-blue-600',
+                    'processing' => 'bg-amber-100 text-amber-600',
+                    default => 'bg-gray-100 text-gray-600'
+                } }}">
+                    @switch($order->status)
+                        @case('completed')
+                        @case('picked_up')
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            @break
+                        @case('cancelled')
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            @break
+                        @case('ready')
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                            @break
+                        @case('processing')
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            @break
+                        @default
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    @endswitch
+                </div>
                 <div>
                     <p class="font-bold text-lg {{ match($order->status) {
                         'completed', 'picked_up' => 'text-emerald-700',
@@ -40,7 +56,15 @@
                         'ready' => 'text-blue-700',
                         default => 'text-amber-700'
                     } }}">{{ strtoupper($order->status) }}</p>
-                    <p class="text-sm text-gray-600">{{ $order->payment_status === 'paid' ? '💰 Lunas' : '💳 Belum Bayar' }}</p>
+                    <p class="text-sm text-gray-600 flex items-center gap-1">
+                        @if($order->payment_status === 'paid')
+                            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Lunas
+                        @else
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                            Belum Bayar
+                        @endif
+                    </p>
                 </div>
             </div>
             <p class="text-2xl font-bold text-gray-900">Rp {{ number_format($order->total_price, 0, ',', '.') }}</p>
@@ -52,7 +76,12 @@
         <div class="lg:col-span-2 space-y-4 sm:space-y-6">
             <!-- Items -->
             <div class="card">
-                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-4">📋 Items</h3>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="p-1.5 bg-primary-100 text-primary-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900">Items</h3>
+                </div>
                 
                 <!-- Mobile: Stack View -->
                 <div class="block sm:hidden space-y-3">
@@ -100,7 +129,12 @@
 
             <!-- Customer Info -->
             <div class="card">
-                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-4">👤 Customer</h3>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="p-1.5 bg-primary-100 text-primary-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900">Customer</h3>
+                </div>
                 <div class="flex items-start gap-4">
                     <div class="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
                         {{ substr($order->customer->name, 0, 1) }}
@@ -109,7 +143,10 @@
                         <p class="font-bold text-gray-900">{{ $order->customer->name }}</p>
                         <p class="text-gray-600">{{ $order->customer->phone }}</p>
                         @if($order->customer->address)
-                            <p class="text-sm text-gray-500 mt-1">📍 {{ $order->customer->address }}</p>
+                            <p class="text-sm text-gray-500 mt-1 flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                {{ $order->customer->address }}
+                            </p>
                         @endif
                     </div>
                 </div>
@@ -120,7 +157,22 @@
                     if (str_starts_with($phone, '0')) {
                         $phone = '62' . substr($phone, 1);
                     }
-                    $waMessage = urlencode("Halo {$order->customer->name}, pesanan Anda dengan nomor invoice {$order->invoice_number} sudah siap diambil. Terima kasih! - Shoe Clean");
+                    
+                    // Dynamic message based on status
+                    $totalFormatted = 'Rp ' . number_format($order->total_price, 0, ',', '.');
+                    
+                    $waMessage = match($order->status) {
+                        'pending' => $order->payment_status === 'unpaid' 
+                            ? "Halo {$order->customer->name}, pesanan Anda ({$order->invoice_number}) sudah kami terima. Total: {$totalFormatted}. Silakan lakukan pembayaran. Terima kasih! - Shoe Clean"
+                            : "Halo {$order->customer->name}, pesanan Anda ({$order->invoice_number}) sudah kami terima dan pembayaran sudah masuk. Pesanan segera kami proses. Terima kasih! - Shoe Clean",
+                        'processing' => "Halo {$order->customer->name}, pesanan Anda ({$order->invoice_number}) sedang dalam proses pengerjaan. Kami akan kabari jika sudah selesai. Terima kasih! - Shoe Clean",
+                        'ready' => $order->payment_status === 'unpaid'
+                            ? "Halo {$order->customer->name}, pesanan Anda ({$order->invoice_number}) sudah siap diambil! Total: {$totalFormatted}. Silakan datang ke outlet kami. Terima kasih! - Shoe Clean"
+                            : "Halo {$order->customer->name}, pesanan Anda ({$order->invoice_number}) sudah siap dan lunas. Silakan datang ke outlet kami untuk pengambilan. Terima kasih! - Shoe Clean",
+                        'picked_up' => "Halo {$order->customer->name}, terima kasih telah menggunakan jasa kami! Pesanan {$order->invoice_number} sudah selesai. Semoga puas dengan layanan kami. Sampai jumpa! - Shoe Clean",
+                        default => "Halo {$order->customer->name}, ini adalah info pesanan Anda ({$order->invoice_number}). Ada yang bisa kami bantu? - Shoe Clean"
+                    };
+                    $waMessage = urlencode($waMessage);
                 @endphp
                 <a href="https://wa.me/{{ $phone }}?text={{ $waMessage }}" target="_blank"
                     class="mt-4 inline-flex items-center gap-2 px-4 py-2.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-medium">
@@ -141,27 +193,36 @@
         <div class="lg:col-span-1 space-y-4 sm:space-y-6">
             <!-- Status Workflow -->
             <div class="card">
-                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-4">⚡ Actions</h3>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="p-1.5 bg-amber-100 text-amber-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900">Actions</h3>
+                </div>
                 
                 <div class="space-y-2">
                     @if($order->status === 'pending')
-                        <button wire:click="updateStatus('processing')" class="w-full py-2.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium transition-colors">
-                            ⚙️ Mulai Processing
+                        <button wire:click="updateStatus('processing')" class="w-full py-2.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 font-medium transition-colors flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            Mulai Processing
                         </button>
-                        <button wire:click="updateStatus('cancelled')" class="w-full py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition-colors">
-                            ❌ Cancel Order
+                        <button wire:click="updateStatus('cancelled')" class="w-full py-2.5 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium transition-colors flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            Cancel Order
                         </button>
                     @endif
 
                     @if($order->status === 'processing')
-                        <button wire:click="updateStatus('ready')" class="w-full py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium transition-colors">
-                            📦 Mark Ready
+                        <button wire:click="updateStatus('ready')" class="w-full py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium transition-colors flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                            Mark Ready
                         </button>
                     @endif
 
                     @if($order->status === 'ready')
-                        <button wire:click="updateStatus('picked_up')" class="w-full py-2.5 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 font-medium transition-colors">
-                            ✅ Picked Up / Selesai
+                        <button wire:click="updateStatus('picked_up')" class="w-full py-2.5 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 font-medium transition-colors flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            Picked Up / Selesai
                         </button>
                     @endif
 
@@ -173,7 +234,12 @@
 
             <!-- Payment -->
             <div class="card">
-                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-4">💰 Payment</h3>
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="p-1.5 bg-emerald-100 text-emerald-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900">Payment</h3>
+                </div>
                 
                 <div class="mb-4 p-3 rounded-lg {{ $order->payment_status === 'paid' ? 'bg-emerald-50' : 'bg-gray-50' }}">
                     <p class="text-sm text-gray-600">Status</p>

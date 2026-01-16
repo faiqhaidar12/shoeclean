@@ -47,7 +47,7 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">Outlet *</label>
                 <select wire:model="outlet_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                     <option value="">Pilih Outlet</option>
-                    @foreach($outlets as $outlet)
+                    @foreach($availableOutlets as $outlet)
                         <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
                     @endforeach
                 </select>

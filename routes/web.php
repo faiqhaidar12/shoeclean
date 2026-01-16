@@ -2,7 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    $services = \App\Models\Service::active()->take(4)->get();
+    return view('welcome', compact('services'));
+});
 
 // Public Tracking (no auth)
 Route::get('/track', \App\Livewire\TrackOrder::class)->name('track');

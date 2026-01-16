@@ -35,11 +35,14 @@
                             <div>
                                 <p class="font-semibold text-gray-900">{{ $user->name }}</p>
                                 <p class="text-sm text-gray-500">{{ $user->email }}</p>
-                                <span class="badge mt-1 {{ match($user->role) {
-                                    'owner' => 'bg-purple-100 text-purple-800',
-                                    'admin' => 'badge-info',
-                                    default => 'bg-gray-100 text-gray-600'
-                                } }}">{{ ucfirst($user->role) }}</span>
+                                @php $role = $user->roles->first()?->slug; @endphp
+                                @if($role)
+                                    <span class="badge mt-1 {{ match($role) {
+                                        'owner' => 'bg-purple-100 text-purple-800',
+                                        'admin' => 'badge-info',
+                                        default => 'bg-gray-100 text-gray-600'
+                                    } }}">{{ ucfirst($role) }}</span>
+                                @endif
                             </div>
                         </div>
                         <a href="{{ route('users.edit', $user->id) }}" class="p-2 text-gray-400 hover:text-primary-600 rounded-lg hover:bg-primary-50">

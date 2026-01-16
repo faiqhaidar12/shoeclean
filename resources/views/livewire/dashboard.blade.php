@@ -143,7 +143,9 @@
                     </p>
                     <p class="text-2xl sm:text-3xl font-bold mt-1 sm:mt-2">{{ $monthOrders }}</p>
                 </div>
-                <div class="text-4xl sm:hidden">📦</div>
+                <div class="sm:hidden p-2 bg-white/20 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
             </div>
         </div>
         <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-xl p-4 sm:p-6 shadow-lg">
@@ -154,7 +156,9 @@
                     <p class="text-xl sm:text-3xl font-bold mt-1 sm:mt-2">Rp
                         {{ number_format($monthRevenue / 1000, 0) }}K</p>
                 </div>
-                <div class="text-4xl sm:hidden">💰</div>
+                <div class="sm:hidden p-2 bg-white/20 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
             </div>
         </div>
         <div class="bg-gradient-to-br from-orange-500 to-pink-600 text-white rounded-xl p-4 sm:p-6 shadow-lg">
@@ -163,7 +167,9 @@
                     <p class="text-orange-200 text-xs sm:text-sm">Total Customers</p>
                     <p class="text-2xl sm:text-3xl font-bold mt-1 sm:mt-2">{{ $totalCustomers }}</p>
                 </div>
-                <div class="text-4xl sm:hidden">👥</div>
+                <div class="sm:hidden p-2 bg-white/20 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </div>
             </div>
         </div>
     </div>
@@ -172,8 +178,12 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <!-- Revenue Chart -->
         <div class="card order-2 lg:order-1">
-            <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-4">📈 Revenue
-                {{ date('F Y', mktime(0, 0, 0, $month, 1)) }}</h3>
+            <div class="flex items-center gap-2 mb-4">
+                <div class="p-1.5 bg-primary-100 text-primary-600 rounded-lg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                </div>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-900">Revenue {{ date('F Y', mktime(0, 0, 0, $month, 1)) }}</h3>
+            </div>
             <div class="relative" style="min-height: 200px;">
                 <canvas id="revenueChart"></canvas>
             </div>
@@ -183,12 +193,19 @@
         <div class="card order-1 lg:order-2">
             <!-- (Recent orders content unchanged) -->
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base sm:text-lg font-semibold text-gray-900">📋 Orders Terbaru</h3>
+                <div class="flex items-center gap-2">
+                    <div class="p-1.5 bg-primary-100 text-primary-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900">Orders Terbaru</h3>
+                </div>
                 <a href="{{ route('orders.index') }}" class="text-primary-600 text-sm hover:underline">Lihat Semua →</a>
             </div>
             @if($recentOrders->isEmpty())
                 <div class="text-center py-8">
-                    <div class="text-4xl mb-2">📭</div>
+                    <div class="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                    </div>
                     <p class="text-gray-500">Belum ada order</p>
                 </div>
             @else
@@ -227,7 +244,12 @@
     @if(auth()->user()->isOwner() || auth()->user()->isAdmin())
         <div class="card">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                <h3 class="text-base sm:text-lg font-semibold text-gray-900">📥 Export Reports</h3>
+                <div class="flex items-center gap-2">
+                    <div class="p-1.5 bg-primary-100 text-primary-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    </div>
+                    <h3 class="text-base sm:text-lg font-semibold text-gray-900">Export Reports</h3>
+                </div>
                 <div class="flex items-center gap-2 text-sm text-gray-600">
                     <svg class="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

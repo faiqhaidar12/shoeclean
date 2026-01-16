@@ -5,86 +5,38 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'ShoeClean') }} - Login</title>
+        <title>{{ config('app.name', 'ShoeClean') }}</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
         <style>
-            .gradient-bg {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-                background-size: 400% 400%;
-                animation: gradientShift 15s ease infinite;
-            }
-            
-            @keyframes gradientShift {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
-            
-            .glass-card {
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-            }
-            
-            .float-animation {
-                animation: float 6s ease-in-out infinite;
-            }
-            
-            @keyframes float {
-                0%, 100% { transform: translateY(0); }
-                50% { transform: translateY(-10px); }
-            }
-            
-            .input-focus:focus {
-                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
-            }
+            body { font-family: 'Plus Jakarta Sans', sans-serif; }
         </style>
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen gradient-bg flex items-center justify-center p-4">
-            <!-- Decorative Elements -->
-            <div class="absolute inset-0 overflow-hidden pointer-events-none">
-                <div class="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
-                <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl"></div>
-                <div class="absolute top-1/2 left-1/3 w-64 h-64 bg-pink-300/10 rounded-full blur-3xl"></div>
+    <body class="bg-gray-50 text-gray-900 antialiased">
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 p-6">
+            <div class="mb-8 text-center">
+                <a href="/" wire:navigate class="inline-flex items-center gap-3">
+                    <div class="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center text-white text-xl shadow-lg shadow-primary-600/20">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-900 tracking-tight">Shoe Clean<span class="text-primary-600">.</span></span>
+                </a>
+            </div>
+
+            <div class="w-full sm:max-w-md mt-6 px-8 py-10 bg-white shadow-xl shadow-gray-200/50 border border-gray-100 rounded-2xl overflow-hidden">
+                {{ $slot }}
             </div>
             
-            <div class="w-full max-w-md relative">
-                <!-- Logo & Branding -->
-                <div class="text-center mb-8 float-animation">
-                    <a href="/" wire:navigate class="inline-block">
-                        <div class="w-20 h-20 mx-auto bg-white rounded-2xl shadow-2xl flex items-center justify-center mb-4">
-                            <span class="text-4xl">👟</span>
-                        </div>
-                    </a>
-                    <h1 class="text-3xl font-bold text-white drop-shadow-lg">ShoeClean</h1>
-                    <p class="text-white/80 mt-2">Laundry Management System</p>
-                </div>
-                
-                <!-- Login Card -->
-                <div class="glass-card rounded-3xl shadow-2xl p-8 sm:p-10">
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl font-bold text-gray-900">Welcome Back! 👋</h2>
-                        <p class="text-gray-500 mt-2">Sign in to continue to your dashboard</p>
-                    </div>
-                    
-                    {{ $slot }}
-                </div>
-                
-                <!-- Footer -->
-                <div class="text-center mt-8">
-                    <p class="text-white/60 text-sm">
-                        &copy; {{ date('Y') }} ShoeClean. All rights reserved.
-                    </p>
-                </div>
-            </div>
+            <p class="mt-8 text-sm text-gray-400">
+                &copy; {{ date('Y') }} Shoe Clean. All rights reserved.
+            </p>
         </div>
     </body>
 </html>
