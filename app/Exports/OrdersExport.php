@@ -3,13 +3,16 @@
 namespace App\Exports;
 
 use App\Models\Order;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class OrdersExport implements FromQuery, WithHeadings, WithMapping, WithStyles
+class OrdersExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithColumnFormatting, ShouldAutoSize
 {
     protected $outletIds;
     protected $month;
@@ -39,12 +42,15 @@ class OrdersExport implements FromQuery, WithHeadings, WithMapping, WithStyles
     {
         return [
             'Invoice',
-            'Date',
-            'Customer',
+            'Tanggal Order',
+            'Pelanggan',
             'Outlet',
-            'Status',
-            'Payment',
-            'Total',
+            'Status Order',
+            'Metode Pembayaran',
+            'Status Pembayaran',
+            'Tipe Order',
+            'Diskon',
+            'Total Order',
         ];
     }
 
@@ -53,18 +59,35 @@ class OrdersExport implements FromQuery, WithHeadings, WithMapping, WithStyles
         return [
             $order->invoice_number,
             $order->created_at->format('d/m/Y H:i'),
-            $order->customer->name,
-            $order->outlet->name,
-            ucfirst($order->status),
-            ucfirst($order->payment_status),
+            $order->customer->name ?? '-',
+            $order->outlet->name ?? '-',
+            ucfirst(str_replace('_', ' ', $order->status)),
+            $order->paymentMethodLabel(),
+            $order->paymentStatusLabel(),
+            $order->order_type ? ucfirst(str_replace('_', ' ', $order->order_type)) : '-',
+            $order->discount_amount ?? 0,
             $order->total_price,
+        ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'H' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
+            'I' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
         return [
-            1 => ['font' => ['bold' => true]],
+            1 => [
+                'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+                'fill' => [
+                    'fillType' => 'solid',
+                    'startColor' => ['rgb' => '1E3A34'],
+                ],
+            ],
         ];
     }
 }

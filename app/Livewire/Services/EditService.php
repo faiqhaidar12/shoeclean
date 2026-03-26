@@ -47,7 +47,7 @@ class EditService extends Component
         $this->outlet_id = $service->outlet_id;
     }
 
-    public function update()
+    public function save()
     {
         $this->validate([
             'name' => 'required|string|max:255',

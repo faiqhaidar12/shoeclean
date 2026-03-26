@@ -42,7 +42,11 @@ class ListExpenses extends Component
         
         // Authorization
         $user = auth()->user();
-        if (!$user->isOwner() && $user->outlet_id !== $expense->outlet_id) {
+        if ($user->isOwner()) {
+            if (!$user->ownedOutlets->contains('id', $expense->outlet_id)) {
+                abort(403);
+            }
+        } elseif ($user->outlet_id !== $expense->outlet_id) {
             abort(403);
         }
 

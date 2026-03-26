@@ -11,8 +11,16 @@ Route::get('/', function () {
 Route::get('/track', \App\Livewire\TrackOrder::class)->name('track');
 Route::get('/track/{invoice}', \App\Livewire\TrackOrder::class)->where('invoice', '.*')->name('track.invoice');
 
-// Midtrans Webhook (public, no auth)
-Route::post('/payment/notification', [\App\Http\Controllers\PaymentController::class, 'notification'])->name('payment.notification');
+// Public Storefront Order (no auth)
+Route::get('/order', \App\Livewire\SelectOutlet::class)->name('public.order.select');
+Route::get('/order/{outlet:slug}', \App\Livewire\PublicOrder::class)->name('public.order');
+Route::get('/order/{outlet:slug}/success/{order}', \App\Livewire\OrderSuccess::class)->name('public.order.success');
+
+// Public Survey (no auth)
+Route::get('/survey/{survey:slug}', \App\Livewire\FillSurvey::class)->name('survey.fill');
+
+// Mayar Webhook (public, no auth)
+Route::post('/webhook/mayar', [\App\Http\Controllers\MayarWebhookController::class, 'handle'])->name('webhook.mayar');
 
 Route::get('dashboard', \App\Livewire\Dashboard::class)
     ->middleware(['auth', 'verified'])
@@ -22,17 +30,38 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+// Super Admin
+Route::middleware(['auth', 'verified', 'role:superadmin'])->prefix('superadmin')->group(function () {
+    Route::get('/', \App\Livewire\SuperAdminDashboard::class)->name('superadmin.dashboard');
+    Route::get('/orders', \App\Livewire\SuperAdmin\ListOrders::class)->name('superadmin.orders.index');
+    Route::get('/subscriptions', \App\Livewire\SuperAdmin\SubscriptionInsights::class)->name('superadmin.subscriptions.index');
+    Route::get('/surveys', \App\Livewire\Surveys\ListSurveys::class)->name('superadmin.surveys.index');
+    Route::get('/surveys/create', \App\Livewire\Surveys\CreateSurvey::class)->name('superadmin.surveys.create');
+    Route::get('/surveys/{survey}/results', \App\Livewire\Surveys\SurveyResults::class)->name('superadmin.surveys.results');
+    Route::get('/feedbacks', \App\Livewire\SuperAdmin\ListFeedbacks::class)->name('superadmin.feedbacks.index');
+    Route::get('/reports/marketing/pdf', [\App\Http\Controllers\ReportController::class, 'marketingKitPdf'])->name('superadmin.reports.marketing.pdf');
+});
+
 require __DIR__.'/auth.php';
 
 // Owner Only
 Route::middleware(['auth', 'verified', 'role:owner'])->group(function () {
     Route::get('/outlets', \App\Livewire\Outlets\ListOutlets::class)->name('outlets.index');
     Route::get('/outlets/create', \App\Livewire\Outlets\CreateOutlet::class)->name('outlets.create');
-    Route::get('/outlets/{outlet}/edit', \App\Livewire\Outlets\EditOutlet::class)->name('outlets.edit');
+
+    // Subscription
+    Route::get('/subscription', \App\Livewire\Subscription\SubscriptionPage::class)->name('subscription');
+
+    // Surveys (Owner)
+    Route::get('/surveys', \App\Livewire\Surveys\ListSurveys::class)->name('surveys.index');
+    Route::get('/surveys/create', \App\Livewire\Surveys\CreateSurvey::class)->name('surveys.create');
+    Route::get('/surveys/{survey}/results', \App\Livewire\Surveys\SurveyResults::class)->name('surveys.results');
 });
 
 // Owner + Admin Only
 Route::middleware(['auth', 'verified', 'role:owner,admin'])->group(function () {
+    Route::get('/outlets/{outlet:slug}/edit', \App\Livewire\Outlets\EditOutlet::class)->name('outlets.edit');
+
     // Services
     Route::get('/services', \App\Livewire\Services\ListServices::class)->name('services.index');
     Route::get('/services/create', \App\Livewire\Services\CreateService::class)->name('services.create');
@@ -72,4 +101,3 @@ Route::middleware(['auth', 'verified', 'role:owner,admin,staff'])->group(functio
     Route::get('/orders/{order}', \App\Livewire\Orders\ViewOrder::class)->name('orders.view');
     Route::get('/orders/{order}/print', [\App\Http\Controllers\ReportController::class, 'printInvoice'])->name('orders.print');
 });
-

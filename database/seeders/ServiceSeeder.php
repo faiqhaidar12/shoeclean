@@ -23,9 +23,19 @@ class ServiceSeeder extends Seeder
             })->first();
             
             if ($owner) {
+                $outletName = 'Shoe Clean Central';
+                $baseSlug = \Illuminate\Support\Str::slug($outletName);
+                $slug = $baseSlug;
+                $counter = 2;
+                while (Outlet::where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . $counter;
+                    $counter++;
+                }
+
                 $outlet = Outlet::create([
                     'owner_id' => $owner->id,
-                    'name' => 'Shoe Clean Central',
+                    'name' => $outletName,
+                    'slug' => $slug,
                     'address' => 'Jl. Sepatu Bersih No. 1, Jakarta',
                     'phone' => '081234567890',
                     'status' => 'active',

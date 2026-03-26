@@ -3,13 +3,16 @@
 namespace App\Exports;
 
 use App\Models\Expense;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class ExpensesExport implements FromQuery, WithHeadings, WithMapping, WithStyles
+class ExpensesExport implements FromQuery, WithHeadings, WithMapping, WithStyles, WithColumnFormatting, ShouldAutoSize
 {
     protected $outletIds;
     protected $month;
@@ -38,11 +41,12 @@ class ExpensesExport implements FromQuery, WithHeadings, WithMapping, WithStyles
     public function headings(): array
     {
         return [
-            'Date',
-            'Category',
-            'Description',
+            'Tanggal',
+            'Kategori',
+            'Deskripsi',
             'Outlet',
-            'Amount',
+            'Dicatat Oleh',
+            'Nominal',
         ];
     }
 
@@ -52,15 +56,29 @@ class ExpensesExport implements FromQuery, WithHeadings, WithMapping, WithStyles
             $expense->expense_date->format('d/m/Y'),
             $expense->category,
             $expense->description ?? '-',
-            $expense->outlet->name,
+            $expense->outlet->name ?? '-',
+            $expense->user->name ?? '-',
             $expense->amount,
+        ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'F' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1,
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
         return [
-            1 => ['font' => ['bold' => true]],
+            1 => [
+                'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+                'fill' => [
+                    'fillType' => 'solid',
+                    'startColor' => ['rgb' => 'B42318'],
+                ],
+            ],
         ];
     }
 }

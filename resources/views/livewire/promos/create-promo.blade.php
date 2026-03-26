@@ -1,98 +1,112 @@
-<div class="p-4 sm:p-6 lg:p-8">
+<div class="py-8">
     <!-- Header -->
-    <div class="mb-6">
-        <a href="{{ route('promos.index') }}" class="text-sm text-gray-500 hover:text-primary-600 flex items-center gap-1 mb-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            Back to Promos
+    <div class="mb-12">
+        <a href="{{ route('promos.index') }}" class="text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/40 hover:text-artisan-secondary flex items-center gap-2 mb-6 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+            Kembali ke Katalog
         </a>
-        <h1 class="text-xl sm:text-2xl font-bold text-gray-900">➕ Add Promo</h1>
+        <h1 class="headline-editorial text-4xl lg:text-5xl italic">Buat Promo Baru</h1>
     </div>
 
-    <!-- Form Card -->
-    <div class="card max-w-2xl">
-        <form wire:submit="save" class="space-y-4 sm:space-y-6">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Kode Promo *</label>
-                <input type="text" wire:model="code" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 uppercase font-mono" placeholder="DISKON20">
-                @error('code') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
+    <!-- Form Container -->
+    <div class="max-w-4xl">
+        <div class="card-artisan p-10 lg:p-16">
+            <form wire:submit="save" class="space-y-12">
+                <div class="space-y-10">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-artisan-secondary">Parameter Promo Strategis</h4>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Kode Promo *</label>
+                            <input type="text" wire:model="code" class="artisan-input font-mono !uppercase !tracking-widest" placeholder="Contoh: PROMO20">
+                            @error('code') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                        </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Promo *</label>
-                <input type="text" wire:model="name" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Diskon Hari Raya">
-                @error('name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Nama Promo *</label>
+                            <input type="text" wire:model="name" class="artisan-input" placeholder="Contoh: Promo Lebaran">
+                            @error('name') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
 
-            @if($outlets->count() > 0)
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Berlaku di Outlet</label>
-                <select wire:model="outlet_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                    <option value="">Semua Outlet</option>
-                    @foreach($outlets as $outlet)
-                        <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
-                    @endforeach
-                </select>
-                <p class="text-xs text-gray-500 mt-1">Kosongkan untuk berlaku di semua outlet</p>
-            </div>
-            @endif
+                    @if($outlets->count() > 0)
+                    <div>
+                        <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Berlaku di Outlet</label>
+                        <select wire:model="outlet_id" class="artisan-input">
+                            <option value="">Semua Outlet (Omni-Outlet)</option>
+                            @foreach($outlets as $outlet)
+                                <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
+                            @endforeach
+                        </select>
+                        <p class="text-[9px] text-artisan-primary/30 font-black uppercase tracking-widest mt-4 italic text-right">Biarkan kosong agar berlaku secara global</p>
+                    </div>
+                    @endif
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tipe *</label>
-                    <select wire:model="type" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        <option value="percentage">Percentage (%)</option>
-                        <option value="fixed">Fixed (Rp)</option>
-                    </select>
-                    @error('type') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Jenis Potongan *</label>
+                            <select wire:model="type" class="artisan-input">
+                                <option value="percentage">Potongan Persentase (%)</option>
+                                <option value="fixed">Potongan Harga Tetap (Rp)</option>
+                            </select>
+                            @error('type') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Besaran Potongan *</label>
+                            <input type="number" wire:model="value" class="artisan-input" placeholder="20">
+                            @error('value') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Minimal Pesanan (Rp)</label>
+                            <input type="number" wire:model="min_order" class="artisan-input" placeholder="0">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Maksimal Diskon (Rp)</label>
+                            <input type="number" wire:model="max_discount" class="artisan-input" placeholder="Tanpa batas">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Batas Maksimal Penggunaan</label>
+                            <input type="number" wire:model="max_uses" class="artisan-input" placeholder="Tanpa batas penggunaan">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Tanggal Mulai *</label>
+                            <input type="date" wire:model="start_date" class="artisan-input">
+                            @error('start_date') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Tanggal Berakhir *</label>
+                        <input type="date" wire:model="end_date" class="artisan-input">
+                        @error('end_date') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="pt-6">
+                         <label class="flex items-center gap-4 cursor-pointer group">
+                            <div class="relative">
+                                <input type="checkbox" wire:model="is_active" id="is_active" class="sr-only peer">
+                                <div class="w-14 h-7 bg-artisan-surface-low rounded-full peer peer-checked:bg-artisan-secondary transition-all shadow-inner"></div>
+                                <div class="absolute left-1 top-1 w-5 h-5 bg-white rounded-full peer-checked:translate-x-7 transition-transform shadow-artisan-sm"></div>
+                            </div>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-artisan-primary group-hover:text-artisan-secondary transition-colors">Aktifkan Promo Sekarang</span>
+                        </label>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nilai *</label>
-                    <input type="number" wire:model="value" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="20">
-                    @error('value') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                <div class="flex flex-col sm:flex-row gap-6 pt-10 border-t border-artisan-outline/10">
+                    <a href="{{ route('promos.index') }}" class="btn-artisan-secondary flex-1 text-center">Batalkan Pembuatan</a>
+                    <button type="submit" class="btn-artisan-primary flex-1">Simpan Promo</button>
                 </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Min. Order (Rp)</label>
-                    <input type="number" wire:model="min_order" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="0">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Max. Discount (Rp)</label>
-                    <input type="number" wire:model="max_discount" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Kosongkan jika tidak ada limit">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Max. Usage</label>
-                    <input type="number" wire:model="max_uses" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Kosongkan jika unlimited">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai *</label>
-                    <input type="date" wire:model="start_date" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                    @error('start_date') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Berakhir *</label>
-                <input type="date" wire:model="end_date" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                @error('end_date') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            <div class="flex items-center gap-3">
-                <input type="checkbox" wire:model="is_active" id="is_active" class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
-                <label for="is_active" class="text-sm text-gray-700">Aktifkan promo ini</label>
-            </div>
-
-            <div class="flex flex-col-reverse sm:flex-row gap-3 pt-4">
-                <a href="{{ route('promos.index') }}" class="btn-secondary flex-1 text-center">Cancel</a>
-                <button type="submit" class="btn-primary flex-1">Save Promo</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

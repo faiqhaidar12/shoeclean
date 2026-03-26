@@ -25,6 +25,19 @@ class Order extends Model
         'delivery_fee',
         'promo_id',
         'discount_amount',
+        'order_source',
+        'payment_method',
+        'payment_proof_path',
+        'payment_proof_original_name',
+        'payment_proof_uploaded_at',
+        'payment_verified_at',
+        'payment_verified_by',
+        'payment_notes',
+    ];
+
+    protected $casts = [
+        'payment_proof_uploaded_at' => 'datetime',
+        'payment_verified_at' => 'datetime',
     ];
 
     public function outlet()
@@ -55,5 +68,34 @@ class Order extends Model
     public function promo()
     {
         return $this->belongsTo(Promo::class);
+    }
+
+    public function paymentVerifier()
+    {
+        return $this->belongsTo(User::class, 'payment_verified_by');
+    }
+
+    public function paymentStatusLabel(): string
+    {
+        return match ($this->payment_status) {
+            'paid' => 'Lunas',
+            'waiting_confirmation' => 'Menunggu Verifikasi',
+            default => 'Belum Lunas',
+        };
+    }
+
+    public function paymentMethodLabel(): string
+    {
+        return match ($this->payment_method) {
+            'qris' => 'QRIS Outlet',
+            'manual_transfer' => 'Transfer Manual',
+            'pay_at_store' => 'Bayar di Toko',
+            default => 'Belum Dipilih',
+        };
+    }
+
+    public function isWaitingPaymentConfirmation(): bool
+    {
+        return $this->payment_status === 'waiting_confirmation';
     }
 }

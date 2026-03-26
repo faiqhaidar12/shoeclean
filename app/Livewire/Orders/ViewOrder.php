@@ -13,7 +13,7 @@ class ViewOrder extends Component
 
     public function mount(\App\Models\Order $order)
     {
-        $this->order = $order->load(['customer', 'items.service', 'user', 'outlet', 'payments']);
+        $this->order = $order->load(['customer', 'items.service', 'user', 'outlet', 'payments', 'paymentVerifier']);
         
         // Authorization
         $user = auth()->user();
@@ -57,35 +57,71 @@ class ViewOrder extends Component
                 ->sum('amount');
 
             if ($totalPaid >= $this->order->total_price) {
-                $this->order->update(['payment_status' => 'paid']);
+                $this->order->update([
+                    'payment_status' => 'paid',
+                    'payment_verified_at' => now(),
+                    'payment_verified_by' => auth()->id(),
+                ]);
             }
         });
         
         // Refresh items
-        $this->order->refresh();
+        $this->order->refresh()->load(['payments', 'paymentVerifier']);
     }
 
-    public $snapToken = null;
-
-    public function payOnline()
+    public function verifyPayment()
     {
-        $midtransService = new \App\Services\MidtransService();
-        $result = $midtransService->createSnapToken($this->order);
-        $this->snapToken = $result['snap_token'];
-        
-        // Dispatch event to show Snap popup
-        $this->dispatch('showSnapPopup', snapToken: $this->snapToken);
+        if (!$this->order->payment_proof_path || $this->order->payment_status === 'paid') {
+            return;
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () {
+            $existingPayment = \App\Models\Payment::where('order_id', $this->order->id)
+                ->where('status', 'success')
+                ->whereIn('method', ['qris', 'manual_transfer'])
+                ->first();
+
+            if (!$existingPayment) {
+                \App\Models\Payment::create([
+                    'order_id' => $this->order->id,
+                    'amount' => $this->order->total_price,
+                    'method' => $this->order->payment_method === 'qris' ? 'qris' : 'manual_transfer',
+                    'status' => 'success',
+                    'payload' => [
+                        'verified_by' => auth()->id(),
+                        'verified_at' => now()->toDateTimeString(),
+                        'source' => 'manual-proof-verification',
+                    ],
+                ]);
+            }
+
+            $this->order->update([
+                'payment_status' => 'paid',
+                'payment_verified_at' => now(),
+                'payment_verified_by' => auth()->id(),
+            ]);
+        });
+
+        $this->order->refresh()->load(['payments', 'paymentVerifier']);
     }
 
-    public function checkPaymentStatus()
+    public function resetPaymentToUnpaid()
     {
-        $this->order->refresh();
+        if ($this->order->payment_status === 'paid') {
+            return;
+        }
+
+        $this->order->update([
+            'payment_status' => 'unpaid',
+            'payment_verified_at' => null,
+            'payment_verified_by' => null,
+        ]);
+
+        $this->order->refresh()->load(['payments', 'paymentVerifier']);
     }
 
     public function render()
     {
-        return view('livewire.orders.view-order', [
-            'clientKey' => config('midtrans.client_key'),
-        ]);
+        return view('livewire.orders.view-order');
     }
 }

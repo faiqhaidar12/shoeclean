@@ -14,13 +14,30 @@ class ListPromos extends Component
 
     public $search = '';
 
+    public function mount()
+    {
+        if (!auth()->user()->hasFeature('promos')) {
+            session()->flash('error', 'Fitur promo tersedia mulai paket Pro.');
+            $this->redirectRoute(auth()->user()->isOwner() ? 'subscription' : 'dashboard', navigate: true);
+            return;
+        }
+    }
+
     public function delete($id)
     {
+        if (!auth()->user()->hasFeature('promos')) {
+            abort(403, 'Fitur promo tersedia mulai paket Pro.');
+        }
+
         Promo::findOrFail($id)->delete();
     }
 
     public function toggle($id)
     {
+        if (!auth()->user()->hasFeature('promos')) {
+            abort(403, 'Fitur promo tersedia mulai paket Pro.');
+        }
+
         $promo = Promo::findOrFail($id);
         $promo->update(['is_active' => !$promo->is_active]);
     }

@@ -102,25 +102,25 @@
 </head>
 <body>
 
-    <a href="#" onclick="window.print(); return false;" class="btn-print no-print">Print Invoice</a>
+    <a href="#" onclick="window.print(); return false;" class="btn-print no-print">Cetak Struk</a>
 
     <div class="header">
         <h1>SHOE CLEAN</h1>
         <p>{{ $order->outlet->name }}</p>
-        <p>{{ $order->outlet->address ?? 'Shoe Care Specialist' }}</p>
+        <p>{{ $order->outlet->address ?? 'Spesialis Perawatan Sepatu' }}</p>
     </div>
 
     <div class="details">
-        <p><strong>Invoice:</strong> {{ $order->invoice_number }}</p>
-        <p><strong>Date:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
-        <p><strong>Cust:</strong> {{ $order->customer->name }}</p>
+        <p><strong>Invois:</strong> {{ $order->invoice_number }}</p>
+        <p><strong>Tanggal:</strong> {{ $order->created_at->format('d/m/Y H:i') }}</p>
+        <p><strong>Pelanggan:</strong> {{ $order->customer->name }}</p>
         <p><strong>Telp:</strong> {{ $order->customer->phone }}</p>
     </div>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Item</th>
+                <th>Layanan</th>
                 <th class="text-right">Total</th>
             </tr>
         </thead>
@@ -147,13 +147,13 @@
             </tr>
             @if($order->pickup_delivery_fee > 0)
             <tr>
-                <td>Delivery Fee</td>
+                <td>Ongkir</td>
                 <td class="text-right">{{ number_format($order->pickup_delivery_fee, 0, ',', '.') }}</td>
             </tr>
             @endif
              @if($order->discount_amount > 0)
             <tr>
-                <td>Discount</td>
+                <td>Diskon</td>
                 <td class="text-right">-{{ number_format($order->discount_amount, 0, ',', '.') }}</td>
             </tr>
             @endif
@@ -165,7 +165,14 @@
     </div>
 
     <div class="footer">
-        <p>Status Payment: <strong>{{ strtoupper($order->payment_status) }}</strong></p>
+        <p>Status Pembayaran: <strong>{{ match ($order->payment_status) {
+            'paid' => 'LUNAS',
+            'waiting_confirmation' => 'MENUNGGU VERIFIKASI',
+            default => 'BELUM LUNAS',
+        } }}</strong></p>
+        @if(in_array($order->payment_status, ['unpaid', 'waiting_confirmation']) && $order->outlet?->qris_image_path)
+            <p>Pembayaran dapat dilakukan manual melalui QRIS outlet atau dikonfirmasi langsung ke petugas outlet.</p>
+        @endif
         <p>Terima kasih telah mempercayakan sepatu Anda kepada kami!</p>
         <p>www.shoeclean.com</p>
     </div>

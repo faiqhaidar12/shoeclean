@@ -1,54 +1,60 @@
-<div class="p-4 sm:p-6 lg:p-8">
+<div class="py-8">
     <!-- Header -->
-    <div class="mb-6">
-        <a href="{{ route('expenses.index') }}" class="text-sm text-gray-500 hover:text-primary-600 flex items-center gap-1 mb-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            Back to Expenses
+    <div class="mb-12">
+        <a href="{{ route('expenses.index') }}" class="text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/40 hover:text-artisan-secondary flex items-center gap-2 mb-6 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+            Kembali ke Buku Besar
         </a>
-        <h1 class="text-xl sm:text-2xl font-bold text-gray-900">➕ Add Expense</h1>
+        <h1 class="headline-editorial text-4xl lg:text-5xl italic">Catat Pengeluaran Baru</h1>
     </div>
 
-    <!-- Form Card -->
-    <div class="card max-w-2xl">
-        <form wire:submit="save" class="space-y-4 sm:space-y-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal *</label>
-                    <input type="date" wire:model="expense_date" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                    @error('expense_date') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+    <!-- Form Container -->
+    <div class="max-w-3xl">
+        <div class="card-artisan p-10 lg:p-16">
+            <form wire:submit="save" class="space-y-12">
+                <div class="space-y-10">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-artisan-secondary">Rincian Alokasi</h4>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Tanggal Alokasi *</label>
+                            <input type="date" wire:model="expense_date" class="artisan-input">
+                            @error('expense_date') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Klasifikasi Sumber Daya *</label>
+                            <select wire:model="category" class="artisan-input">
+                                <option value="">Pilih Klasifikasi</option>
+                                <option value="supplies">Perlengkapan Material</option>
+                                <option value="utilities">Utilitas Outlet</option>
+                                <option value="salary">Honorarium Staf</option>
+                                <option value="rent">Sewa Outlet</option>
+                                <option value="maintenance">Pemeliharaan Fasilitas</option>
+                                <option value="other">Lain-lain</option>
+                            </select>
+                            @error('category') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Jumlah Alokasi (Rp) *</label>
+                        <input type="number" wire:model="amount" class="artisan-input" placeholder="Contoh: 250000">
+                        @error('amount') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Keterangan Alokasi</label>
+                        <textarea wire:model="description" rows="4" class="artisan-input" placeholder="Berikan keterangan rinci untuk alokasi ini..."></textarea>
+                        @error('description') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Kategori *</label>
-                    <select wire:model="category" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        <option value="">Pilih Kategori</option>
-                        <option value="supplies">Supplies</option>
-                        <option value="utilities">Utilities</option>
-                        <option value="salary">Salary</option>
-                        <option value="rent">Rent</option>
-                        <option value="maintenance">Maintenance</option>
-                        <option value="other">Other</option>
-                    </select>
-                    @error('category') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                <div class="flex flex-col sm:flex-row gap-6 pt-10 border-t border-artisan-outline/10">
+                    <a href="{{ route('expenses.index') }}" class="btn-artisan-secondary flex-1 text-center">Batalkan Alokasi</a>
+                    <button type="submit" class="btn-artisan-primary flex-1">Simpan Alokasi</button>
                 </div>
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Jumlah (Rp) *</label>
-                <input type="number" wire:model="amount" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="100000">
-                @error('amount') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                <textarea wire:model="description" rows="3" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="Detail pengeluaran"></textarea>
-                @error('description') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
-
-            <div class="flex flex-col-reverse sm:flex-row gap-3 pt-4">
-                <a href="{{ route('expenses.index') }}" class="btn-secondary flex-1 text-center">Cancel</a>
-                <button type="submit" class="btn-primary flex-1">Save Expense</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

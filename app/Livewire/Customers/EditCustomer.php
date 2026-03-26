@@ -21,6 +21,16 @@ class EditCustomer extends Component
 
     public function mount(\App\Models\Customer $customer)
     {
+        // Authorization: Only allow editing if user is owner or belongs to the same outlet
+        $user = auth()->user();
+        if ($user->isOwner()) {
+            if (!$user->ownedOutlets->contains('id', $customer->outlet_id)) {
+                abort(403);
+            }
+        } elseif ($customer->outlet_id !== $user->outlet_id) {
+            abort(403);
+        }
+
         $this->customer = $customer;
         $this->name = $customer->name;
         $this->phone = $customer->phone;
@@ -28,12 +38,12 @@ class EditCustomer extends Component
         $this->email = $customer->email;
         $this->outlet_id = $customer->outlet_id;
 
-        if (auth()->user()->isOwner()) {
-            $this->availableOutlets = auth()->user()->ownedOutlets;
+        if ($user->isOwner()) {
+            $this->availableOutlets = $user->ownedOutlets;
         }
     }
 
-    public function update()
+    public function save()
     {
         $this->validate([
             'name' => 'required|string|max:255',

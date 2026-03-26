@@ -39,6 +39,9 @@ class OutletSwitcher extends Component
             if ($user->isOwner()) {
                 // Owner can access their owned outlets
                 $canAccess = $user->ownedOutlets->contains('id', $outletId);
+            } elseif ($user->isAdmin() && $user->outlet) {
+                // Admins can access all outlets of their owner
+                $canAccess = Outlet::where('owner_id', $user->outlet->owner_id)->where('id', $outletId)->exists();
             } else {
                 // Staff can only access their assigned outlet
                 $canAccess = (int) $user->outlet_id === $outletId;
@@ -67,6 +70,9 @@ class OutletSwitcher extends Component
         
         if ($user->isOwner()) {
             $outlets = $user->ownedOutlets;
+        } elseif ($user->isAdmin() && $user->outlet) {
+            // Admins can switch between all outlets belonging to the business
+            $outlets = Outlet::where('owner_id', $user->outlet->owner_id)->get();
         } else {
             // Staff only sees their assigned outlet
             $outlets = $user->outlet ? collect([$user->outlet]) : collect();

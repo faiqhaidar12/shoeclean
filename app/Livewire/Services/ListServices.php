@@ -6,9 +6,13 @@ use Livewire\Component;
 
 use Livewire\Attributes\Layout;
 
+use Livewire\WithPagination;
+
 #[Layout('layouts.app')]
 class ListServices extends Component
 {
+    use WithPagination;
+
     public function delete($id)
     {
         $service = \App\Models\Service::findOrFail($id);

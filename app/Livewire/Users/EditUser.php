@@ -23,6 +23,12 @@ class EditUser extends Component
 
     public function mount(\App\Models\User $user)
     {
+        if (!auth()->user()->hasFeature('team_management')) {
+            session()->flash('error', 'Kelola admin dan staff tersedia mulai paket Pro.');
+            $this->redirectRoute(auth()->user()->isOwner() ? 'subscription' : 'dashboard', navigate: true);
+            return;
+        }
+
         // Authorization
         if (auth()->user()->isOwner()) {
             $this->availableOutlets = auth()->user()->ownedOutlets;
@@ -55,8 +61,13 @@ class EditUser extends Component
         $this->outlet_id = $user->outlet_id;
     }
 
-    public function update()
+    public function save()
     {
+        if (!auth()->user()->hasFeature('team_management')) {
+            $route = auth()->user()->isOwner() ? 'subscription' : 'dashboard';
+            return redirect()->route($route)->with('error', 'Kelola admin dan staff tersedia mulai paket Pro.');
+        }
+
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($this->user->id)],
@@ -68,7 +79,15 @@ class EditUser extends Component
         }
 
         if (auth()->user()->isOwner()) {
-            $rules['outlet_id'] = ['nullable', 'exists:outlets,id'];
+            $rules['outlet_id'] = [
+                'required', 
+                'exists:outlets,id',
+                function ($attribute, $value, $fail) {
+                    if (!auth()->user()->ownedOutlets->contains('id', $value)) {
+                        $fail('Outlet tidak valid atau bukan milik Anda.');
+                    }
+                }
+            ];
         }
 
         // Validate Role assignment auth
@@ -88,7 +107,7 @@ class EditUser extends Component
         }
 
         if (auth()->user()->isOwner()) {
-             $data['outlet_id'] = $this->outlet_id;
+             $data['outlet_id'] = $this->outlet_id ?: null;
         }
 
         $this->user->update($data);

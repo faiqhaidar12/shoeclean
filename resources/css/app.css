@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,80 +7,69 @@
 /* Custom base styles */
 @layer base {
     body {
-        @apply font-sans antialiased;
+        @apply font-sans antialiased bg-artisan-background text-artisan-primary;
     }
 }
 
 /* Custom component classes */
 @layer components {
-    .btn-primary {
-        @apply px-4 py-2 bg-primary-600 text-white font-medium rounded-lg 
-               hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 
-               transition-all duration-200 shadow-sm hover:shadow-md;
+    .headline-editorial {
+        @apply font-manrope font-black tracking-tighter text-artisan-primary antialiased;
+    }
+
+    .btn-artisan-primary {
+        @apply px-8 py-4 bg-artisan-primary text-white font-black uppercase tracking-[0.2em] text-[10px] 
+               rounded-2xl hover:bg-artisan-secondary transition-all duration-500 
+               shadow-artisan active:scale-95 leading-none;
     }
     
-    .btn-secondary {
-        @apply px-4 py-2 bg-white text-gray-700 font-medium rounded-lg border border-gray-300
-               hover:bg-gray-50 focus:ring-4 focus:ring-gray-100 
-               transition-all duration-200;
+    .btn-artisan-secondary {
+        @apply px-8 py-4 bg-white text-artisan-primary font-black uppercase tracking-[0.2em] text-[10px]
+               rounded-2xl hover:bg-artisan-surface-low transition-all duration-500 active:scale-95 shadow-artisan-sm leading-none;
     }
     
-    .btn-success {
-        @apply px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg 
-               hover:bg-emerald-700 focus:ring-4 focus:ring-emerald-200 
-               transition-all duration-200;
+    .card-artisan {
+        @apply bg-artisan-surface-lowest rounded-[2.5rem] shadow-artisan;
+    }
+
+    .card-artisan-low {
+        @apply bg-artisan-surface-low rounded-[2rem] p-10;
     }
     
-    .btn-danger {
-        @apply px-4 py-2 bg-red-600 text-white font-medium rounded-lg 
-               hover:bg-red-700 focus:ring-4 focus:ring-red-200 
-               transition-all duration-200;
+    .artisan-input {
+        @apply block w-full bg-artisan-surface-low border-0 border-b-2 border-transparent rounded-t-2xl rounded-b-sm 
+               focus:bg-white focus:ring-0 focus:border-artisan-secondary
+               text-sm font-medium py-4 px-6 transition-all placeholder-artisan-primary/30;
     }
     
-    .card {
-        @apply bg-white rounded-xl shadow-soft border border-gray-100 p-6;
+    .nav-link-artisan {
+        @apply flex items-center gap-4 px-6 py-4 text-white/50 font-black uppercase tracking-[0.2em] text-[10px] rounded-2xl
+               hover:bg-white/5 hover:text-white transition-all duration-300;
     }
     
-    .input-field {
-        @apply block w-full rounded-lg border-gray-300 shadow-sm 
-               focus:border-primary-500 focus:ring-primary-500 text-sm;
+    .nav-link-artisan.active {
+        @apply bg-white/10 text-white shadow-artisan-sm;
     }
-    
-    .nav-link {
-        @apply flex items-center gap-3 px-4 py-3 text-gray-600 rounded-lg 
-               hover:bg-primary-50 hover:text-primary-700 
-               transition-all duration-200;
+
+    .artisan-table-row {
+        @apply hover:bg-artisan-surface-low transition-all duration-300;
     }
-    
-    .nav-link.active {
-        @apply bg-primary-100 text-primary-700 font-medium;
+
+    .artisan-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #3a6758 #f4f3f1;
     }
-    
-    .stat-card {
-        @apply card flex items-center gap-4;
+
+    .artisan-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
     }
-    
-    .stat-icon {
-        @apply w-12 h-12 rounded-xl flex items-center justify-center;
+
+    .artisan-scrollbar::-webkit-scrollbar-track {
+        @apply bg-artisan-surface-low rounded-full;
     }
-    
-    .badge {
-        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
-    }
-    
-    .badge-success {
-        @apply bg-emerald-100 text-emerald-800;
-    }
-    
-    .badge-warning {
-        @apply bg-amber-100 text-amber-800;
-    }
-    
-    .badge-danger {
-        @apply bg-red-100 text-red-800;
-    }
-    
-    .badge-info {
-        @apply bg-blue-100 text-blue-800;
+
+    .artisan-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-artisan-secondary/20 rounded-full hover:bg-artisan-secondary transition-colors;
     }
 }

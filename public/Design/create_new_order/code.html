@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>New Order | SoleArtisan Master Artisan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "inverse-primary": "#adcec1",
+              "tertiary-fixed": "#d4e6e5",
+              "on-primary": "#ffffff",
+              "on-secondary-fixed-variant": "#214f41",
+              "surface-variant": "#e3e2e0",
+              "outline-variant": "#c1c8c4",
+              "error": "#ba1a1a",
+              "primary-fixed": "#c8eadd",
+              "outline": "#727975",
+              "secondary-fixed-dim": "#a1d1bf",
+              "secondary": "#3a6758",
+              "on-background": "#1a1c1b",
+              "surface-container-highest": "#e3e2e0",
+              "on-tertiary-container": "#809291",
+              "inverse-on-surface": "#f1f1ef",
+              "tertiary-fixed-dim": "#b8cac9",
+              "on-primary-container": "#75958a",
+              "tertiary": "#051515",
+              "on-surface-variant": "#414845",
+              "on-secondary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "on-primary-fixed-variant": "#2f4c43",
+              "error-container": "#ffdad6",
+              "on-secondary-container": "#406d5e",
+              "surface-container": "#eeeeec",
+              "on-error": "#ffffff",
+              "surface-container-low": "#f4f3f1",
+              "on-error-container": "#93000a",
+              "on-surface": "#1a1c1b",
+              "secondary-container": "#bcedda",
+              "on-tertiary-fixed": "#0e1e1e",
+              "primary": "#001610",
+              "on-secondary-fixed": "#002118",
+              "inverse-surface": "#2f3130",
+              "surface-bright": "#faf9f7",
+              "surface-container-high": "#e9e8e6",
+              "tertiary-container": "#1a2a2a",
+              "surface": "#faf9f7",
+              "secondary-fixed": "#bcedda",
+              "background": "#faf9f7",
+              "surface-tint": "#46645b",
+              "on-primary-fixed": "#012019",
+              "primary-fixed-dim": "#adcec1",
+              "on-tertiary-fixed-variant": "#3a4a49",
+              "primary-container": "#0d2c24",
+              "surface-dim": "#dadad8",
+              "on-tertiary": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body { font-family: 'Inter', sans-serif; }
+      h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar (Shared Component) -->
+<aside class="h-screen w-72 fixed left-0 top-0 border-r border-emerald-900/5 bg-emerald-50 dark:bg-emerald-950 flex flex-col py-8 px-6 gap-y-2 z-50">
+<div class="mb-10 px-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">diamond</span>
+</div>
+<div>
+<h2 class="font-manrope font-bold text-xl text-emerald-900 dark:text-emerald-50 leading-none">Master Artisan</h2>
+<p class="text-[10px] uppercase tracking-widest text-emerald-700/60 font-bold mt-1">Premium Preservation</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-700/60 dark:text-emerald-400/60 hover:text-emerald-900 dark:hover:text-emerald-50 hover:bg-emerald-100/30 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-inter text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-emerald-100/50 dark:bg-emerald-800/30 text-emerald-900 dark:text-emerald-50 font-semibold border-r-4 border-emerald-700 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-inter text-sm font-medium">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-700/60 dark:text-emerald-400/60 hover:text-emerald-900 dark:hover:text-emerald-50 hover:bg-emerald-100/30 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">handyman</span>
+<span class="font-inter text-sm font-medium">Services</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-700/60 dark:text-emerald-400/60 hover:text-emerald-900 dark:hover:text-emerald-50 hover:bg-emerald-100/30 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-inter text-sm font-medium">Outlets</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-700/60 dark:text-emerald-400/60 hover:text-emerald-900 dark:hover:text-emerald-50 hover:bg-emerald-100/30 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-inter text-sm font-medium">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-700/60 dark:text-emerald-400/60 hover:text-emerald-900 dark:hover:text-emerald-50 hover:bg-emerald-100/30 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-inter text-sm font-medium">Expenses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-700/60 dark:text-emerald-400/60 hover:text-emerald-900 dark:hover:text-emerald-50 hover:bg-emerald-100/30 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-inter text-sm font-medium">Promos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-700/60 dark:text-emerald-400/60 hover:text-emerald-900 dark:hover:text-emerald-50 hover:bg-emerald-100/30 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-inter text-sm font-medium">Users</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-emerald-900/10 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-700/60 hover:bg-emerald-100/30 transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-inter text-sm font-medium">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-emerald-700/60 hover:bg-emerald-100/30 transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-inter text-sm font-medium">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-72 min-h-screen bg-surface">
+<!-- TopAppBar (Shared Component Logic) -->
+<header class="fixed top-0 right-0 left-72 h-20 bg-white/60 backdrop-blur-xl z-40 flex justify-between items-center px-12">
+<div>
+<h1 class="font-manrope text-2xl font-black text-emerald-950 tracking-tighter">New Order</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full border border-emerald-900/5">
+<span class="material-symbols-outlined text-emerald-900 text-sm">location_on</span>
+<span class="text-sm font-medium text-emerald-900">Outlet: Downtown HQ</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-emerald-900 hover:bg-emerald-50 rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-emerald-900 hover:bg-emerald-50 rounded-full transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-emerald-200 overflow-hidden ring-2 ring-emerald-50">
+<img alt="User Avatar" data-alt="Portrait of a professional male artisan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDM-EsTXdKR_sMXhCCga4EIl0tfHeIyrhUB9oOp3taHoWSzCTbkZ5XrlDbtjQsgJwskuE4uK4xPQCbnonpvemtxwvIMQ7hA3yAIagYcV-j-z8AbGqhJO6yobkBz-b2yt75va0ddOZRks-6jHwe-ShufmEUcWv8fJ2wAzRweTvvm4bKlPpvkU6DbVTcQgD82eUeb1OW9CnwEsDPAiffoe_zMsBzAYzy7SSx9h5r7KbGNYMIBBRDs7oURBDAeFUjUVIbHzcoa2mt5PrEL"/>
+</div>
+</div>
+</div>
+</header>
+<div class="pt-32 pb-20 px-12 max-w-7xl mx-auto flex gap-12">
+<!-- Form Body -->
+<div class="flex-1 space-y-12">
+<!-- Section 1: Customer Selection -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-bold font-manrope text-primary tracking-tight">Customer Selection</h2>
+<button class="text-sm font-semibold text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-base">person_add</span>
+                            New Customer
+                        </button>
+</div>
+<div class="bg-surface-container-low rounded-xl p-8 transition-all border-b-2 border-transparent focus-within:border-secondary">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg py-4 pl-12 pr-4 text-on-surface placeholder:text-outline-variant focus:ring-0 text-lg font-medium shadow-sm" placeholder="Search by name, phone or email..." type="text"/>
+</div>
+<div class="mt-6 flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+<!-- Recent Customers (Editorial Layout) -->
+<div class="flex-shrink-0 bg-surface-container-lowest p-4 rounded-xl flex items-center gap-4 border border-outline-variant/10 cursor-pointer hover:bg-primary-fixed/30 transition-all">
+<div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-900 font-bold">JD</div>
+<div>
+<p class="text-sm font-bold text-primary">Julianne DeSilva</p>
+<p class="text-xs text-outline">+1 (555) 012-3456</p>
+</div>
+</div>
+<div class="flex-shrink-0 bg-surface-container-lowest p-4 rounded-xl flex items-center gap-4 border border-outline-variant/10 cursor-pointer hover:bg-primary-fixed/30 transition-all">
+<div class="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-900 font-bold">MK</div>
+<div>
+<p class="text-sm font-bold text-primary">Marcus King</p>
+<p class="text-xs text-outline">+1 (555) 987-6543</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: Item Details -->
+<section>
+<h2 class="text-xl font-bold font-manrope text-primary tracking-tight mb-6">Item Details</h2>
+<div class="grid grid-cols-3 gap-6">
+<div class="col-span-1 space-y-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant px-1">Shoe Type</label>
+<select class="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 text-on-surface focus:ring-2 focus:ring-secondary/20 font-medium">
+<option>Sneaker</option>
+<option>Leather Dress</option>
+<option>Suede Loafer</option>
+<option>Luxury Heel</option>
+<option>Boot</option>
+</select>
+</div>
+<div class="col-span-1 space-y-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant px-1">Brand</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 text-on-surface focus:ring-2 focus:ring-secondary/20 font-medium" placeholder="e.g. Balenciaga" type="text"/>
+</div>
+<div class="col-span-1 space-y-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant px-1">Model / Color</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 text-on-surface focus:ring-2 focus:ring-secondary/20 font-medium" placeholder="Triple S / Beige" type="text"/>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-2 gap-8">
+<div class="aspect-video bg-surface-container-low rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 group cursor-pointer hover:border-secondary/50 transition-all">
+<span class="material-symbols-outlined text-4xl text-outline-variant group-hover:text-secondary mb-2">add_a_photo</span>
+<p class="text-sm font-bold text-outline-variant group-hover:text-secondary">Condition Photos</p>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant px-1">Artisan Notes</label>
+<textarea class="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 text-on-surface focus:ring-2 focus:ring-secondary/20 font-medium resize-none" placeholder="Mention scuffs, stains, or specific requests..." rows="4"></textarea>
+</div>
+</div>
+</section>
+<!-- Section 3: Service Selection -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-xl font-bold font-manrope text-primary tracking-tight">Service Selection</h2>
+<span class="text-xs font-medium text-outline px-3 py-1 bg-surface-container rounded-full">3 Available in HQ</span>
+</div>
+<div class="grid grid-cols-3 gap-4">
+<!-- Service Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl border-2 border-primary ring-4 ring-primary/5 transition-all relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-primary transform translate-x-8 -translate-y-8 rotate-45 flex items-end justify-center pb-1">
+<span class="material-symbols-outlined text-white text-xs -rotate-45">check</span>
+</div>
+<div class="w-10 h-10 bg-secondary-container rounded-lg flex items-center justify-center text-on-secondary-container mb-4">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cleaning_services</span>
+</div>
+<h3 class="font-bold text-primary mb-1">Deep Clean</h3>
+<p class="text-xs text-outline mb-4 leading-relaxed">Full internal &amp; external revitalization.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="text-lg font-black text-primary">$45.00</span>
+<span class="text-[10px] font-bold text-secondary uppercase tracking-tighter bg-secondary-container px-2 py-0.5 rounded-full">2-3 Days</span>
+</div>
+</div>
+<!-- Service Card 2 -->
+<div class="bg-surface-container-low p-6 rounded-2xl border-2 border-transparent hover:border-secondary/30 transition-all cursor-pointer group">
+<div class="w-10 h-10 bg-surface-container-highest rounded-lg flex items-center justify-center text-outline-variant mb-4 group-hover:bg-secondary-container group-hover:text-on-secondary-container transition-colors">
+<span class="material-symbols-outlined">brush</span>
+</div>
+<h3 class="font-bold text-primary mb-1">Midsole Repaint</h3>
+<p class="text-xs text-outline mb-4 leading-relaxed">Precision color matching and sealing.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="text-lg font-black text-primary">$35.00</span>
+<span class="text-[10px] font-bold text-outline uppercase tracking-tighter">4-5 Days</span>
+</div>
+</div>
+<!-- Service Card 3 -->
+<div class="bg-surface-container-low p-6 rounded-2xl border-2 border-transparent hover:border-secondary/30 transition-all cursor-pointer group">
+<div class="w-10 h-10 bg-surface-container-highest rounded-lg flex items-center justify-center text-outline-variant mb-4 group-hover:bg-secondary-container group-hover:text-on-secondary-container transition-colors">
+<span class="material-symbols-outlined">handyman</span>
+</div>
+<h3 class="font-bold text-primary mb-1">Sole Reglue</h3>
+<p class="text-xs text-outline mb-4 leading-relaxed">Structural integrity restoration.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="text-lg font-black text-primary">$25.00</span>
+<span class="text-[10px] font-bold text-outline uppercase tracking-tighter">1-2 Days</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 4: Outlet & Logistics -->
+<section>
+<h2 class="text-xl font-bold font-manrope text-primary tracking-tight mb-6">Outlet &amp; Logistics</h2>
+<div class="grid grid-cols-2 gap-8">
+<div class="space-y-4">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant px-1">Select Outlet</label>
+<div class="grid grid-cols-1 gap-3">
+<div class="p-4 bg-emerald-100/50 rounded-xl border-l-4 border-emerald-700 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-900">domain</span>
+<div>
+<p class="text-sm font-bold text-emerald-900">Downtown HQ</p>
+<p class="text-xs text-emerald-700">Main Lab</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-emerald-700">radio_button_checked</span>
+</div>
+<div class="p-4 bg-surface-container-low rounded-xl border-l-4 border-transparent flex items-center justify-between opacity-60 cursor-pointer hover:opacity-100 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline">storefront</span>
+<div>
+<p class="text-sm font-bold text-primary">The Annex</p>
+<p class="text-xs text-outline">Processing Hub</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<label class="block text-xs font-bold uppercase tracking-wider text-on-surface-variant px-1">Collection Method</label>
+<div class="flex gap-4">
+<div class="flex-1 p-4 bg-surface-container-low rounded-xl border border-transparent hover:border-secondary cursor-pointer transition-all flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-2xl">package_2</span>
+<span class="text-sm font-bold">Drop-off</span>
+</div>
+<div class="flex-1 p-4 bg-surface-container-lowest border-2 border-primary rounded-xl flex flex-col items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-2xl text-primary" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="text-sm font-bold text-primary">White Glove</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sticky Order Summary Sidebar -->
+<aside class="w-96">
+<div class="sticky top-32 bg-white rounded-3xl shadow-[0px_12px_32px_rgba(26,28,27,0.06)] overflow-hidden border border-surface-container">
+<div class="bg-primary p-8 text-on-primary">
+<p class="text-[10px] font-black uppercase tracking-[0.2em] opacity-60 mb-1">Current Order</p>
+<h2 class="text-2xl font-manrope font-extrabold tracking-tight">Order Summary</h2>
+</div>
+<div class="p-8 space-y-6">
+<!-- Summary List -->
+<div class="space-y-4">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-sm font-bold text-primary">Deep Clean Service</p>
+<p class="text-xs text-outline">Item: Balenciaga Triple S</p>
+</div>
+<span class="font-bold text-primary">$45.00</span>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<p class="text-sm font-bold text-primary">White Glove Logistics</p>
+<p class="text-xs text-outline">Pick-up &amp; Delivery</p>
+</div>
+<span class="font-bold text-primary">$15.00</span>
+</div>
+</div>
+<div class="pt-6 border-t border-dashed border-outline-variant">
+<div class="flex items-center gap-3 mb-6 bg-secondary-container/30 p-4 rounded-xl">
+<span class="material-symbols-outlined text-on-secondary-container">calendar_today</span>
+<div>
+<p class="text-[10px] font-bold text-on-secondary-container uppercase tracking-wider">Est. Completion</p>
+<p class="text-sm font-bold text-primary">Oct 24, 2023</p>
+</div>
+</div>
+<div class="flex justify-between items-end mb-8">
+<p class="text-sm font-bold text-on-surface-variant">Grand Total</p>
+<div class="text-right">
+<p class="text-3xl font-manrope font-black text-primary leading-none">$60.00</p>
+<p class="text-[10px] text-outline mt-1 font-medium italic">Tax included (5%)</p>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-5 rounded-2xl font-bold tracking-tight hover:scale-[0.98] active:opacity-80 transition-all flex items-center justify-center gap-2 group shadow-lg shadow-primary/10">
+<span>Create Order</span>
+<span class="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<button class="w-full py-4 text-xs font-bold text-outline hover:text-primary transition-colors mt-2">
+                                Save Draft &amp; Exit
+                            </button>
+</div>
+</div>
+<div class="p-6 bg-surface-container-low/50 border-t border-surface-container flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary text-sm">verified_user</span>
+<p class="text-[10px] font-bold text-on-surface-variant leading-tight">Order governed by Master Artisan’s Premium Preservation Guarantee.</p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>

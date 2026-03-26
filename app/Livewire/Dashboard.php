@@ -5,7 +5,12 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Order;
 use App\Models\Customer;
+use App\Models\Outlet;
 use App\Models\Payment;
+use App\Models\Feedback;
+use App\Models\Survey;
+use App\Models\SurveyResponse;
+use App\Services\SubscriptionService;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 
@@ -16,8 +21,22 @@ class Dashboard extends Component
     public $year;
     public $availableYears = [];
 
+    // Feedback form
+    public $feedbackCategory = 'saran';
+    public $feedbackMessage = '';
+    public $feedbackSent = false;
+
+    // Survey modal
+    public $showSurveyModal = false;
+    public $pendingSurvey = null;
+
     public function mount()
     {
+        // Redirect super admin to their own dashboard
+        if (auth()->user()->isSuperAdmin()) {
+            return redirect()->route('superadmin.dashboard');
+        }
+
         $this->month = now()->month;
         $this->year = now()->year;
         
@@ -34,6 +53,70 @@ class Dashboard extends Component
         }
         
         $this->availableYears = $years;
+
+        // Check for pending platform survey
+        $this->checkPendingSurvey();
+    }
+
+    protected function checkPendingSurvey(): void
+    {
+        // Skip if already dismissed this session
+        if (session('survey_modal_dismissed')) {
+            return;
+        }
+
+        $user = auth()->user();
+        $activeSurvey = Survey::platform()->active()->latest()->first();
+
+        if (!$activeSurvey) {
+            return;
+        }
+
+        // Check if user filled any platform survey in last 30 days
+        $recentResponse = SurveyResponse::whereHas('survey', function ($q) {
+                $q->where('type', 'platform');
+            })
+            ->where(function ($q) use ($user) {
+                $q->where('respondent_name', $user->name)
+                  ->orWhere('respondent_phone', $user->email);
+            })
+            ->where('created_at', '>=', now()->subDays(30))
+            ->exists();
+
+        if (!$recentResponse) {
+            $this->showSurveyModal = true;
+            $this->pendingSurvey = $activeSurvey;
+        }
+    }
+
+    public function dismissSurveyModal(): void
+    {
+        $this->showSurveyModal = false;
+        session(['survey_modal_dismissed' => true]);
+    }
+
+    public function submitFeedback(): void
+    {
+        $this->validate([
+            'feedbackCategory' => 'required|in:keluhan,ide,saran',
+            'feedbackMessage' => 'required|min:10|max:2000',
+        ], [
+            'feedbackMessage.required' => 'Pesan tidak boleh kosong.',
+            'feedbackMessage.min' => 'Pesan minimal 10 karakter.',
+        ]);
+
+        $user = auth()->user();
+
+        Feedback::create([
+            'user_id' => $user->id,
+            'outlet_id' => $user->outlet_id,
+            'category' => $this->feedbackCategory,
+            'message' => $this->feedbackMessage,
+        ]);
+
+        $this->feedbackMessage = '';
+        $this->feedbackCategory = 'saran';
+        $this->feedbackSent = true;
     }
 
     public function updated($property)
@@ -54,17 +137,15 @@ class Dashboard extends Component
     {
         $user = auth()->user();
         $isOwner = $user->isOwner();
-        
-        // Determine outlet scope
-        if ($isOwner) {
-            $outletIds = $user->ownedOutlets->pluck('id')->toArray();
-            // If outlet switcher is active, filter to that outlet
-            if (session('current_outlet_id')) {
-                $outletIds = [session('current_outlet_id')];
-            }
-        } else {
-            $outletIds = [$user->outlet_id];
-        }
+        $outletIds = $user->reportOutletIds();
+        $ownedOutletCount = $isOwner ? $user->ownedOutlets()->count() : 1;
+        $isCombinedOutletScope = $isOwner && count($outletIds) > 1;
+        $scopedOutlets = Outlet::whereIn('id', $outletIds)
+            ->orderBy('name')
+            ->get(['id', 'name']);
+        $activeScopeLabel = $isCombinedOutletScope
+            ? 'Semua cabang aktif'
+            : ($scopedOutlets->first()?->name ?? 'Outlet aktif');
 
         // Stats
         $todayOrders = Order::whereIn('outlet_id', $outletIds)
@@ -156,11 +237,34 @@ class Dashboard extends Component
         // Dispatch data for chart update
         $this->dispatch('chart-data-updated', labels: $chartLabels, data: $chartData);
 
+        // Subscription info
+        $subscriptionService = new SubscriptionService();
+        $orderLimitInfo = $subscriptionService->checkOrderLimit($user);
+        $currentPlan = $user->currentPlan();
+        $showBusinessUpsell = $isOwner
+            && $currentPlan === 'pro'
+            && $ownedOutletCount > 1
+            && !$user->canAccessMultiOutletReports();
+        $topPerformingOutlet = null;
+
+        if ($isCombinedOutletScope) {
+            $topPerformingOutlet = Payment::join('orders', 'payments.order_id', '=', 'orders.id')
+                ->join('outlets', 'orders.outlet_id', '=', 'outlets.id')
+                ->whereIn('orders.outlet_id', $outletIds)
+                ->where('payments.status', 'success')
+                ->whereMonth('payments.created_at', $this->month)
+                ->whereYear('payments.created_at', $this->year)
+                ->selectRaw('outlets.name, SUM(payments.amount) as revenue_total, COUNT(DISTINCT orders.id) as orders_total')
+                ->groupBy('outlets.id', 'outlets.name')
+                ->orderByDesc('revenue_total')
+                ->first();
+        }
+
         return view('livewire.dashboard', [
             'isOwner' => $isOwner,
-            'todayOrders' => $todayOrders, // Remains today's actual live data
+            'todayOrders' => $todayOrders,
             'monthOrders' => $monthOrders,
-            'todayRevenue' => $todayRevenue, // Remains today's actual live data
+            'todayRevenue' => $todayRevenue,
             'monthRevenue' => $monthRevenue,
             'pendingOrders' => $pendingOrders,
             'readyOrders' => $readyOrders,
@@ -169,6 +273,14 @@ class Dashboard extends Component
             'chartData' => $chartData,
             'statusCounts' => $statusCounts,
             'recentOrders' => $recentOrders,
+            'orderLimitInfo' => $orderLimitInfo,
+            'currentPlan' => $currentPlan,
+            'ownedOutletCount' => $ownedOutletCount,
+            'isCombinedOutletScope' => $isCombinedOutletScope,
+            'showBusinessUpsell' => $showBusinessUpsell,
+            'activeScopeLabel' => $activeScopeLabel,
+            'scopedOutlets' => $scopedOutlets,
+            'topPerformingOutlet' => $topPerformingOutlet,
         ]);
     }
 }

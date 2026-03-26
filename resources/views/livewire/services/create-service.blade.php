@@ -1,63 +1,71 @@
-<div class="p-4 sm:p-6 lg:p-8">
+<div class="py-8">
     <!-- Header -->
-    <div class="mb-6">
-        <a href="{{ route('services.index') }}" class="text-sm text-gray-500 hover:text-primary-600 flex items-center gap-1 mb-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            Back to Services
+    <div class="mb-12">
+        <a href="{{ route('services.index') }}" class="text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/40 hover:text-artisan-secondary flex items-center gap-2 mb-6 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+            Kembali ke Katalog
         </a>
-        <h1 class="text-xl sm:text-2xl font-bold text-gray-900">➕ Add Service</h1>
+        <h1 class="headline-editorial text-4xl lg:text-5xl italic">Tambah Protokol Baru</h1>
     </div>
 
-    <!-- Form Card -->
-    <div class="card max-w-2xl">
-        <form wire:submit="save" class="space-y-4 sm:space-y-6">
-            @if($availableOutlets->count() > 1)
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Outlet *</label>
-                <select wire:model="outlet_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                    @foreach($availableOutlets as $outlet)
-                        <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
-                    @endforeach
-                </select>
-                @error('outlet_id') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
-            @elseif($availableOutlets->count() == 1)
-            <div class="p-3 bg-gray-50 rounded-lg">
-                <p class="text-sm text-gray-600">
-                    <span class="font-medium">Outlet:</span> {{ $availableOutlets->first()->name }}
-                </p>
-            </div>
-            @endif
+    <!-- Form Container -->
+    <div class="max-w-3xl">
+        <div class="card-artisan p-10 lg:p-16">
+            <form wire:submit="save" class="space-y-12">
+                @if($availableOutlets->count() > 1)
+                    <div>
+                        <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Penugasan Outlet *</label>
+                        <select wire:model="outlet_id" class="artisan-input">
+                            @foreach($availableOutlets as $outlet)
+                                <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('outlet_id') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                    </div>
+                @elseif($availableOutlets->count() == 1)
+                    <div class="p-8 bg-artisan-surface-low rounded-2xl flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-1">Outlet Ditugaskan</p>
+                            <p class="text-sm font-manrope font-black text-artisan-primary">{{ $availableOutlets->first()->name }}</p>
+                        </div>
+                        <svg class="w-5 h-5 text-artisan-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                @endif
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Nama Service *</label>
-                <input type="text" wire:model="name" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="e.g., Deep Clean">
-                @error('name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-            </div>
+                <div class="space-y-10 pt-10 border-t border-artisan-outline/10">
+                    <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-artisan-secondary">Detail Protokol</h4>
+                    
+                    <div>
+                        <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Nama Protokol *</label>
+                        <input type="text" wire:model="name" class="artisan-input" placeholder="Contoh: Cuci Ekstra Mendalam">
+                        @error('name') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                    </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Unit *</label>
-                    <select wire:model="unit" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
-                        <option value="pasang">Per Pasang</option>
-                        <option value="pcs">Per Pcs</option>
-                        <option value="kg">Per Kg</option>
-                        <option value="meter">Per Meter</option>
-                    </select>
-                    @error('unit') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Satuan Metrik *</label>
+                            <select wire:model="unit" class="artisan-input">
+                                <option value="pasang">Per Pasang</option>
+                                <option value="pcs">Per Buah</option>
+                                <option value="kg">Per Kilogram</option>
+                                <option value="meter">Per Meter</option>
+                            </select>
+                            @error('unit') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Harga Layanan (Rp) *</label>
+                            <input type="number" wire:model="price" class="artisan-input" placeholder="50000">
+                            @error('price') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Harga (Rp) *</label>
-                    <input type="number" wire:model="price" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500" placeholder="50000">
-                    @error('price') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                <div class="flex flex-col sm:flex-row gap-6 pt-10 border-t border-artisan-outline/10">
+                    <a href="{{ route('services.index') }}" class="btn-artisan-secondary flex-1 text-center">Batalkan</a>
+                    <button type="submit" class="btn-artisan-primary flex-1">Simpan Protokol</button>
                 </div>
-            </div>
-
-            <div class="flex flex-col-reverse sm:flex-row gap-3 pt-4">
-                <a href="{{ route('services.index') }}" class="btn-secondary flex-1 text-center">Cancel</a>
-                <button type="submit" class="btn-primary flex-1">Save Service</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>

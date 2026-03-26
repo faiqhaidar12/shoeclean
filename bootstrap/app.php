@@ -15,9 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
         
-        // Exclude payment notification from CSRF verification (for Midtrans webhook)
+        // Exclude payment notification from CSRF verification (for Midtrans & Mayar webhooks)
         $middleware->validateCsrfTokens(except: [
             'payment/notification',
+            'webhook/mayar',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

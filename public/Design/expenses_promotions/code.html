@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed": "#bcedda",
+              "outline-variant": "#c1c8c4",
+              "outline": "#727975",
+              "primary-fixed-dim": "#adcec1",
+              "surface-container-high": "#e9e8e6",
+              "inverse-primary": "#adcec1",
+              "on-secondary-fixed": "#002118",
+              "primary-fixed": "#c8eadd",
+              "on-surface": "#1a1c1b",
+              "on-error": "#ffffff",
+              "primary": "#001610",
+              "on-tertiary-fixed-variant": "#3a4a49",
+              "secondary-container": "#bcedda",
+              "secondary-fixed-dim": "#a1d1bf",
+              "on-background": "#1a1c1b",
+              "surface": "#faf9f7",
+              "inverse-surface": "#2f3130",
+              "error": "#ba1a1a",
+              "surface-tint": "#46645b",
+              "inverse-on-surface": "#f1f1ef",
+              "secondary": "#3a6758",
+              "tertiary-container": "#1a2a2a",
+              "on-tertiary-fixed": "#0e1e1e",
+              "on-tertiary-container": "#809291",
+              "surface-bright": "#faf9f7",
+              "background": "#faf9f7",
+              "surface-container-highest": "#e3e2e0",
+              "on-error-container": "#93000a",
+              "tertiary-fixed": "#d4e6e5",
+              "on-primary-fixed-variant": "#2f4c43",
+              "primary-container": "#0d2c24",
+              "on-secondary": "#ffffff",
+              "error-container": "#ffdad6",
+              "on-primary-fixed": "#012019",
+              "surface-container-lowest": "#ffffff",
+              "on-surface-variant": "#414845",
+              "on-tertiary": "#ffffff",
+              "surface-dim": "#dadad8",
+              "on-primary": "#ffffff",
+              "surface-container-low": "#f4f3f1",
+              "on-secondary-fixed-variant": "#214f41",
+              "on-primary-container": "#75958a",
+              "tertiary": "#051515",
+              "tertiary-fixed-dim": "#b8cac9",
+              "surface-container": "#eeeeec",
+              "on-secondary-container": "#406d5e",
+              "surface-variant": "#e3e2e0"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #faf9f7;
+      }
+      h1, h2, h3, .headline-md {
+        font-family: 'Manrope', sans-serif;
+      }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="h-screen w-72 fixed left-0 top-0 border-r border-emerald-900/5 bg-emerald-50 flex flex-col py-8 px-6 gap-y-2 z-50">
+<div class="mb-10 px-2">
+<h2 class="font-manrope font-bold text-xl text-emerald-900">Master Artisan</h2>
+<p class="text-xs text-emerald-700/60 uppercase tracking-widest mt-1">Premium Preservation</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active state logic: Expenses is the current intent -->
+<a class="flex items-center gap-3 px-4 py-3 text-emerald-700/60 hover:text-emerald-900 hover:bg-emerald-100/30 transition-all duration-200 ease-in-out font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-emerald-700/60 hover:text-emerald-900 hover:bg-emerald-100/30 transition-all duration-200 ease-in-out font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined">receipt_long</span> Orders
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-emerald-700/60 hover:text-emerald-900 hover:bg-emerald-100/30 transition-all duration-200 ease-in-out font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined">handyman</span> Services
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-emerald-700/60 hover:text-emerald-900 hover:bg-emerald-100/30 transition-all duration-200 ease-in-out font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined">storefront</span> Outlets
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-emerald-700/60 hover:text-emerald-900 hover:bg-emerald-100/30 transition-all duration-200 ease-in-out font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined">groups</span> Customers
+            </a>
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-4 py-3 bg-emerald-100/50 text-emerald-900 font-semibold border-r-4 border-emerald-700 transition-all duration-200 ease-in-out font-inter text-sm" href="#">
+<span class="material-symbols-outlined">payments</span> Expenses
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-emerald-700/60 hover:text-emerald-900 hover:bg-emerald-100/30 transition-all duration-200 ease-in-out font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined">confirmation_number</span> Promos
+            </a>
+</nav>
+<div class="mt-auto pt-6 border-t border-emerald-900/5 space-y-1">
+<button class="w-full mb-4 py-3 px-4 bg-primary text-on-primary rounded-xl font-semibold text-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span> New Order
+            </button>
+<a class="flex items-center gap-3 px-4 py-3 text-emerald-700/60 hover:text-emerald-900 transition-all font-inter text-sm" href="#">
+<span class="material-symbols-outlined">help</span> Help Center
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-emerald-700/60 hover:text-emerald-900 transition-all font-inter text-sm" href="#">
+<span class="material-symbols-outlined">logout</span> Sign Out
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-72 min-h-screen p-12">
+<!-- TopNavBar (Authority: JSON) -->
+<header class="flex justify-between items-center mb-16">
+<div class="flex flex-col">
+<span class="text-secondary font-bold tracking-widest text-xs uppercase mb-2">Financial Overview</span>
+<h1 class="text-primary font-black text-5xl tracking-tighter font-headline">Treasury &amp; Loyalty</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3 px-4 py-2 bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-secondary">location_on</span>
+<span class="font-bold text-primary tracking-tight">Outlet: Downtown HQ</span>
+</div>
+<div class="flex gap-2">
+<button class="p-3 bg-white shadow-sm rounded-full text-primary hover:bg-emerald-50 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-3 bg-white shadow-sm rounded-full text-primary hover:bg-emerald-50 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Financial Summary & Bar Chart -->
+<section class="col-span-12 lg:col-span-8 space-y-8">
+<div class="bg-surface-container-low rounded-xl p-8 flex flex-col gap-8">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="headline-md text-primary font-extrabold mb-1">Expense Trends</h3>
+<p class="text-on-surface-variant text-sm font-medium">Monthly operational outflow comparison</p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-secondary uppercase tracking-widest">Total YTD</span>
+<p class="text-3xl font-black text-primary font-headline tracking-tighter">$142,850.00</p>
+</div>
+</div>
+<!-- Simple Bar Chart (HTML/Tailwind) -->
+<div class="flex items-end justify-between h-48 gap-4 px-4 pt-4">
+<div class="flex flex-col items-center flex-1 gap-3">
+<div class="w-full bg-primary-fixed/40 rounded-t-lg transition-all hover:bg-primary-fixed" style="height: 45%;"></div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Jan</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-3">
+<div class="w-full bg-primary-fixed/40 rounded-t-lg transition-all hover:bg-primary-fixed" style="height: 60%;"></div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Feb</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-3">
+<div class="w-full bg-primary-fixed/40 rounded-t-lg transition-all hover:bg-primary-fixed" style="height: 55%;"></div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Mar</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-3">
+<div class="w-full bg-primary-fixed/40 rounded-t-lg transition-all hover:bg-primary-fixed" style="height: 85%;"></div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Apr</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-3">
+<div class="w-full bg-primary-fixed/40 rounded-t-lg transition-all hover:bg-primary-fixed" style="height: 70%;"></div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">May</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-3">
+<div class="w-full bg-primary font-headline rounded-t-lg transition-all" style="height: 100%;"></div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Jun</span>
+</div>
+</div>
+</div>
+<!-- Expense Tracker Table -->
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<h3 class="headline-md text-primary font-extrabold">Expense Registry</h3>
+<button class="px-5 py-2.5 bg-secondary text-white rounded-xl font-bold text-sm flex items-center gap-2 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">add_circle</span> Log Expense
+                        </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-on-surface-variant/60 uppercase text-[10px] tracking-[0.2em] font-black border-b border-surface-container">
+<th class="pb-4 font-black">Category</th>
+<th class="pb-4 font-black">Reference</th>
+<th class="pb-4 font-black">Date</th>
+<th class="pb-4 font-black text-right">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="group hover:bg-primary-fixed/10 transition-colors">
+<td class="py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-lg">sanitizer</span>
+</div>
+<span class="font-bold text-primary text-sm">Supplies</span>
+</div>
+</td>
+<td class="py-6 text-sm text-on-surface-variant font-medium">Fine Leather Chemicals (Batch 402)</td>
+<td class="py-6 text-sm text-on-surface-variant font-medium">June 14, 2024</td>
+<td class="py-6 text-right font-black text-primary">$1,240.00</td>
+</tr>
+<tr class="group hover:bg-primary-fixed/10 transition-colors">
+<td class="py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-lg">badge</span>
+</div>
+<span class="font-bold text-primary text-sm">Salaries</span>
+</div>
+</td>
+<td class="py-6 text-sm text-on-surface-variant font-medium">Monthly Payroll - Artisan Dept.</td>
+<td class="py-6 text-sm text-on-surface-variant font-medium">June 01, 2024</td>
+<td class="py-6 text-right font-black text-primary">$18,450.00</td>
+</tr>
+<tr class="group hover:bg-primary-fixed/10 transition-colors">
+<td class="py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-lg">house</span>
+</div>
+<span class="font-bold text-primary text-sm">Rent</span>
+</div>
+</td>
+<td class="py-6 text-sm text-on-surface-variant font-medium">Downtown HQ Lease - Q2 Final</td>
+<td class="py-6 text-sm text-on-surface-variant font-medium">May 28, 2024</td>
+<td class="py-6 text-right font-black text-primary">$4,800.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Sidebar Content: Promotions -->
+<aside class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Promotions Header -->
+<div class="flex items-center justify-between">
+<h3 class="headline-md text-primary font-extrabold">Active Promos</h3>
+<span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-black uppercase tracking-widest rounded-full">4 Running</span>
+</div>
+<!-- Promo Card 1 -->
+<div class="relative bg-primary p-8 rounded-xl overflow-hidden group">
+<!-- Glass Accent -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-secondary/30 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-700"></div>
+<div class="relative z-10 flex flex-col gap-6">
+<div>
+<span class="text-on-primary-container font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">Acquisition Offer</span>
+<h4 class="text-white font-headline font-black text-2xl tracking-tighter leading-none">10% Off First Visit</h4>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-primary-container font-medium">Validity</span>
+<span class="text-white font-bold">Jan 01 — Dec 31, 2024</span>
+</div>
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary-fixed h-full w-2/3"></div>
+</div>
+<div class="flex justify-between items-center">
+<span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase rounded-lg border border-emerald-500/30">Active</span>
+<span class="text-white/60 text-[10px] font-bold">452 Uses</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Promo Card 2 -->
+<div class="bg-white border border-surface-container p-8 rounded-xl space-y-6">
+<div>
+<span class="text-on-surface-variant/60 font-black uppercase text-[10px] tracking-[0.2em] mb-2 block">Loyalty Reward</span>
+<h4 class="text-primary font-headline font-black text-2xl tracking-tighter leading-none">Artisan Gold Tier</h4>
+</div>
+<p class="text-on-surface-variant text-sm font-medium leading-relaxed">Exclusive 15% discount for members with 5+ premium restorations per year.</p>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm">schedule</span>
+<span class="text-xs font-bold text-on-surface-variant">Ongoing</span>
+</div>
+<button class="text-secondary font-black text-[10px] uppercase tracking-widest flex items-center gap-1 hover:gap-2 transition-all">
+                            Manage <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Stats/Insight Card -->
+<div class="bg-secondary-container/30 p-8 rounded-xl">
+<div class="flex items-start gap-4 mb-6">
+<div class="bg-secondary p-3 rounded-xl text-white">
+<span class="material-symbols-outlined">insights</span>
+</div>
+<div>
+<h4 class="font-headline font-black text-primary text-lg tracking-tight">Financial Health</h4>
+<p class="text-on-secondary-container text-xs font-medium">Margin analysis for June</p>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs font-bold text-primary">
+<span>Service Revenue</span>
+<span>$42,100</span>
+</div>
+<div class="flex justify-between text-xs font-bold text-error">
+<span>Operational Costs</span>
+<span>-$24,490</span>
+</div>
+<hr class="border-secondary/10 my-2"/>
+<div class="flex justify-between text-sm font-black text-primary uppercase tracking-tighter">
+<span>Net Preservation Profit</span>
+<span class="text-secondary">$17,610</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Contextual FAB (Suppressed on Details, but appropriate for adding records here) -->
+<button class="fixed bottom-10 right-10 w-16 h-16 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-50 group">
+<span class="material-symbols-outlined text-3xl">post_add</span>
+<span class="absolute right-20 bg-primary text-white text-[10px] font-black uppercase tracking-widest py-2 px-4 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Record Transaction</span>
+</button>
+</body></html>
