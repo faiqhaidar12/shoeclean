@@ -6,6 +6,20 @@
         <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-[400px] h-[400px] bg-white/5 rounded-full blur-[100px] pointer-events-none"></div>
 
         <div class="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-6 flex flex-wrap items-center justify-between gap-3 sm:mb-8">
+                <a href="{{ url('/') }}" class="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-3 text-[10px] font-black uppercase tracking-[0.22em] text-white/80 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+                    Kembali
+                </a>
+                <div class="flex flex-wrap items-center gap-3">
+                    <a href="{{ route('public.order.select') }}" class="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-3 text-[10px] font-black uppercase tracking-[0.22em] text-white/80 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white">
+                        Ganti Outlet
+                    </a>
+                    <a href="{{ route('track') }}" class="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-3 text-[10px] font-black uppercase tracking-[0.22em] text-white/80 backdrop-blur-md transition-colors hover:bg-white/10 hover:text-white">
+                        Lacak Pesanan
+                    </a>
+                </div>
+            </div>
             <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
                 <div class="flex items-start gap-4 sm:items-center sm:gap-6">
                     <div class="flex h-14 w-14 items-center justify-center rounded-[1.25rem] border border-white/10 bg-white/5 text-2xl font-manrope font-black italic text-artisan-secondary shadow-2xl backdrop-blur-xl sm:h-16 sm:w-16 sm:rounded-[1.5rem] sm:text-3xl">
@@ -20,11 +34,11 @@
                 </div>
                 
                 <div class="grid gap-2 sm:pr-2">
-                    <p class="flex items-start gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-white/40 sm:justify-end sm:text-[10px]">
+                    <p class="flex items-start gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-white/70 sm:justify-end sm:text-[10px]">
                         <svg class="mt-0.5 h-3.5 w-3.5 shrink-0 text-artisan-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         {{ $outlet->address }}
                     </p>
-                    <p class="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-white/40 sm:justify-end sm:text-[10px]">
+                    <p class="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-white/70 sm:justify-end sm:text-[10px]">
                         <svg class="h-3.5 w-3.5 shrink-0 text-artisan-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                         {{ $outlet->phone }}
                     </p>
@@ -90,8 +104,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                         </svg>
                     </div>
-                    <h2 class="headline-editorial text-3xl sm:text-4xl italic text-artisan-primary mb-3">Tentukan Lokasi</h2>
-                    <p class="text-[10px] text-artisan-primary/30 font-black uppercase tracking-[0.2em] leading-relaxed">Pilih cabang artisan terdekat untuk kualitas restorasi yang seragam di seluruh jaringan kami.</p>
+                    <h2 class="headline-editorial text-3xl sm:text-4xl italic text-artisan-primary mb-3">Pilih Cabang Terdekat</h2>
+                    <p class="text-[10px] text-artisan-primary/55 font-black uppercase tracking-[0.2em] leading-relaxed">Pilih outlet yang akan menangani pesanan Anda agar estimasi biaya, QRIS, dan proses pengerjaan sesuai dengan cabang yang dipilih.</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -130,10 +144,10 @@
                 <div class="flex flex-col gap-4 sm:gap-6 md:flex-row md:items-end md:justify-between">
                     <div class="max-w-xl">
                         <div class="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-3">
-                            <span class="w-4 h-[1px] bg-artisan-secondary"></span> Curated Menu
+                            <span class="w-4 h-[1px] bg-artisan-secondary"></span> Pilih Layanan
                         </div>
-                        <h2 class="headline-editorial text-3xl italic text-artisan-primary sm:text-4xl mb-2">Layanan Restorasi</h2>
-                        <p class="text-[10px] leading-relaxed text-artisan-primary/30 font-black uppercase tracking-[0.2em]">Pilih layanan yang dibutuhkan, lalu atur jumlah pasang langsung dari keranjang di bawah.</p>
+                        <h2 class="headline-editorial text-3xl italic text-artisan-primary sm:text-4xl mb-2">Tentukan Layanan untuk Sepatu Anda</h2>
+                        <p class="text-[10px] leading-relaxed text-artisan-primary/55 font-black uppercase tracking-[0.2em]">Pilih jenis perawatan yang dibutuhkan, atur jumlah pasang, lalu lanjutkan ke data customer tanpa perlu chat admin lebih dulu.</p>
                     </div>
                 </div>
 
@@ -144,7 +158,7 @@
                             <div class="mb-6">
                                 <div class="mb-4 inline-flex items-center rounded-full bg-artisan-secondary/5 px-3 py-1 text-[8px] font-black uppercase tracking-[0.24em] text-artisan-secondary">Per {{ $service->unit }}</div>
                                 <h3 class="headline-editorial text-lg italic text-artisan-primary sm:text-xl mb-2">{{ $service->name }}</h3>
-                                <p class="text-[10px] leading-relaxed text-artisan-primary/45 font-bold">Pilih layanan ini bila Anda ingin hasil pengerjaan premium untuk pasangan yang sedang Anda order.</p>
+                                <p class="text-[10px] leading-relaxed text-artisan-primary/45 font-bold">Cocok untuk menjaga sepatu tetap bersih, rapi, dan nyaman dipakai sesuai kebutuhan perawatan yang Anda pilih.</p>
                             </div>
                             <div class="flex items-end justify-between gap-4">
                                 <div>
@@ -163,7 +177,7 @@
                 <div class="bg-white rounded-[2.25rem] sm:rounded-[3rem] shadow-artisan-lg border border-slate-100 overflow-hidden">
                     <div class="px-5 py-5 bg-artisan-primary text-white flex items-center justify-between gap-4 sm:px-10 sm:py-8">
                         <div>
-                            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-1">Selections</h3>
+                            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-1">Keranjang Layanan</h3>
                             <p class="headline-editorial text-xl italic sm:text-2xl">Keranjang Pesanan</p>
                         </div>
                         <div class="flex items-center gap-3">
@@ -248,10 +262,10 @@
             <div class="space-y-8 py-6 animate-fade-in-right sm:space-y-12 sm:py-10">
                 <div class="max-w-xl">
                     <div class="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-3">
-                        <span class="w-4 h-[1px] bg-artisan-secondary"></span> Guest Profile
+                        <span class="w-4 h-[1px] bg-artisan-secondary"></span> Data Customer
                     </div>
                     <h2 class="headline-editorial text-3xl italic text-artisan-primary sm:text-4xl mb-2">Data Pelanggan</h2>
-                    <p class="text-[10px] leading-relaxed text-artisan-primary/30 font-black uppercase tracking-[0.2em]">Isi kontak aktif dan pilih cara layanan agar outlet bisa memproses order tanpa perlu chat ulang.</p>
+                    <p class="text-[10px] leading-relaxed text-artisan-primary/55 font-black uppercase tracking-[0.2em]">Isi kontak yang aktif agar outlet bisa mengonfirmasi pesanan, memberi update progres, dan menghubungi Anda tanpa perlu tanya ulang.</p>
                 </div>
 
                 <div class="bg-white rounded-[2.25rem] sm:rounded-[3rem] p-5 sm:p-8 lg:p-10 border border-slate-100 shadow-artisan-lg space-y-8 sm:space-y-10">
@@ -259,14 +273,14 @@
                         <div class="group">
                             <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/30 mb-3 ml-2 group-focus-within:text-artisan-secondary transition-colors">Nama Lengkap *</label>
                             <input wire:model="customer_name" type="text" placeholder="Tulis nama Anda..." 
-                                class="w-full px-5 py-4 sm:px-6 sm:py-5 bg-slate-50/60 border border-slate-100 rounded-2xl text-[13px] font-bold text-artisan-primary focus:ring-2 focus:ring-artisan-secondary/20 transition-all outline-none placeholder:text-artisan-primary/10">
+                                class="w-full px-5 py-4 sm:px-6 sm:py-5 bg-white border border-artisan-outline/45 rounded-2xl text-[13px] font-bold text-artisan-primary shadow-artisan-sm focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all outline-none placeholder:text-artisan-primary/40">
                             @error('customer_name') <p class="text-red-500 text-[10px] font-bold mt-2 ml-2 italic uppercase tracking-wider">{{ $message }}</p> @enderror
                         </div>
 
                         <div class="group">
                             <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/30 mb-3 ml-2 group-focus-within:text-artisan-secondary transition-colors">WhatsApp / HP *</label>
                             <input wire:model="customer_phone" type="tel" placeholder="08xxxxxxxxxx" 
-                                class="w-full px-5 py-4 sm:px-6 sm:py-5 bg-slate-50/60 border border-slate-100 rounded-2xl text-[13px] font-bold text-artisan-primary focus:ring-2 focus:ring-artisan-secondary/20 transition-all outline-none placeholder:text-artisan-primary/10">
+                                class="w-full px-5 py-4 sm:px-6 sm:py-5 bg-white border border-artisan-outline/45 rounded-2xl text-[13px] font-bold text-artisan-primary shadow-artisan-sm focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all outline-none placeholder:text-artisan-primary/40">
                             @error('customer_phone') <p class="text-red-500 text-[10px] font-bold mt-2 ml-2 italic uppercase tracking-wider">{{ $message }}</p> @enderror
                         </div>
                     </div>
@@ -275,7 +289,7 @@
                     <div class="space-y-5">
                         <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/30 ml-2">Metode Layanan</label>
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
-                            @foreach(['regular' => ['Reguler', 'Drop at Outlet'], 'pickup' => ['Pickup', 'Artisan Fetch'], 'delivery' => ['delivery', 'Home Courier']] as $type => [$label, $desc])
+                            @foreach(['regular' => ['Reguler', 'Datang Langsung ke Outlet'], 'pickup' => ['Pickup', 'Outlet Menjemput ke Lokasi Anda'], 'delivery' => ['Delivery', 'Sepatu Diantar Kembali ke Alamat Anda']] as $type => [$label, $desc])
                                 <label class="relative cursor-pointer group">
                                     <input wire:model.live="order_type" type="radio" value="{{ $type }}" class="peer sr-only">
                                     <div class="h-full p-5 sm:p-7 border-2 rounded-[2rem] text-center transition-all duration-500 
@@ -301,9 +315,9 @@
                             <div class="relative group">
                                 <textarea wire:model="{{ $order_type === 'pickup' ? 'pickup_address' : 'delivery_address' }}" rows="3" 
                                     placeholder="Tuliskan alamat lengkap..." 
-                                    class="w-full px-5 py-5 sm:px-6 sm:py-6 bg-slate-50/60 border border-slate-100 rounded-[2rem] text-[13px] font-bold text-artisan-primary focus:ring-2 focus:ring-artisan-secondary/20 transition-all outline-none placeholder:text-artisan-primary/10 resize-none"></textarea>
+                                    class="w-full px-5 py-5 sm:px-6 sm:py-6 bg-white border border-artisan-outline/45 rounded-[2rem] text-[13px] font-bold text-artisan-primary shadow-artisan-sm focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all outline-none placeholder:text-artisan-primary/40 resize-none"></textarea>
                                 <div class="mt-3 text-[9px] font-black uppercase tracking-widest text-artisan-secondary">
-                                    Extra Surcharge: Rp {{ number_format($order_type === 'pickup' ? $pickup_fee : $delivery_fee, 0, ',', '.') }}
+                                    Biaya Tambahan: Rp {{ number_format($order_type === 'pickup' ? $pickup_fee : $delivery_fee, 0, ',', '.') }}
                                 </div>
                             </div>
                         </div>
@@ -314,12 +328,12 @@
                         <div class="space-y-6">
                             <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/30 ml-2">Catatan Pesanan</label>
                             <textarea wire:model="notes" rows="3" placeholder="Contoh: Titip di satpam, sepatu kotor sekali..." 
-                                class="w-full px-5 py-5 sm:px-6 sm:py-6 bg-slate-50/60 border border-slate-100 rounded-[2rem] text-[13px] font-bold text-artisan-primary focus:ring-2 focus:ring-artisan-secondary/20 transition-all outline-none placeholder:text-artisan-primary/10 resize-none"></textarea>
+                                class="w-full px-5 py-5 sm:px-6 sm:py-6 bg-white border border-artisan-outline/45 rounded-[2rem] text-[13px] font-bold text-artisan-primary shadow-artisan-sm focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all outline-none placeholder:text-artisan-primary/40 resize-none"></textarea>
                         </div>
                         
                         <div class="space-y-6">
-                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/30 ml-2">Privilege Code</label>
-                            <div class="bg-slate-50/60 rounded-[2rem] p-4">
+                            <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/30 ml-2">Kode Promo</label>
+                            <div class="bg-artisan-surface-low/90 rounded-[2rem] p-4 border border-artisan-outline/20">
                                 @if($applied_promo)
                                     <div class="flex items-center justify-between p-6 bg-white rounded-2xl shadow-sm border border-emerald-50">
                                         <div class="flex items-center gap-4">
@@ -331,13 +345,13 @@
                                                 <p class="text-[10px] font-bold text-artisan-primary/40">Hemat Rp {{ number_format($discount_amount, 0, ',', '.') }}</p>
                                             </div>
                                         </div>
-                                        <button wire:click="removePromo" class="text-[9px] font-black uppercase tracking-widest text-red-400 hover:text-red-600 transition-colors">Discard</button>
+                                        <button wire:click="removePromo" class="text-[9px] font-black uppercase tracking-widest text-red-400 hover:text-red-600 transition-colors">Hapus</button>
                                     </div>
                                 @else
                                     <div class="flex flex-col gap-3 sm:flex-row">
                                         <input wire:model="promo_code" type="text" placeholder="Masukkan kode..." 
-                                            class="flex-1 px-5 py-4 bg-white border border-slate-100 rounded-2xl text-[12px] font-bold text-artisan-primary uppercase focus:ring-2 focus:ring-artisan-secondary/20 transition-all outline-none placeholder:normal-case placeholder:text-artisan-primary/10">
-                                        <button wire:click="applyPromo" class="w-full sm:w-auto px-8 py-4 bg-artisan-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-artisan-secondary transition-all active:scale-95 shadow-lg shadow-artisan-primary/10">Apply</button>
+                                            class="flex-1 px-5 py-4 bg-white border border-artisan-outline/45 rounded-2xl text-[12px] font-bold text-artisan-primary uppercase shadow-artisan-sm focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all outline-none placeholder:normal-case placeholder:text-artisan-primary/40">
+                                        <button wire:click="applyPromo" class="w-full sm:w-auto px-8 py-4 bg-artisan-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-artisan-secondary transition-all active:scale-95 shadow-lg shadow-artisan-primary/10">Gunakan</button>
                                     </div>
                                     @if(session('promo_error')) <p class="text-red-500 text-[9px] font-bold mt-3 ml-2 italic uppercase tracking-wider">{{ session('promo_error') }}</p> @endif
                                     @if(session('promo_success')) <p class="text-emerald-600 text-[9px] font-bold mt-3 ml-2 italic uppercase tracking-wider">{{ session('promo_success') }}</p> @endif
@@ -369,10 +383,10 @@
                     <div class="absolute -bottom-20 left-8 h-36 w-36 rounded-full bg-white/5 blur-3xl"></div>
                     <div class="relative z-10 max-w-3xl">
                         <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-[9px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-4">
-                            <span class="w-4 h-[1px] bg-artisan-secondary"></span> Final Review
+                            <span class="w-4 h-[1px] bg-artisan-secondary"></span> Review Pesanan
                         </div>
-                        <h2 class="headline-editorial text-3xl italic text-white sm:text-5xl">Konfirmasi Pesanan</h2>
-                        <p class="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Periksa kembali detail layanan, total tagihan, dan metode pembayaran sebelum pesanan dikirim ke outlet.</p>
+                        <h2 class="headline-editorial text-3xl italic text-white sm:text-5xl">Pastikan Pesanan Sudah Sesuai</h2>
+                        <p class="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/70">Cek sekali lagi layanan, total estimasi, dan metode pembayaran agar outlet bisa langsung memproses order Anda dengan lebih cepat.</p>
                     </div>
                 </div>
 
@@ -383,8 +397,8 @@
                         <div class="bg-white rounded-[2.5rem] sm:rounded-[3.5rem] p-5 sm:p-8 lg:p-10 border border-slate-100 shadow-artisan-lg">
                             <div class="mb-8 flex items-center justify-between gap-4">
                                 <div>
-                                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-2 ml-2">Detail Identitas</h3>
-                                    <p class="text-[10px] font-bold text-artisan-primary/40 ml-2">Pastikan data pelanggan sudah benar sebelum order dikirim.</p>
+                                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-2 ml-2">Detail Customer</h3>
+                                    <p class="text-[10px] font-bold text-artisan-primary/40 ml-2">Pastikan nama, nomor WhatsApp, dan metode layanan sudah benar sebelum pesanan dikirim.</p>
                                 </div>
                                 <div class="flex h-14 w-14 items-center justify-center rounded-[1.5rem] bg-artisan-primary text-xl font-black italic text-white shadow-artisan">
                                     {{ strtoupper(substr($customer_name, 0, 1)) }}
@@ -433,8 +447,8 @@
                             <div class="px-5 py-5 bg-slate-50/50 sm:px-8 sm:py-7 lg:px-10">
                                 <div class="flex items-center justify-between gap-4">
                                     <div>
-                                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary">Curated Services</h3>
-                                        <p class="mt-2 text-[10px] font-bold text-artisan-primary/40">Semua layanan yang akan diproses pada order ini.</p>
+                                        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary">Ringkasan Layanan</h3>
+                                        <p class="mt-2 text-[10px] font-bold text-artisan-primary/40">Semua layanan yang akan diproses pada pesanan ini beserta jumlah pasangnya.</p>
                                     </div>
                                     <div class="rounded-[1.5rem] bg-white px-4 py-3 text-center shadow-sm">
                                         <p class="text-[8px] font-black uppercase tracking-[0.3em] text-artisan-primary/20">Item</p>
@@ -475,7 +489,7 @@
                             <div class="absolute top-0 right-0 w-32 h-32 bg-artisan-secondary/5 rounded-bl-[4rem]"></div>
                             <div class="absolute bottom-0 left-0 w-24 h-24 bg-artisan-primary/5 rounded-tr-[3rem]"></div>
                             
-                            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-8 whitespace-nowrap">Ringkasan Biaya</h3>
+                            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-8 whitespace-nowrap">Ringkasan Tagihan</h3>
                             
                             <div class="space-y-4 relative z-10">
                                 <div class="flex justify-between items-center text-artisan-primary/70">
@@ -514,15 +528,15 @@
                         <div class="bg-white rounded-[2.5rem] sm:rounded-[3rem] p-5 sm:p-8 lg:p-10 border border-slate-100 shadow-artisan-lg space-y-6">
                             <div>
                                 <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-2">Metode Pembayaran</h3>
-                                <p class="text-[10px] font-bold text-artisan-primary/50 leading-relaxed">Pilih cara pembayaran yang paling nyaman. Jika sudah transfer via QRIS sekarang, unggah bukti agar outlet bisa memverifikasi lebih cepat.</p>
+                                <p class="text-[10px] font-bold text-artisan-primary/50 leading-relaxed">Pilih cara pembayaran yang paling nyaman. Jika Anda scan QRIS sekarang, unggah bukti bayar agar outlet bisa memverifikasi pesanan lebih cepat.</p>
                             </div>
 
                             <div class="space-y-4">
                                 <label class="flex items-start gap-4 rounded-[2rem] border p-5 cursor-pointer transition-all {{ $payment_method === 'pay_at_store' ? 'border-artisan-primary bg-artisan-primary text-white shadow-artisan' : 'border-slate-100 hover:border-artisan-secondary/30 hover:bg-slate-50/50' }}">
                                     <input type="radio" wire:model.live="payment_method" value="pay_at_store" class="mt-1 text-artisan-primary focus:ring-artisan-secondary">
                                     <div>
-                                        <p class="text-[11px] font-black uppercase tracking-widest {{ $payment_method === 'pay_at_store' ? 'text-artisan-secondary' : 'text-artisan-primary' }}">Bayar di Toko</p>
-                                        <p class="text-[10px] font-bold mt-2 leading-relaxed {{ $payment_method === 'pay_at_store' ? 'text-white/70' : 'text-artisan-primary/50' }}">Pesanan dibuat sekarang, pembayaran dilakukan saat datang ke outlet atau saat penyerahan sepatu.</p>
+                                        <p class="text-[11px] font-black uppercase tracking-widest {{ $payment_method === 'pay_at_store' ? 'text-artisan-secondary' : 'text-artisan-primary' }}">Bayar di Outlet</p>
+                                        <p class="text-[10px] font-bold mt-2 leading-relaxed {{ $payment_method === 'pay_at_store' ? 'text-white/70' : 'text-artisan-primary/50' }}">Pesanan langsung tercatat sekarang, lalu pembayaran bisa dilakukan saat datang ke outlet atau saat serah terima sepatu.</p>
                                     </div>
                                 </label>
 
@@ -531,14 +545,14 @@
                                         <input type="radio" wire:model.live="payment_method" value="qris" class="mt-1 text-artisan-primary focus:ring-artisan-secondary">
                                         <div>
                                             <p class="text-[11px] font-black uppercase tracking-widest {{ $payment_method === 'qris' ? 'text-artisan-secondary' : 'text-artisan-primary' }}">Bayar via QRIS Outlet</p>
-                                            <p class="text-[10px] font-bold mt-2 leading-relaxed {{ $payment_method === 'qris' ? 'text-white/70' : 'text-artisan-primary/50' }}">Scan QRIS cabang ini dan unggah bukti pembayaran. Status akan berubah menjadi menunggu verifikasi outlet.</p>
+                                            <p class="text-[10px] font-bold mt-2 leading-relaxed {{ $payment_method === 'qris' ? 'text-white/70' : 'text-artisan-primary/50' }}">Scan QRIS cabang ini, bayar sesuai total estimasi, lalu unggah bukti agar outlet bisa mengecek pembayaran Anda.</p>
                                         </div>
                                     </label>
                                 @endif
                             </div>
 
                             @if($payment_method === 'qris' && $outlet->qris_image_path)
-                                <div class="space-y-5 rounded-[2rem] border border-slate-100 bg-slate-50/60 p-4 sm:p-5">
+                                <div class="space-y-5 rounded-[2rem] border border-artisan-outline/25 bg-artisan-surface-low/80 p-4 sm:p-5">
                                     <div class="rounded-[1.5rem] border border-slate-100 bg-white p-4 shadow-sm">
                                         <img src="{{ \Illuminate\Support\Facades\Storage::url($outlet->qris_image_path) }}" alt="QRIS {{ $outlet->name }}" class="mx-auto max-h-72 rounded-2xl object-contain">
                                     </div>
@@ -558,9 +572,9 @@
 
                                     <div>
                                         <label class="block text-[10px] font-black uppercase tracking-widest text-artisan-primary/40 mb-3">Catatan Pembayaran</label>
-                                        <textarea wire:model="payment_notes" rows="3" placeholder="Contoh: Sudah transfer via QRIS atas nama Andi." class="w-full px-6 py-4 bg-white border-none rounded-[2rem] text-[12px] font-bold text-artisan-primary focus:ring-2 focus:ring-artisan-secondary/20 transition-all outline-none placeholder:text-artisan-primary/20 resize-none"></textarea>
+                                        <textarea wire:model="payment_notes" rows="3" placeholder="Contoh: Sudah transfer via QRIS atas nama Andi pukul 14.30." class="w-full px-6 py-4 bg-white border border-artisan-outline/45 rounded-[2rem] text-[12px] font-bold text-artisan-primary shadow-artisan-sm focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all outline-none placeholder:text-artisan-primary/35 resize-none"></textarea>
                                         @error('payment_notes') <p class="text-red-500 text-[10px] mt-2 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
-                                        <p class="text-[9px] text-artisan-primary/30 mt-2 font-bold uppercase tracking-widest">Jika belum transfer sekarang, Anda tetap bisa lanjut membuat order tanpa upload bukti.</p>
+                                        <p class="text-[9px] text-artisan-primary/30 mt-2 font-bold uppercase tracking-widest">Jika belum transfer sekarang, Anda tetap bisa kirim pesanan dulu lalu bayar nanti di outlet atau upload bukti belakangan.</p>
                                     </div>
                                 </div>
                             @endif
@@ -576,9 +590,9 @@
                                     <h4 class="text-[9px] font-black uppercase tracking-widest text-artisan-primary mb-1">Informasi</h4>
                                     <p class="text-[10px] font-medium text-artisan-primary/60 leading-relaxed">
                                         @if($outlet->qris_image_path)
-                                            QRIS outlet ini tersedia. Anda bisa scan setelah pesanan dibuat atau gunakan instruksi di bawah untuk menyiapkan pembayaran.
+                                            QRIS outlet ini siap digunakan. Anda bisa scan sekarang atau setelah pesanan berhasil dibuat.
                                         @else
-                                            Pembayaran dilakukan secara tunai/transfer saat restorasi selesai di outlet kami.
+                                            Pembayaran dilakukan secara manual di outlet saat proses serah terima atau setelah pesanan selesai.
                                         @endif
                                     </p>
                                 </div>
@@ -588,9 +602,9 @@
                         @if($outlet->qris_image_path && $payment_method !== 'qris')
                             <div class="bg-white rounded-[2.5rem] sm:rounded-[3rem] p-5 sm:p-8 lg:p-10 border border-slate-100 shadow-artisan-lg space-y-6">
                                 <div>
-                                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-2">QRIS Outlet</h3>
+                                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-2">QRIS Cabang Terpilih</h3>
                                     <p class="text-[10px] font-bold text-artisan-primary/50 leading-relaxed">
-                                        QRIS yang ditampilkan mengikuti cabang yang Anda pilih: {{ $outlet->name }}.
+                                        QRIS yang tampil mengikuti cabang yang Anda pilih, yaitu {{ $outlet->name }}.
                                     </p>
                                 </div>
 
@@ -601,7 +615,7 @@
                                 @if($outlet->qris_notes)
                                     <p class="text-[10px] font-bold text-artisan-primary/50 leading-relaxed">{{ $outlet->qris_notes }}</p>
                                 @else
-                                    <p class="text-[10px] font-bold text-artisan-primary/50 leading-relaxed">Scan QRIS ini untuk pembayaran outlet {{ $outlet->name }} sesuai total estimasi di samping.</p>
+                                    <p class="text-[10px] font-bold text-artisan-primary/50 leading-relaxed">Scan QRIS ini untuk pembayaran ke outlet {{ $outlet->name }} sesuai total estimasi yang tertera di ringkasan tagihan.</p>
                                 @endif
                             </div>
                         @endif
@@ -611,7 +625,7 @@
                             <button wire:click="save" wire:loading.attr="disabled" 
                                 class="w-full py-5 sm:py-7 bg-emerald-600 text-white rounded-[2.5rem] font-manrope font-black italic text-base sm:text-lg hover:bg-emerald-700 transition-all duration-500 shadow-xl shadow-emerald-900/10 flex items-center justify-center gap-4 active:scale-[0.98] disabled:opacity-50">
                                 <span wire:loading.remove wire:target="save" class="flex items-center gap-4">
-                                    Buat Pesanan Sekarang
+                                    Kirim Pesanan ke Outlet
                                     <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
                                 </span>
                                 <span wire:loading wire:target="save" class="flex items-center gap-4">
@@ -638,19 +652,19 @@
             <div class="flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left">
                 <div class="space-y-4">
                     <h4 class="headline-editorial text-2xl italic text-white uppercase tracking-widest">{{ $outlet->name }}</h4>
-                    <p class="text-[10px] text-white/30 font-bold uppercase tracking-[0.2em]">Master Artisan Shoecare Network — Established Excellence</p>
+                    <p class="text-[10px] text-white/65 font-bold uppercase tracking-[0.2em]">Order lebih mudah, pembayaran lebih jelas, dan progres lebih mudah dilacak.</p>
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-center gap-10">
                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $outlet->phone) }}" target="_blank" 
                         class="group flex flex-col items-center md:items-start gap-1">
-                        <span class="text-[9px] font-black uppercase tracking-widest text-artisan-secondary animate-pulse">Contact Artisan</span>
+                        <span class="text-[9px] font-black uppercase tracking-widest text-artisan-secondary animate-pulse">Hubungi Outlet</span>
                         <span class="text-[13px] font-black italic text-white group-hover:text-artisan-secondary transition-colors">{{ $outlet->phone }}</span>
                     </a>
                     
                     <a href="{{ route('track') }}" 
                         class="px-10 py-5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] text-white hover:bg-white/10 hover:border-white/20 transition-all shadow-xl">
-                        Track Restoration
+                        Lacak Pesanan
                     </a>
                 </div>
             </div>
@@ -659,7 +673,7 @@
                 <p class="text-[9px] font-black uppercase tracking-widest text-white/10">&copy; {{ date('Y') }} Shoeclean Artisan. All Rights Reserved.</p>
                 <div class="flex items-center gap-6">
                     <div class="w-2 h-2 bg-artisan-secondary rounded-full"></div>
-                    <span class="text-[9px] font-black uppercase tracking-widest text-white/10 leading-none">Status: Ready for Restoration</span>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-white/10 leading-none">Pesanan akan langsung diteruskan ke outlet pilihan Anda.</span>
                 </div>
             </div>
         </div>

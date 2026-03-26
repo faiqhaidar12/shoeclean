@@ -19,24 +19,24 @@ export default {
                     600: '#4F46E5',
                 },
                 artisan: {
-                    primary: '#0D2C24',      // Ink / Deep Dark Green
-                    secondary: '#3a6758',    // Action Mint
-                    tertiary: '#051515',     // Ultra-dark accent
-                    background: '#faf9f7',   // Background
-                    bg: '#faf9f7',           // Background duplicate for convenience
+                    primary: '#16352D',      // Ink / Deep Green
+                    secondary: '#2F7A67',    // Action Sage
+                    tertiary: '#102521',     // Deep accent
+                    background: '#F7F4EE',   // Warm background
+                    bg: '#F7F4EE',           // Background duplicate for convenience
                     surface: {
-                        low: '#f4f3f1',      // Surface container low
-                        lowest: '#ffffff',   // Surface container lowest
-                        variant: '#e3e2e0'   // Surface variant
+                        low: '#F1ECE4',      // Surface container low
+                        lowest: '#FFFFFF',   // Surface container lowest
+                        variant: '#E2DDD4'   // Surface variant
                     },
-                    outline: '#c1c8c4',      // Outline variant
+                    outline: '#D6DDD8',      // Outline variant
                 }
             },
             boxShadow: {
-                'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
-                'artisan': '0px 12px 32px rgba(26, 28, 27, 0.06)',
-                'artisan-lg': '0px 24px 64px rgba(26, 28, 27, 0.1)',
-                'artisan-sm': '0px 4px 12px rgba(26, 28, 27, 0.04)',
+                'soft': '0 2px 15px -3px rgba(22, 53, 45, 0.08), 0 10px 20px -2px rgba(22, 53, 45, 0.05)',
+                'artisan': '0px 12px 32px rgba(22, 53, 45, 0.08)',
+                'artisan-lg': '0px 24px 64px rgba(22, 53, 45, 0.12)',
+                'artisan-sm': '0px 4px 12px rgba(22, 53, 45, 0.05)',
             },
             animation: {
                 'spin-slow': 'spin 8s linear infinite',
@@ -47,4 +47,3 @@ export default {
         require('@tailwindcss/forms'),
     ],
 };
-

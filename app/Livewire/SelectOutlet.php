@@ -40,6 +40,7 @@ class SelectOutlet extends Component
             ->get();
 
         $outlets = Outlet::where('status', 'active')
+            ->withCount('services')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')

@@ -14,7 +14,7 @@
         .font-manrope { font-family: 'Manrope', sans-serif; }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+<body class="min-h-screen bg-gradient-to-br from-artisan-background via-[#fbf8f2] to-artisan-surface-low">
     {{ $slot }}
 </body>
 </html>

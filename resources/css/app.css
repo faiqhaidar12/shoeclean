@@ -25,21 +25,21 @@
     
     .btn-artisan-secondary {
         @apply px-8 py-4 bg-white text-artisan-primary font-black uppercase tracking-[0.2em] text-[10px]
-               rounded-2xl hover:bg-artisan-surface-low transition-all duration-500 active:scale-95 shadow-artisan-sm leading-none;
+               rounded-2xl border border-artisan-outline/50 hover:bg-artisan-surface-low transition-all duration-500 active:scale-95 shadow-artisan-sm leading-none;
     }
     
     .card-artisan {
-        @apply bg-artisan-surface-lowest rounded-[2.5rem] shadow-artisan;
+        @apply bg-artisan-surface-lowest rounded-[2.5rem] shadow-artisan border border-artisan-outline/35;
     }
 
     .card-artisan-low {
-        @apply bg-artisan-surface-low rounded-[2rem] p-10;
+        @apply bg-artisan-surface-low rounded-[2rem] p-10 border border-artisan-outline/25;
     }
     
     .artisan-input {
-        @apply block w-full bg-artisan-surface-low border-0 border-b-2 border-transparent rounded-t-2xl rounded-b-sm 
-               focus:bg-white focus:ring-0 focus:border-artisan-secondary
-               text-sm font-medium py-4 px-6 transition-all placeholder-artisan-primary/30;
+        @apply block w-full bg-artisan-surface-lowest border border-artisan-outline/45 rounded-2xl
+               focus:bg-white focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary
+               text-sm font-semibold py-4 px-6 transition-all placeholder:text-artisan-primary/40 shadow-artisan-sm;
     }
     
     .nav-link-artisan {

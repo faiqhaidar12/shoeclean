@@ -4,8 +4,27 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $services = \App\Models\Service::active()->take(4)->get();
-    return view('welcome', compact('services'));
+    $outlets = \App\Models\Outlet::query()
+        ->where('status', 'active')
+        ->withCount('services')
+        ->orderBy('name')
+        ->take(6)
+        ->get();
+
+    return view('welcome', compact('services', 'outlets'));
 });
+
+Route::get('/pricing', function () {
+    $planDetails = app(\App\Services\SubscriptionService::class)->getPlanDetails();
+    $outlets = \App\Models\Outlet::query()
+        ->where('status', 'active')
+        ->withCount('services')
+        ->orderBy('name')
+        ->take(6)
+        ->get();
+
+    return view('pricing', compact('planDetails', 'outlets'));
+})->name('pricing');
 
 // Public Tracking (no auth)
 Route::get('/track', \App\Livewire\TrackOrder::class)->name('track');

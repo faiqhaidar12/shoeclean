@@ -12,6 +12,14 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    protected ?self $resolvedOwnerCache = null;
+    protected bool $resolvedOwnerLoaded = false;
+    protected ?\App\Models\Subscription $activeSubscriptionCache = null;
+    protected bool $activeSubscriptionLoaded = false;
+    protected ?string $currentPlanCache = null;
+    protected bool $currentPlanLoaded = false;
+    protected array $featureAccessCache = [];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -110,14 +118,32 @@ class User extends Authenticatable
 
     public function activeSubscription(): ?\App\Models\Subscription
     {
-        return $this->subscriptions()
-            ->where('status', 'active')
-            ->where(function ($q) {
-                $q->whereNull('expires_at')
-                  ->orWhere('expires_at', '>', now());
-            })
-            ->latest('started_at')
-            ->first();
+        if ($this->activeSubscriptionLoaded) {
+            return $this->activeSubscriptionCache;
+        }
+
+        if ($this->relationLoaded('subscriptions')) {
+            $this->activeSubscriptionCache = $this->subscriptions
+                ->filter(function ($subscription) {
+                    return $subscription->status === 'active'
+                        && (is_null($subscription->expires_at) || $subscription->expires_at->isFuture());
+                })
+                ->sortByDesc('started_at')
+                ->first();
+        } else {
+            $this->activeSubscriptionCache = $this->subscriptions()
+                ->where('status', 'active')
+                ->where(function ($q) {
+                    $q->whereNull('expires_at')
+                      ->orWhere('expires_at', '>', now());
+                })
+                ->latest('started_at')
+                ->first();
+        }
+
+        $this->activeSubscriptionLoaded = true;
+
+        return $this->activeSubscriptionCache;
     }
 
     public function orderQuotas(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -131,9 +157,27 @@ class User extends Authenticatable
      */
     public function getOwner(): ?User
     {
-        if ($this->isOwner()) return $this;
-        if ($this->outlet && $this->outlet->owner) return $this->outlet->owner;
-        return null;
+        if ($this->resolvedOwnerLoaded) {
+            return $this->resolvedOwnerCache;
+        }
+
+        if ($this->isOwner()) {
+            $this->resolvedOwnerCache = $this;
+        } elseif ($this->relationLoaded('outlet') && $this->outlet) {
+            if (!$this->outlet->relationLoaded('owner')) {
+                $this->outlet->load('owner');
+            }
+
+            $this->resolvedOwnerCache = $this->outlet->owner;
+        } elseif ($this->outlet) {
+            $this->resolvedOwnerCache = $this->outlet->owner;
+        } else {
+            $this->resolvedOwnerCache = null;
+        }
+
+        $this->resolvedOwnerLoaded = true;
+
+        return $this->resolvedOwnerCache;
     }
 
     /**
@@ -141,11 +185,23 @@ class User extends Authenticatable
      */
     public function currentPlan(): string
     {
+        if ($this->currentPlanLoaded) {
+            return $this->currentPlanCache ?? 'free';
+        }
+
         $owner = $this->getOwner();
-        if (!$owner) return 'free';
+        if (!$owner) {
+            $this->currentPlanCache = 'free';
+            $this->currentPlanLoaded = true;
+
+            return 'free';
+        }
 
         $sub = $owner->activeSubscription();
-        return $sub ? $sub->plan : 'free';
+        $this->currentPlanCache = $sub ? $sub->plan : 'free';
+        $this->currentPlanLoaded = true;
+
+        return $this->currentPlanCache;
     }
 
     /**
@@ -153,6 +209,10 @@ class User extends Authenticatable
      */
     public function hasFeature(string $feature): bool
     {
+        if (array_key_exists($feature, $this->featureAccessCache)) {
+            return $this->featureAccessCache[$feature];
+        }
+
         $plan = $this->currentPlan();
 
         $featureMatrix = [
@@ -161,7 +221,7 @@ class User extends Authenticatable
             'business' => ['promos', 'exports', 'team_management', 'multi_outlet_reports'],
         ];
 
-        return in_array($feature, $featureMatrix[$plan] ?? [], true);
+        return $this->featureAccessCache[$feature] = in_array($feature, $featureMatrix[$plan] ?? [], true);
     }
 
     /**

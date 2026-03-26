@@ -3,17 +3,28 @@
     <div class="relative bg-artisan-primary text-white overflow-hidden pb-24 pt-16">
         <!-- Abstract Decorative Elements -->
         <div class="absolute top-0 right-0 -mr-16 -mt-16 w-96 h-96 bg-artisan-secondary/10 rounded-full blur-[100px] animate-pulse"></div>
-        <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-80 h-80 bg-white/5 rounded-full blur-[80px]"></div>
+        <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-80 h-80 bg-white/10 rounded-full blur-[80px]"></div>
         
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="mb-8 flex items-center justify-between gap-4">
+                <a href="{{ url('/') }}" class="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-[10px] font-black uppercase tracking-[0.22em] text-white/90 backdrop-blur-md transition-colors hover:bg-white/15 hover:text-white">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+                    Kembali
+                </a>
+                <a href="{{ route('track') }}" class="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-[10px] font-black uppercase tracking-[0.22em] text-white/90 backdrop-blur-md transition-colors hover:bg-white/15 hover:text-white">
+                    Lacak Pesanan
+                </a>
+            </div>
+            <div class="text-center">
             <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-md border border-white/10 rounded-full text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-8 animate-fade-in-down">
                 <span class="w-1.5 h-1.5 rounded-full bg-artisan-secondary animate-ping"></span>
                 Official Storefront
             </div>
             <h1 class="headline-editorial text-4xl sm:text-6xl italic leading-tight mb-6 translate-y-0 opacity-100 transition-all duration-700">Pilih Cabang <br class="sm:hidden"> Restorasi</h1>
-            <p class="text-white/50 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] max-w-lg mx-auto leading-relaxed">
-                Temukan artisan terdekat untuk mengembalikan kemilau setiap langkah Anda.
+            <p class="text-white/75 text-xs sm:text-sm font-bold uppercase tracking-[0.2em] max-w-lg mx-auto leading-relaxed">
+                Pilih outlet yang paling dekat agar customer bisa langsung order, cek QRIS cabang, dan melihat alur layanan yang sesuai.
             </p>
+            </div>
         </div>
     </div>
 
@@ -30,14 +41,14 @@
                         </svg>
                     </div>
                     <input wire:model.live="search" type="text" 
-                        class="block w-full pl-14 pr-6 py-4 bg-slate-50/50 border-none rounded-2xl text-[13px] font-bold text-artisan-primary placeholder-artisan-primary/20 focus:ring-2 focus:ring-artisan-secondary/20 transition-all outline-none" 
+                        class="block w-full pl-14 pr-6 py-4 bg-white border border-artisan-outline/45 rounded-2xl text-[13px] font-bold text-artisan-primary shadow-artisan-sm placeholder:text-artisan-primary/40 focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all outline-none" 
                         placeholder="Nama cabang atau alamat...">
                 </div>
                 
                 <div class="flex gap-4 w-full lg:w-auto h-full">
                     <div class="relative flex-1 lg:w-56 h-full">
                         <select wire:model.live="selected_province" 
-                            class="block w-full px-6 py-4 bg-slate-50/50 border-none rounded-2xl text-[11px] font-black uppercase tracking-widest text-artisan-primary focus:ring-2 focus:ring-artisan-secondary/20 transition-all appearance-none outline-none">
+                            class="block w-full px-6 py-4 bg-white border border-artisan-outline/45 rounded-2xl text-[11px] font-black uppercase tracking-widest text-artisan-primary shadow-artisan-sm focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all appearance-none outline-none">
                             <option value="">Provinsi</option>
                             @foreach($provinces as $prov)
                                 <option value="{{ $prov->province_id }}">{{ $prov->province_name }}</option>
@@ -50,7 +61,7 @@
 
                     <div class="relative flex-1 lg:w-56 h-full">
                         <select wire:model.live="selected_city" 
-                            class="block w-full px-6 py-4 bg-slate-50/50 border-none rounded-2xl text-[11px] font-black uppercase tracking-widest text-artisan-primary focus:ring-2 focus:ring-artisan-secondary/20 transition-all appearance-none outline-none disabled:opacity-50" 
+                            class="block w-full px-6 py-4 bg-white border border-artisan-outline/45 rounded-2xl text-[11px] font-black uppercase tracking-widest text-artisan-primary shadow-artisan-sm focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all appearance-none outline-none disabled:opacity-50" 
                             {{ empty($selected_province) ? 'disabled' : '' }}>
                             <option value="">Kota/Kab</option>
                             @foreach($cities as $city)
@@ -67,7 +78,7 @@
 
         <!-- Outlets Listing -->
         @if($outlets->isEmpty())
-            <div class="text-center py-24 bg-white/50 backdrop-blur-sm rounded-[3rem] border border-white flex flex-col items-center justify-center">
+            <div class="text-center py-24 bg-white/80 backdrop-blur-sm rounded-[3rem] border border-artisan-outline/25 flex flex-col items-center justify-center shadow-artisan">
                 <div class="w-24 h-24 bg-slate-50 rounded-[2rem] flex items-center justify-center mb-8 text-slate-200">
                     <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
@@ -99,7 +110,12 @@
                         
                         <div class="relative z-10 flex-1 flex flex-col">
                             <div class="mb-4">
-                                <span class="text-[9px] font-black uppercase tracking-[0.3em] text-artisan-secondary bg-artisan-secondary/5 px-3 py-1 rounded-full mb-3 inline-block">Aktif</span>
+                                <div class="mb-3 flex flex-wrap gap-2">
+                                    <span class="text-[9px] font-black uppercase tracking-[0.3em] text-artisan-secondary bg-artisan-secondary/5 px-3 py-1 rounded-full inline-block">Aktif</span>
+                                    @if($branch->qris_image_path)
+                                        <span class="text-[9px] font-black uppercase tracking-[0.3em] text-blue-600 bg-blue-50 px-3 py-1 rounded-full inline-block">QRIS Tersedia</span>
+                                    @endif
+                                </div>
                                 <h3 class="headline-editorial text-2xl italic text-artisan-primary group-hover:text-artisan-secondary transition-colors duration-500">{{ $branch->name }}</h3>
                             </div>
                             
@@ -108,6 +124,16 @@
                                     <svg class="w-4 h-4 shrink-0 text-artisan-secondary mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                                     <span class="line-clamp-2">{{ $branch->address }}</span>
                                 </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="rounded-full bg-slate-50 px-3 py-2 text-[9px] font-black uppercase tracking-[0.18em] text-artisan-primary/45">
+                                        {{ $branch->services_count }} Layanan
+                                    </span>
+                                    @if($branch->pickup_fee > 0)
+                                        <span class="rounded-full bg-slate-50 px-3 py-2 text-[9px] font-black uppercase tracking-[0.18em] text-artisan-primary/45">
+                                            Pickup
+                                        </span>
+                                    @endif
+                                </div>
                                 <div class="flex items-center justify-between pt-6 border-t border-slate-50">
                                     <span class="text-[9px] font-black uppercase tracking-[0.2em] text-artisan-primary/20">Mulai Order</span>
                                     <svg class="w-4 h-4 text-artisan-secondary opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
@@ -120,4 +146,3 @@
         @endif
     </div>
 </div>
-

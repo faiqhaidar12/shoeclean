@@ -27,9 +27,9 @@
                 <div class="relative z-10 space-y-5">
                     <div class="max-w-3xl rounded-[1.75rem] border border-white/10 bg-white/8 p-4 backdrop-blur-md sm:p-6">
                         <p class="inline-flex rounded-full bg-artisan-secondary px-3 py-1 text-[9px] font-black uppercase tracking-[0.28em] text-artisan-primary shadow-sm">Order Tracking</p>
-                        <h1 class="mt-4 text-3xl font-black leading-tight text-white sm:text-4xl lg:text-5xl">Lacak Pesanan Anda</h1>
+                        <h1 class="mt-4 text-3xl font-black leading-tight text-white sm:text-4xl lg:text-5xl">Cek Progres Pesanan Tanpa Perlu Chat Admin</h1>
                         <p class="mt-3 max-w-2xl text-[11px] font-semibold leading-relaxed text-white/80 sm:text-sm">
-                            Masukkan nomor invoice untuk melihat progres pengerjaan, status pembayaran, dan informasi outlet secara real-time.
+                            Masukkan nomor invoice untuk melihat status pengerjaan, pembayaran, dan informasi outlet dalam satu halaman yang mudah dibaca dari HP.
                         </p>
                     </div>
 
@@ -42,7 +42,7 @@
                                 class="w-full flex-1 rounded-[1.4rem] border border-white/10 bg-white px-5 py-4 text-[13px] font-black text-artisan-primary outline-none transition-all placeholder:text-artisan-primary/20 focus:ring-2 focus:ring-artisan-secondary/30"
                             >
                             <button type="submit" class="inline-flex items-center justify-center gap-3 rounded-[1.4rem] bg-artisan-secondary px-6 py-4 text-[10px] font-black uppercase tracking-[0.24em] text-artisan-primary transition-all hover:bg-white active:scale-[0.98] sm:px-8">
-                                Cari Invoice
+                                Lacak Sekarang
                                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                             </button>
                         </div>
@@ -50,8 +50,8 @@
 
                     @if($error)
                         <div class="rounded-[1.5rem] border border-red-200 bg-red-50 px-4 py-4 text-red-700">
-                            <p class="text-[10px] font-black uppercase tracking-[0.22em]">Invoice Tidak Ditemukan</p>
-                            <p class="mt-2 text-sm font-semibold leading-relaxed text-red-700/80">{{ $error }}</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.22em]">Invoice Belum Ketemu</p>
+                            <p class="mt-2 text-sm font-semibold leading-relaxed text-red-700/80">{{ $error }} Pastikan nomor invoice sesuai dengan yang Anda terima dari outlet.</p>
                         </div>
                     @endif
                 </div>
@@ -115,7 +115,7 @@
                             <div class="mb-4 flex items-center justify-between gap-3">
                                 <div>
                                     <p class="text-[9px] font-black uppercase tracking-[0.28em] text-artisan-secondary">Progress Pesanan</p>
-                                    <p class="mt-2 text-sm font-bold text-artisan-primary/60">Status pengerjaan terbaru dari outlet.</p>
+                                    <p class="mt-2 text-sm font-bold text-artisan-primary/60">Lihat posisi pesanan Anda saat ini dan apa langkah berikutnya dari outlet.</p>
                                 </div>
                             </div>
 
@@ -142,13 +142,13 @@
                                             </p>
                                             <p class="mt-1 text-[11px] font-semibold leading-relaxed {{ $isActive ? 'text-artisan-primary/55' : 'text-artisan-primary/30' }}">
                                                 @if($status === 'pending')
-                                                    Pesanan sudah masuk dan menunggu mulai dikerjakan.
+                                                    Pesanan Anda sudah diterima outlet dan masuk ke antrean pengerjaan.
                                                 @elseif($status === 'processing')
-                                                    Sepatu sedang dalam proses pembersihan atau restorasi.
+                                                    Tim outlet sedang mengerjakan pesanan Anda sesuai layanan yang dipilih.
                                                 @elseif($status === 'ready')
-                                                    Pesanan selesai dikerjakan dan siap diambil atau dikirim.
+                                                    Pesanan sudah selesai dikerjakan dan siap diambil atau dikirim sesuai kesepakatan.
                                                 @else
-                                                    Pesanan telah selesai diterima oleh customer.
+                                                    Pesanan sudah selesai dan diterima customer.
                                                 @endif
                                             </p>
                                         </div>
@@ -169,7 +169,7 @@
                                 <div class="mb-4 flex items-center justify-between gap-3">
                                     <div>
                                         <p class="text-[9px] font-black uppercase tracking-[0.28em] text-artisan-secondary">Detail Layanan</p>
-                                        <p class="mt-2 text-sm font-bold text-artisan-primary/60">Ringkasan item yang ada di pesanan ini.</p>
+                                    <p class="mt-2 text-sm font-bold text-artisan-primary/60">Ringkasan layanan yang sedang atau sudah dikerjakan untuk pesanan ini.</p>
                                     </div>
                                     <div class="rounded-full bg-artisan-surface-low px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/50">
                                         {{ $order->items->count() }} item
@@ -224,19 +224,19 @@
                         @if($order->payment_status === 'waiting_confirmation')
                             <div class="rounded-[1.75rem] border border-amber-200 bg-amber-50 px-5 py-5">
                                 <p class="text-[10px] font-black uppercase tracking-[0.22em] text-amber-700">Menunggu Verifikasi Pembayaran</p>
-                                <p class="mt-2 text-sm font-semibold leading-relaxed text-amber-800/80">Bukti pembayaran Anda sudah masuk dan sedang diperiksa oleh outlet. Status akan berubah otomatis setelah diverifikasi.</p>
+                                    <p class="mt-2 text-sm font-semibold leading-relaxed text-amber-800/80">Bukti pembayaran Anda sudah diterima dan sedang dicek oleh outlet. Setelah diverifikasi, status pembayaran akan otomatis berubah menjadi lunas.</p>
                             </div>
                         @elseif($order->payment_status === 'unpaid' && $order->payment_method === 'qris' && $order->outlet?->qris_image_path)
                             <div class="rounded-[1.75rem] border border-slate-100 bg-white p-5 shadow-sm">
                                 <div class="space-y-4 text-center">
                                     <div>
                                         <p class="text-[10px] font-black uppercase tracking-[0.22em] text-artisan-secondary">QRIS Outlet</p>
-                                        <p class="mt-2 text-sm font-semibold leading-relaxed text-artisan-primary/55">Scan QRIS berikut untuk pembayaran ke outlet {{ $order->outlet->name }}.</p>
+                                        <p class="mt-2 text-sm font-semibold leading-relaxed text-artisan-primary/55">Gunakan QRIS berikut untuk pembayaran ke outlet {{ $order->outlet->name }} sesuai total tagihan pesanan Anda.</p>
                                     </div>
                                     <div class="rounded-[1.5rem] bg-artisan-surface-low/60 p-4">
                                         <img src="{{ \Illuminate\Support\Facades\Storage::url($order->outlet->qris_image_path) }}" alt="QRIS {{ $order->outlet->name }}" class="mx-auto max-h-72 rounded-2xl bg-white object-contain">
                                     </div>
-                                    <p class="text-[11px] font-semibold leading-relaxed text-artisan-primary/50">Setelah transfer, hubungi outlet atau kirim bukti pembayaran agar bisa diverifikasi lebih cepat.</p>
+                                    <p class="text-[11px] font-semibold leading-relaxed text-artisan-primary/50">Setelah transfer, kirim bukti pembayaran atau hubungi outlet agar proses verifikasi lebih cepat.</p>
                                 </div>
                             </div>
                         @endif
@@ -245,7 +245,7 @@
                             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                 <div>
                                     <p class="text-[9px] font-black uppercase tracking-[0.28em] text-artisan-secondary">Butuh Bantuan?</p>
-                                    <p class="mt-2 text-sm font-semibold leading-relaxed text-artisan-primary/60">Tim outlet siap membantu jika Anda ingin konfirmasi pembayaran atau menanyakan progres order.</p>
+                                    <p class="mt-2 text-sm font-semibold leading-relaxed text-artisan-primary/60">Jika ada kendala pembayaran atau Anda butuh konfirmasi lebih lanjut, tim outlet siap membantu.</p>
                                 </div>
 
                                 @if($waNumber)
