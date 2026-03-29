@@ -64,6 +64,7 @@ This project now includes:
 
 - GitHub Actions CI at `.github/workflows/ci.yml`
 - Railway deployment config at `railway.toml`
+- Docker-based Railway build at `Dockerfile`
 - Laravel health check at `/up`
 
 ### CI pipeline
@@ -99,3 +100,7 @@ Recommended next setup in Railway:
 - Enable "Wait for CI" so deploys only run after GitHub Actions passes
 - The Railway pre-deploy step will run migrations and seed base roles automatically
 - Add a volume or move uploads to S3-compatible storage if you need persistent user-uploaded files
+
+### Railway build note
+
+Railway can build this app using the included `Dockerfile`, which ensures required PHP extensions such as `gd`, `intl`, `pdo_mysql`, and `zip` are available during production builds.
