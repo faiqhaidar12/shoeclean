@@ -5,6 +5,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
+    libcurl4-openssl-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
@@ -14,9 +15,14 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
     bcmath \
+    curl \
+    dom \
     gd \
     intl \
     pdo_mysql \
+    xml \
+    xmlreader \
+    xmlwriter \
     zip \
     && rm -rf /var/lib/apt/lists/*
 
@@ -48,6 +54,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
+    libcurl4-openssl-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
@@ -57,10 +64,15 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
     bcmath \
+    curl \
+    dom \
     gd \
     intl \
     pcntl \
     pdo_mysql \
+    xml \
+    xmlreader \
+    xmlwriter \
     zip \
     && rm -rf /var/lib/apt/lists/*
 
