@@ -39,23 +39,32 @@ class Dashboard extends Component
 
         $this->month = now()->month;
         $this->year = now()->year;
-        
+
         // Get available years from orders
-        $years = Order::selectRaw('YEAR(created_at) as year')
+        $yearExpression = $this->yearSelectExpression();
+
+        $years = Order::selectRaw("{$yearExpression} as year")
             ->distinct()
             ->orderBy('year', 'desc')
             ->pluck('year')
             ->toArray();
-            
+
         // Always include current year
         if (!in_array(now()->year, $years)) {
             array_unshift($years, now()->year);
         }
-        
+
         $this->availableYears = $years;
 
         // Check for pending platform survey
         $this->checkPendingSurvey();
+    }
+
+    protected function yearSelectExpression(): string
+    {
+        return DB::connection()->getDriverName() === 'sqlite'
+            ? "CAST(strftime('%Y', created_at) AS INTEGER)"
+            : 'YEAR(created_at)';
     }
 
     protected function checkPendingSurvey(): void

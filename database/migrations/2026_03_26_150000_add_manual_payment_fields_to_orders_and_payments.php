@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    protected function canAlterEnums(): bool
+    {
+        return DB::getDriverName() !== 'sqlite';
+    }
+
     /**
      * Run the migrations.
      */
@@ -22,8 +27,10 @@ return new class extends Migration
             $table->text('payment_notes')->nullable()->after('payment_verified_by');
         });
 
-        DB::statement("ALTER TABLE orders MODIFY payment_status ENUM('unpaid', 'waiting_confirmation', 'paid') NOT NULL DEFAULT 'unpaid'");
-        DB::statement("ALTER TABLE payments MODIFY method ENUM('cash', 'qris', 'manual_transfer', 'midtrans') NOT NULL DEFAULT 'cash'");
+        if ($this->canAlterEnums()) {
+            DB::statement("ALTER TABLE orders MODIFY payment_status ENUM('unpaid', 'waiting_confirmation', 'paid') NOT NULL DEFAULT 'unpaid'");
+            DB::statement("ALTER TABLE payments MODIFY method ENUM('cash', 'qris', 'manual_transfer', 'midtrans') NOT NULL DEFAULT 'cash'");
+        }
     }
 
     /**
@@ -31,8 +38,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("ALTER TABLE payments MODIFY method ENUM('cash', 'midtrans') NOT NULL DEFAULT 'cash'");
-        DB::statement("ALTER TABLE orders MODIFY payment_status ENUM('unpaid', 'paid') NOT NULL DEFAULT 'unpaid'");
+        if ($this->canAlterEnums()) {
+            DB::statement("ALTER TABLE payments MODIFY method ENUM('cash', 'midtrans') NOT NULL DEFAULT 'cash'");
+            DB::statement("ALTER TABLE orders MODIFY payment_status ENUM('unpaid', 'paid') NOT NULL DEFAULT 'unpaid'");
+        }
 
         Schema::table('orders', function (Blueprint $table) {
             $table->dropConstrainedForeignId('payment_verified_by');

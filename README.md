@@ -57,3 +57,45 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## CI/CD
+
+This project now includes:
+
+- GitHub Actions CI at `.github/workflows/ci.yml`
+- Railway deployment config at `railway.toml`
+- Laravel health check at `/up`
+
+### CI pipeline
+
+The CI workflow runs:
+
+- `composer install`
+- `npm ci`
+- `php artisan test`
+- `npm run build`
+
+### Railway deployment checklist
+
+Use Railway with a MySQL service for production because this app includes MySQL-oriented schema changes.
+
+Set these variables in Railway:
+
+- `APP_ENV=production`
+- `APP_DEBUG=false`
+- `APP_URL=https://your-domain`
+- `APP_KEY=base64:...`
+- `DB_CONNECTION=mysql`
+- `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
+- `CACHE_STORE=database`
+- `SESSION_DRIVER=database`
+- `QUEUE_CONNECTION=database`
+- `FILESYSTEM_DISK=public`
+
+Recommended next setup in Railway:
+
+- Connect the GitHub repository to the Railway service
+- Enable deploys from the main branch
+- Enable "Wait for CI" so deploys only run after GitHub Actions passes
+- The Railway pre-deploy step will run migrations and seed base roles automatically
+- Add a volume or move uploads to S3-compatible storage if you need persistent user-uploaded files

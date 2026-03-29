@@ -15,10 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create roles
-        $ownerRole = \App\Models\Role::create(['name' => 'Owner', 'slug' => 'owner']);
-        \App\Models\Role::create(['name' => 'Admin', 'slug' => 'admin']);
-        \App\Models\Role::create(['name' => 'Staff', 'slug' => 'staff']);
+        $this->call(RoleSeeder::class);
+
+        $ownerRole = \App\Models\Role::where('slug', 'owner')->firstOrFail();
 
         // Create owner user
         $owner = User::factory()->create([
