@@ -1,6 +1,26 @@
-FROM composer:2 AS composer_deps
+FROM php:8.2-cli-bookworm AS composer_deps
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    libxml2-dev \
+    libicu-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+    bcmath \
+    gd \
+    intl \
+    pdo_mysql \
+    zip \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY composer.json composer.lock ./
 RUN composer install \
@@ -43,8 +63,6 @@ RUN apt-get update && apt-get install -y \
     pdo_mysql \
     zip \
     && rm -rf /var/lib/apt/lists/*
-
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY . .
 COPY --from=composer_deps /app/vendor ./vendor
