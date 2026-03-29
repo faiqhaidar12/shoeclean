@@ -16,13 +16,10 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install \
     bcmath \
     curl \
-    dom \
     gd \
     intl \
     pdo_mysql \
     xml \
-    xmlreader \
-    xmlwriter \
     zip \
     && rm -rf /var/lib/apt/lists/*
 
@@ -65,14 +62,11 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install \
     bcmath \
     curl \
-    dom \
     gd \
     intl \
     pcntl \
     pdo_mysql \
     xml \
-    xmlreader \
-    xmlwriter \
     zip \
     && rm -rf /var/lib/apt/lists/*
 
