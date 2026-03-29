@@ -63,9 +63,10 @@ COPY --from=composer_deps /app/vendor ./vendor
 COPY --from=node_assets /app/public/build ./public/build
 
 RUN php artisan package:discover --ansi \
+    && chmod +x docker/start.sh \
     && mkdir -p storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs \
     && chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 8080
 
-CMD ["sh", "-lc", "php artisan storage:link || true; php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+CMD ["./docker/start.sh"]

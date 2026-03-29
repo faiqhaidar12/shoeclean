@@ -65,6 +65,7 @@ This project now includes:
 - GitHub Actions CI at `.github/workflows/ci.yml`
 - Railway deployment config at `railway.toml`
 - Docker-based Railway build at `Dockerfile`
+- Render Blueprint config at `render.yaml`
 - Laravel health check at `/up`
 
 ### CI pipeline
@@ -104,3 +105,7 @@ Recommended next setup in Railway:
 ### Railway build note
 
 Railway can build this app using the included `Dockerfile`, which ensures required PHP extensions such as `gd`, `intl`, `pdo_mysql`, and `zip` are available during production builds.
+
+### Render deploy note
+
+Render can also deploy this app from the included `Dockerfile`. The included `render.yaml` defines a Docker web service and expects MySQL credentials to be filled in from the Render dashboard or another external MySQL provider.

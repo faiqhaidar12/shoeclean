@@ -1,0 +1,73 @@
+services:
+  - type: web
+    name: shoeclean-demo
+    runtime: docker
+    plan: free
+    region: singapore
+    autoDeployTrigger: checksPass
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: ShoeClean
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_STACK
+        value: single
+      - key: LOG_LEVEL
+        value: error
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_LIFETIME
+        value: "120"
+      - key: SESSION_PATH
+        value: /
+      - key: SESSION_DOMAIN
+        value: ""
+      - key: BROADCAST_CONNECTION
+        value: log
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: FILESYSTEM_DISK
+        value: public
+      - key: MAIL_MAILER
+        value: log
+      - key: MAIL_FROM_ADDRESS
+        value: hello@example.com
+      - key: MAIL_FROM_NAME
+        value: ShoeClean
+      - key: MAYAR_API_URL
+        value: https://api.mayar.club
+      - key: MAYAR_API_KEY
+        sync: false
+      - key: MAYAR_WEBHOOK_SECRET
+        sync: false
+      - key: MAYAR_PRODUCT_MEMBERSHIP_ID
+        sync: false
+      - key: MAYAR_TIER_PRO_ID
+        sync: false
+      - key: MAYAR_TIER_BUSINESS_ID
+        sync: false
+      - key: MAYAR_PRODUCT_TOPUP_ID
+        sync: false
