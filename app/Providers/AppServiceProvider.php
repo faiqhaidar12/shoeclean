@@ -19,9 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        \Opcodes\LogViewer\Facades\LogViewer::auth(function ($request) {
-            return $request->user() && $request->user()->isOwner();
-        });
+        if (class_exists(\Opcodes\LogViewer\Facades\LogViewer::class)) {
+            \Opcodes\LogViewer\Facades\LogViewer::auth(function ($request) {
+                return $request->user() && $request->user()->isOwner();
+            });
+        }
 
         // View Composer for Sidebar Order Count
         view()->composer('layouts.app', function ($view) {
