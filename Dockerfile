@@ -13,14 +13,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libicu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install \
-    bcmath \
-    curl \
-    gd \
-    intl \
-    pdo_mysql \
-    xml \
-    zip \
+    && docker-php-ext-install bcmath curl gd intl pdo_mysql xml zip \
+    && docker-php-ext-install dom \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -30,7 +24,8 @@ RUN composer install \
     --no-dev \
     --no-interaction \
     --no-scripts \
-    --optimize-autoloader
+    --optimize-autoloader \
+    -vvv
 
 FROM node:20-bookworm-slim AS node_assets
 
@@ -59,15 +54,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libicu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install \
-    bcmath \
-    curl \
-    gd \
-    intl \
-    pcntl \
-    pdo_mysql \
-    xml \
-    zip \
+    && docker-php-ext-install bcmath curl gd intl pcntl pdo_mysql xml zip \
+    && docker-php-ext-install dom \
     && rm -rf /var/lib/apt/lists/*
 
 COPY . .
