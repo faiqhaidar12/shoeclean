@@ -2,13 +2,74 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Outlet;
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 
 class AuthSessionController
 {
+    public function register(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'business_name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+        ]);
+
+        $validated['password'] = Hash::make($validated['password']);
+
+        $user = DB::transaction(function () use ($validated) {
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => $validated['password'],
+            ]);
+
+            $ownerRole = Role::where('slug', 'owner')->firstOrFail();
+            $user->roles()->attach($ownerRole);
+
+            $baseSlug = Str::slug($validated['business_name']);
+            $slug = $baseSlug ?: 'outlet';
+            $counter = 2;
+
+            while (Outlet::where('slug', $slug)->exists()) {
+                $slug = ($baseSlug ?: 'outlet').'-'.$counter;
+                $counter++;
+            }
+
+            Outlet::create([
+                'owner_id' => $user->id,
+                'name' => $validated['business_name'],
+                'slug' => $slug,
+                'address' => '-',
+                'phone' => '-',
+                'status' => 'active',
+            ]);
+
+            event(new Registered($user));
+
+            return $user;
+        });
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return response()->json([
+            'message' => 'Akun berhasil dibuat.',
+            'user' => $this->transformUser($request->user()),
+        ], 201);
+    }
+
     public function store(Request $request): JsonResponse
     {
         $credentials = $request->validate([

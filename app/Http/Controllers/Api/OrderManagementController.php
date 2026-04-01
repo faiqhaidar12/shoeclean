@@ -168,12 +168,14 @@ class OrderManagementController
         return [
             'id' => $order->id,
             'invoice_number' => $order->invoice_number,
+            'created_at' => optional($order->created_at)->toIso8601String(),
             'status' => $order->status,
             'status_label' => $this->statusLabel($order->status),
             'payment_status' => $order->payment_status,
             'payment_status_label' => $order->paymentStatusLabel(),
             'payment_state' => $hasPendingPayment ? 'pending'
                 : ($hasFailedPayment ? 'failed' : $order->payment_status),
+            'has_payment_proof' => (bool) $order->payment_proof_path,
             'total_price' => $order->total_price,
             'created_at' => optional($order->created_at)->toIso8601String(),
             'customer' => $order->customer ? [
@@ -207,6 +209,12 @@ class OrderManagementController
             'payment_notes' => $order->payment_notes,
             'payment_verified_at' => optional($order->payment_verified_at)->toIso8601String(),
             'payment_proof_url' => $order->payment_proof_path ? url('storage/' . ltrim($order->payment_proof_path, '/')) : null,
+            'payment_summary' => [
+                'has_payment_proof' => (bool) $order->payment_proof_path,
+                'can_mark_paid' => $order->payment_status !== 'paid',
+                'can_verify_payment' => (bool) $order->payment_proof_path && $order->payment_status !== 'paid',
+                'successful_payments_total' => (int) $order->payments->where('status', 'success')->sum('amount'),
+            ],
             'customer' => $order->customer ? [
                 'name' => $order->customer->name,
                 'phone' => $order->customer->phone,
@@ -236,7 +244,9 @@ class OrderManagementController
                     'id' => $payment->id,
                     'amount' => $payment->amount,
                     'method' => $payment->method,
+                    'method_label' => $this->paymentMethodLabel($payment->method),
                     'status' => $payment->status,
+                    'status_label' => $this->paymentRecordStatusLabel($payment->status),
                     'created_at' => optional($payment->created_at)->toIso8601String(),
                 ];
             })->values(),
@@ -276,6 +286,26 @@ class OrderManagementController
             'completed' => 'Selesai',
             'cancelled' => 'Dibatalkan',
             default => ucfirst(str_replace('_', ' ', $status)),
+        };
+    }
+
+    protected function paymentMethodLabel(?string $method): string
+    {
+        return match ($method) {
+            'cash' => 'Cash',
+            'qris' => 'QRIS',
+            'manual_transfer' => 'Transfer Manual',
+            default => ucfirst((string) $method ?: 'manual'),
+        };
+    }
+
+    protected function paymentRecordStatusLabel(string $status): string
+    {
+        return match ($status) {
+            'success' => 'Berhasil',
+            'pending' => 'Menunggu',
+            'failed' => 'Gagal',
+            default => ucfirst($status),
         };
     }
 }
