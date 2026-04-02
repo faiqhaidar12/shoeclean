@@ -43,8 +43,71 @@ class SubscriptionService
     /**
      * Activate a subscription for an owner.
      */
-    public function activateSubscription(User $owner, string $plan, ?string $mayarTransactionId = null, ?string $mayarMemberId = null, ?int $monthlyPeriod = 1): Subscription
+    public function activateSubscription(
+        User $owner,
+        string $plan,
+        ?string $transactionId = null,
+        ?string $memberId = null,
+        ?int $monthlyPeriod = 1,
+        ?string $paymentGateway = null,
+        ?string $gatewayReference = null
+    ): Subscription
     {
+        if ($paymentGateway && ($transactionId || $gatewayReference)) {
+            $existing = Subscription::query()
+                ->when($paymentGateway, fn ($query) => $query->where('payment_gateway', $paymentGateway))
+                ->where(function ($query) use ($transactionId, $gatewayReference) {
+                    if ($transactionId) {
+                        $query->orWhere('gateway_transaction_id', $transactionId)
+                            ->orWhere('mayar_transaction_id', $transactionId);
+                    }
+
+                    if ($gatewayReference) {
+                        $query->orWhere('gateway_reference', $gatewayReference)
+                            ->orWhere('mayar_member_id', $gatewayReference);
+                    }
+                })
+                ->first();
+
+            if ($existing) {
+                return $existing;
+            }
+        }
+
+        $currentActive = $owner->subscriptions()
+            ->where('status', 'active')
+            ->where(function ($query) {
+                $query->whereNull('expires_at')
+                    ->orWhere('expires_at', '>', now());
+            })
+            ->latest('started_at')
+            ->first();
+
+        if ($currentActive && $currentActive->plan === $plan) {
+            $baseExpiry = $currentActive->expires_at && $currentActive->expires_at->isFuture()
+                ? $currentActive->expires_at->copy()
+                : now();
+
+            $newExpiry = $baseExpiry->addMonths($monthlyPeriod);
+
+            $currentActive->update([
+                'payment_gateway' => $paymentGateway ?? $currentActive->payment_gateway,
+                'mayar_transaction_id' => $paymentGateway === 'mayar' ? $transactionId : $currentActive->mayar_transaction_id,
+                'mayar_member_id' => $paymentGateway === 'mayar' ? $memberId : $currentActive->mayar_member_id,
+                'gateway_transaction_id' => $transactionId ?? $currentActive->gateway_transaction_id,
+                'gateway_reference' => $gatewayReference ?? $currentActive->gateway_reference,
+                'expires_at' => $newExpiry,
+            ]);
+
+            Log::info("Subscription renewed", [
+                'user_id' => $owner->id,
+                'plan' => $plan,
+                'expires_at' => $newExpiry,
+            ]);
+
+            return $currentActive->fresh();
+        }
+
         // Expire any existing active subscriptions
         $owner->subscriptions()
             ->where('status', 'active')
@@ -56,8 +119,11 @@ class SubscriptionService
             'user_id' => $owner->id,
             'plan' => $plan,
             'status' => 'active',
-            'mayar_transaction_id' => $mayarTransactionId,
-            'mayar_member_id' => $mayarMemberId,
+            'payment_gateway' => $paymentGateway,
+            'mayar_transaction_id' => $paymentGateway === 'mayar' ? $transactionId : null,
+            'mayar_member_id' => $paymentGateway === 'mayar' ? $memberId : null,
+            'gateway_transaction_id' => $transactionId,
+            'gateway_reference' => $gatewayReference,
             'started_at' => now(),
             'expires_at' => $expiresAt,
         ]);
@@ -74,20 +140,49 @@ class SubscriptionService
     /**
      * Add top-up quota for an owner.
      */
-    public function addQuota(User $owner, int $amount, ?string $mayarTransactionId = null): OrderQuota
+    public function addQuota(
+        User $owner,
+        int $amount,
+        ?string $transactionId = null,
+        ?string $paymentGateway = null,
+        ?string $gatewayReference = null
+    ): OrderQuota
     {
+        if ($paymentGateway && ($transactionId || $gatewayReference)) {
+            $existing = OrderQuota::query()
+                ->when($paymentGateway, fn ($query) => $query->where('payment_gateway', $paymentGateway))
+                ->where(function ($query) use ($transactionId, $gatewayReference) {
+                    if ($transactionId) {
+                        $query->orWhere('gateway_transaction_id', $transactionId)
+                            ->orWhere('mayar_transaction_id', $transactionId);
+                    }
+
+                    if ($gatewayReference) {
+                        $query->orWhere('gateway_reference', $gatewayReference);
+                    }
+                })
+                ->first();
+
+            if ($existing) {
+                return $existing;
+            }
+        }
+
         $quota = OrderQuota::create([
             'user_id' => $owner->id,
             'quota_total' => $amount,
             'quota_used' => 0,
-            'mayar_transaction_id' => $mayarTransactionId,
+            'payment_gateway' => $paymentGateway,
+            'mayar_transaction_id' => $paymentGateway === 'mayar' ? $transactionId : null,
+            'gateway_transaction_id' => $transactionId,
+            'gateway_reference' => $gatewayReference,
             'purchased_at' => now(),
         ]);
 
         Log::info("Order quota added", [
             'user_id' => $owner->id,
             'quota' => $amount,
-            'transaction_id' => $mayarTransactionId,
+            'transaction_id' => $transactionId,
         ]);
 
         return $quota;
@@ -129,67 +224,6 @@ class SubscriptionService
      */
     public function getPlanDetails(): array
     {
-        return [
-            'free' => [
-                'name' => 'Free',
-                'subtitle' => 'Untuk mulai operasional',
-                'price' => 0,
-                'price_label' => 'Gratis',
-                'order_limit' => config('mayar.plans.free.order_limit', 100),
-                'max_outlets' => 1,
-                'description' => 'Cocok untuk toko baru yang ingin mulai mencatat order dan mencoba alur operasional digital.',
-                'cta' => 'Mulai Gratis',
-                'features' => [
-                    '1 outlet',
-                    '100 order total',
-                    'Tracking customer',
-                    'QRIS outlet & pembayaran manual',
-                    'Laporan dasar',
-                ],
-            ],
-            'pro' => [
-                'name' => 'Pro',
-                'subtitle' => 'Untuk 1 outlet yang sudah aktif',
-                'price' => config('mayar.plans.pro.price', 75000),
-                'price_label' => 'Rp75.000/bulan',
-                'order_limit' => null,
-                'max_outlets' => 1,
-                'description' => 'Paket terbaik untuk 1 outlet yang ingin operasional tanpa batas dan fitur bisnis yang lebih lengkap.',
-                'cta' => 'Upgrade ke Pro',
-                'features' => [
-                    '1 outlet',
-                    'Unlimited order',
-                    'Promo & voucher',
-                    'Export laporan PDF/Excel',
-                    'Kelola admin/staff outlet',
-                ],
-            ],
-            'business' => [
-                'name' => 'Business',
-                'subtitle' => 'Untuk bisnis multi cabang',
-                'price' => config('mayar.plans.business.price', 200000),
-                'price_label' => 'Rp200.000/bulan',
-                'order_limit' => null,
-                'max_outlets' => null,
-                'description' => 'Untuk owner yang mengelola banyak outlet dan butuh kontrol operasional serta laporan lintas cabang.',
-                'cta' => 'Upgrade ke Business',
-                'features' => [
-                    'Semua fitur Pro',
-                    'Unlimited outlet',
-                    'Unlimited order',
-                    'Laporan multi-cabang',
-                    'Kontrol bisnis lintas cabang',
-                ],
-            ],
-            'topup' => [
-                'name' => 'Top-up Kuota',
-                'subtitle' => 'Tambahan untuk paket Free',
-                'price' => config('mayar.topup.price', 100000),
-                'price_label' => 'Rp100.000',
-                'quota' => config('mayar.topup.quota', 500),
-                'description' => 'Saat kuota Free habis, Anda bisa tambah 500 order tanpa harus langsung upgrade paket.',
-                'cta' => 'Beli 500 Order',
-            ],
-        ];
+        return app(PricingCatalogService::class)->getPlanDetails();
     }
 }

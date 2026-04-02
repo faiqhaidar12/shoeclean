@@ -27,7 +27,7 @@ class InternalOrderCreateController
         $outlets = Outlet::query()
             ->whereIn('id', $allowedOutletIds)
             ->orderBy('name')
-            ->get(['id', 'name', 'slug', 'pickup_fee', 'delivery_fee']);
+            ->get(['id', 'name', 'slug', 'pickup_fee', 'delivery_fee', 'latitude', 'longitude']);
 
         $services = Service::query()
             ->whereIn('outlet_id', $allowedOutletIds)
@@ -44,6 +44,8 @@ class InternalOrderCreateController
                 'slug' => $outlet->slug,
                 'pickup_fee' => $outlet->pickup_fee,
                 'delivery_fee' => $outlet->delivery_fee,
+                'latitude' => $outlet->latitude,
+                'longitude' => $outlet->longitude,
             ])->values(),
             'services' => $services->map(fn (Service $service) => [
                 'id' => $service->id,
@@ -168,7 +170,11 @@ class InternalOrderCreateController
             'notes' => ['nullable', 'string'],
             'order_type' => ['required', 'in:regular,pickup,delivery'],
             'pickup_address' => ['nullable', 'string'],
+            'pickup_latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'pickup_longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'delivery_address' => ['nullable', 'string'],
+            'delivery_latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'delivery_longitude' => ['nullable', 'numeric', 'between:-180,180'],
             'promo_code' => ['nullable', 'string'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.service_id' => ['required', 'integer', 'exists:services,id'],
@@ -249,7 +255,11 @@ class InternalOrderCreateController
                 'notes' => $validated['notes'] ?? null,
                 'order_type' => $validated['order_type'],
                 'pickup_address' => $validated['order_type'] === 'pickup' ? ($validated['pickup_address'] ?? null) : null,
+                'pickup_latitude' => $validated['order_type'] === 'pickup' ? ($validated['pickup_latitude'] ?? null) : null,
+                'pickup_longitude' => $validated['order_type'] === 'pickup' ? ($validated['pickup_longitude'] ?? null) : null,
                 'delivery_address' => $validated['order_type'] === 'delivery' ? ($validated['delivery_address'] ?? null) : null,
+                'delivery_latitude' => $validated['order_type'] === 'delivery' ? ($validated['delivery_latitude'] ?? null) : null,
+                'delivery_longitude' => $validated['order_type'] === 'delivery' ? ($validated['delivery_longitude'] ?? null) : null,
                 'pickup_fee' => $pickupFee,
                 'delivery_fee' => $deliveryFee,
                 'promo_id' => $promo?->id,

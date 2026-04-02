@@ -170,8 +170,8 @@
                     </div>
                     <p class="text-[10px] font-black uppercase tracking-[0.22em] text-indigo-500">{{ $planDetails['pro']['subtitle'] }}</p>
                     <h3 class="font-manrope font-extrabold text-xl text-indigo-700 mt-2">{{ $planDetails['pro']['name'] }}</h3>
-                    <p class="mt-2 text-3xl font-manrope font-extrabold text-artisan-primary sm:text-4xl">Rp75<span class="text-base sm:text-lg">.000</span></p>
-                    <p class="text-sm text-artisan-primary/40 mt-1">per bulan</p>
+                    <p class="mt-2 text-3xl font-manrope font-extrabold text-artisan-primary sm:text-4xl">{{ $planDetails['pro']['price_label'] }}</p>
+                    <p class="text-sm text-artisan-primary/40 mt-1">{{ ($planDetails['pro']['is_published'] ?? true) ? 'per bulan' : 'Segera tersedia' }}</p>
                     <p class="text-sm text-artisan-primary/55 leading-relaxed mt-4">{{ $planDetails['pro']['description'] }}</p>
                 </div>
                 <ul class="mb-8 space-y-3">
@@ -188,10 +188,10 @@
                         Paket Saat Ini
                     </button>
                 @else
-                    <button wire:click="subscribePlan('pro')" wire:loading.attr="disabled"
+                    <button @if(!($planDetails['pro']['is_published'] ?? true)) disabled @endif wire:click="subscribePlan('pro')" wire:loading.attr="disabled"
                         class="w-full py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-all active:scale-[0.98] text-sm disabled:opacity-50">
                         <span wire:loading.remove wire:target="subscribePlan('pro')">
-                            {{ $currentPlan === 'business' ? 'Turun ke Pro' : $planDetails['pro']['cta'] }}
+                            {{ !($planDetails['pro']['is_published'] ?? true) ? 'Coming Soon' : ($currentPlan === 'business' ? 'Turun ke Pro' : $planDetails['pro']['cta']) }}
                         </span>
                         <span wire:loading wire:target="subscribePlan('pro')">
                             <svg class="w-5 h-5 mx-auto animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
@@ -214,8 +214,8 @@
                     </div>
                     <p class="text-[10px] font-black uppercase tracking-[0.22em] text-purple-500">{{ $planDetails['business']['subtitle'] }}</p>
                     <h3 class="font-manrope font-extrabold text-xl text-purple-700 mt-2">{{ $planDetails['business']['name'] }}</h3>
-                    <p class="mt-2 text-3xl font-manrope font-extrabold text-artisan-primary sm:text-4xl">Rp200<span class="text-base sm:text-lg">.000</span></p>
-                    <p class="text-sm text-artisan-primary/40 mt-1">per bulan</p>
+                    <p class="mt-2 text-3xl font-manrope font-extrabold text-artisan-primary sm:text-4xl">{{ $planDetails['business']['price_label'] }}</p>
+                    <p class="text-sm text-artisan-primary/40 mt-1">{{ ($planDetails['business']['is_published'] ?? true) ? 'per bulan' : 'Segera tersedia' }}</p>
                     <p class="text-sm text-artisan-primary/55 leading-relaxed mt-4">{{ $planDetails['business']['description'] }}</p>
                 </div>
                 <ul class="mb-8 space-y-3">
@@ -232,9 +232,9 @@
                         Paket Saat Ini
                     </button>
                 @else
-                    <button wire:click="subscribePlan('business')" wire:loading.attr="disabled"
+                    <button @if(!($planDetails['business']['is_published'] ?? true)) disabled @endif wire:click="subscribePlan('business')" wire:loading.attr="disabled"
                         class="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-600 text-white font-bold rounded-2xl shadow-lg shadow-purple-200 hover:shadow-xl hover:shadow-purple-300 transition-all active:scale-[0.98] text-sm disabled:opacity-50">
-                        <span wire:loading.remove wire:target="subscribePlan('business')">{{ $planDetails['business']['cta'] }}</span>
+                        <span wire:loading.remove wire:target="subscribePlan('business')">{{ !($planDetails['business']['is_published'] ?? true) ? 'Coming Soon' : $planDetails['business']['cta'] }}</span>
                         <span wire:loading wire:target="subscribePlan('business')">
                             <svg class="w-5 h-5 mx-auto animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
                         </span>
@@ -265,9 +265,9 @@
                 </div>
             </div>
             <div>
-                <button wire:click="buyQuota" wire:loading.attr="disabled"
-                    class="w-full px-6 py-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-2xl shadow-lg shadow-amber-200 hover:shadow-xl hover:shadow-amber-300 transition-all active:scale-[0.98] text-sm disabled:opacity-50 sm:w-auto sm:px-8 whitespace-nowrap">
-                    <span wire:loading.remove wire:target="buyQuota">{{ $planDetails['topup']['cta'] }} - {{ $planDetails['topup']['price_label'] }}</span>
+                    <button @if(!($planDetails['topup']['is_published'] ?? true)) disabled @endif wire:click="buyQuota" wire:loading.attr="disabled"
+                        class="w-full px-6 py-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold rounded-2xl shadow-lg shadow-amber-200 hover:shadow-xl hover:shadow-amber-300 transition-all active:scale-[0.98] text-sm disabled:opacity-50 sm:w-auto sm:px-8 whitespace-nowrap">
+                    <span wire:loading.remove wire:target="buyQuota">{{ !($planDetails['topup']['is_published'] ?? true) ? 'Coming Soon' : ($planDetails['topup']['cta'] . ' - ' . $planDetails['topup']['price_label']) }}</span>
                     <span wire:loading wire:target="buyQuota">
                         <svg class="w-5 h-5 mx-auto animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
                     </span>
@@ -304,7 +304,7 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-3 sm:gap-4">
-                            @if($sub->mayar_transaction_id)
+                            @if($sub->gateway_transaction_id || $sub->mayar_transaction_id)
                                 <button wire:click="showReceipt({{ $sub->id }})" class="text-xs font-bold text-artisan-primary/60 hover:text-artisan-primary transition-colors flex items-center gap-1 bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-100">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                     Nota
@@ -322,7 +322,7 @@
     @endif
 
     <!-- Top-up History -->
-    @if(auth()->user()->orderQuotas()->whereNotNull('mayar_transaction_id')->count() > 0)
+    @if(auth()->user()->orderQuotas()->whereNotNull('gateway_transaction_id')->orWhereNotNull('mayar_transaction_id')->count() > 0)
         <div class="card-artisan mt-8 p-5 sm:p-8">
             <div class="mb-6 flex items-center gap-3 sm:gap-4">
                 <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-500 text-white shadow-lg shadow-amber-200 sm:h-12 sm:w-12">
@@ -334,7 +334,7 @@
                 </div>
             </div>
             <div class="space-y-3">
-                @foreach(auth()->user()->orderQuotas()->whereNotNull('mayar_transaction_id')->latest()->take(10)->get() as $quota)
+                @foreach(auth()->user()->orderQuotas()->where(function ($query) { $query->whereNotNull('gateway_transaction_id')->orWhereNotNull('mayar_transaction_id'); })->latest()->take(10)->get() as $quota)
                     <div class="flex flex-col gap-4 rounded-2xl bg-artisan-surface-low p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-100 text-amber-600">

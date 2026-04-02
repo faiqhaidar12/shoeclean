@@ -3,7 +3,7 @@
 namespace App\Livewire\Subscription;
 
 use Livewire\Component;
-use App\Services\MayarService;
+use App\Services\DuitkuService;
 use App\Services\SubscriptionService;
 use Livewire\Attributes\Layout;
 
@@ -43,66 +43,24 @@ class SubscriptionPage extends Component
         try {
             $user = auth()->user();
             $owner = $user->getOwner();
+            $selectedPlan = $this->planDetails[$plan] ?? null;
 
-            // Direct payment link for Pro and Business plans as requested
-            if (in_array($plan, ['pro', 'business'])) {
-                $baseUrl = $plan === 'pro' 
-                    ? 'https://faiq-haidar.mayar.shop/pl/bulanan-pro'
-                    : 'https://faiq-haidar.mayar.shop/pl/bulanan-business';
-                
-                $paymentUrl = $baseUrl
-                    . '?email=' . urlencode($owner->email) 
-                    . '&name=' . urlencode($owner->name);
-                
-                $this->loading = false;
-                return redirect()->away($paymentUrl);
+            if (!$selectedPlan) {
+                throw new \RuntimeException('Paket tidak ditemukan.');
             }
 
-            $productId = config('mayar.product_membership_id');
-            $tierId = $plan === 'pro'
-                ? config('mayar.tier_pro_id')
-                : config('mayar.tier_business_id');
-
-            if (!$productId || !$tierId) {
-                // If Mayar product IDs are not configured, activate directly (for testing)
-                $subscriptionService = new SubscriptionService();
-                $subscriptionService->activateSubscription($owner, $plan);
-                
-                $this->currentPlan = $plan;
-                $this->activeSubscription = $owner->activeSubscription();
-                $this->orderLimitInfo = $subscriptionService->checkOrderLimit($user);
-                
-                session()->flash('success', 'Paket ' . ucfirst($plan) . ' berhasil diaktifkan!');
-                $this->loading = false;
-                return;
+            if (!($selectedPlan['is_published'] ?? false)) {
+                throw new \RuntimeException('Paket ini belum dipublikasikan.');
             }
 
-            $mayarService = new MayarService();
-
-            $response = $mayarService->registerMembership(
-                $productId,
-                $tierId,
-                1, // monthly
-                [
-                    'name' => $owner->name,
-                    'email' => $owner->email,
-                    'mobile' => '08000000000', // placeholder
-                ]
+            $response = app(DuitkuService::class)->createCheckout(
+                $owner,
+                $plan,
+                $selectedPlan,
+                route('subscription'),
             );
 
-            // Get the payment link URL from the response
-            $paymentUrl = $response['data']['paymentLinkUrl']
-                ?? $response['paymentLinkUrl']
-                ?? null;
-
-            // Try to get specific tier payment URL
-            $tiers = $response['data']['membershipTiers'] ?? $response['membershipTiers'] ?? [];
-            foreach ($tiers as $tier) {
-                if ($tier['id'] === $tierId && isset($tier['specificPaymentLinkUrl'])) {
-                    $paymentUrl = $tier['specificPaymentLinkUrl'];
-                    break;
-                }
-            }
+            $paymentUrl = data_get($response, 'paymentUrl');
 
             if ($paymentUrl) {
                 $this->loading = false;
@@ -125,11 +83,23 @@ class SubscriptionPage extends Component
         try {
             $user = auth()->user();
             $owner = $user->getOwner();
+            $selectedPlan = $this->planDetails['topup'] ?? null;
 
-            // Direct payment link for Top-up Quota
-            $paymentUrl = 'https://faiq-haidar.mayar.shop/pl/top-up-order-quota'
-                . '?email=' . urlencode($owner->email)
-                . '&name=' . urlencode($owner->name);
+            if (!$selectedPlan || !($selectedPlan['is_published'] ?? false)) {
+                throw new \RuntimeException('Top-up belum dipublikasikan.');
+            }
+
+            $response = app(DuitkuService::class)->createCheckout(
+                $owner,
+                'topup',
+                $selectedPlan,
+                route('subscription'),
+            );
+            $paymentUrl = data_get($response, 'paymentUrl');
+
+            if (!$paymentUrl) {
+                throw new \RuntimeException('Gagal mendapatkan link pembayaran Duitku.');
+            }
 
             $this->loading = false;
             return redirect()->away($paymentUrl);
@@ -142,12 +112,13 @@ class SubscriptionPage extends Component
     public function showReceipt($id)
     {
         $sub = auth()->user()->subscriptions()->find($id);
-        if ($sub && $sub->mayar_transaction_id) {
+        if ($sub && ($sub->gateway_transaction_id || $sub->mayar_transaction_id)) {
+            $amount = data_get($this->planDetails, "{$sub->plan}.price", 0);
             $this->receiptData = [
-                'transaction_id' => $sub->mayar_transaction_id,
+                'transaction_id' => $sub->gateway_transaction_id ?? $sub->mayar_transaction_id,
                 'date' => $sub->started_at->format('d M Y, H:i'),
                 'item' => 'Paket Langganan ' . ucfirst($sub->plan),
-                'amount' => $sub->plan === 'business' ? 200000 : ($sub->plan === 'pro' ? 75000 : 0),
+                'amount' => $amount,
                 'status' => 'LUNAS',
                 'customer_name' => auth()->user()->name,
                 'customer_email' => auth()->user()->email,
@@ -159,12 +130,12 @@ class SubscriptionPage extends Component
     public function showTopupReceipt($id)
     {
         $quota = auth()->user()->orderQuotas()->find($id);
-        if ($quota && $quota->mayar_transaction_id) {
+        if ($quota && ($quota->gateway_transaction_id || $quota->mayar_transaction_id)) {
             $this->receiptData = [
-                'transaction_id' => $quota->mayar_transaction_id,
+                'transaction_id' => $quota->gateway_transaction_id ?? $quota->mayar_transaction_id,
                 'date' => $quota->purchased_at->format('d M Y, H:i'),
-                'item' => 'Top-up Kuota ' . number_format($quota->quota_total) . ' Order',
-                'amount' => config('mayar.topup.price', 100000),
+                'item' => 'Top-up Kuota ' . number_format($quota->quota_total) . ' Pesanan',
+                'amount' => data_get($this->planDetails, 'topup.price', 0),
                 'status' => 'LUNAS',
                 'customer_name' => auth()->user()->name,
                 'customer_email' => auth()->user()->email,

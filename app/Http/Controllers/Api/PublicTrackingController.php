@@ -22,7 +22,7 @@ class PublicTrackingController extends Controller
 
         $order = Order::query()
             ->where('invoice_number', $invoice)
-            ->with(['customer:id,name,phone', 'items.service:id,name', 'outlet:id,name,address,phone,qris_image_path'])
+            ->with(['customer:id,name,phone', 'items.service:id,name', 'outlet:id,name,address,phone,qris_image_path,latitude,longitude'])
             ->first();
 
         if (!$order) {
@@ -54,6 +54,12 @@ class PublicTrackingController extends Controller
                 'total_price' => (int) $order->total_price,
                 'notes' => $order->notes,
                 'order_type' => $order->order_type,
+                'pickup_address' => $order->pickup_address,
+                'pickup_latitude' => $order->pickup_latitude,
+                'pickup_longitude' => $order->pickup_longitude,
+                'delivery_address' => $order->delivery_address,
+                'delivery_latitude' => $order->delivery_latitude,
+                'delivery_longitude' => $order->delivery_longitude,
                 'customer' => $order->customer ? [
                     'name' => $order->customer->name,
                     'phone' => $order->customer->phone,
@@ -62,6 +68,8 @@ class PublicTrackingController extends Controller
                     'name' => $order->outlet->name,
                     'address' => $order->outlet->address,
                     'phone' => $order->outlet->phone,
+                    'latitude' => $order->outlet->latitude,
+                    'longitude' => $order->outlet->longitude,
                     'qris_image_url' => $order->outlet->qris_image_path
                         ? url(Storage::url($order->outlet->qris_image_path))
                         : null,

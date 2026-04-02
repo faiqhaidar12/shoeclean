@@ -36,7 +36,7 @@ class AuthSessionController
             ]);
 
             $ownerRole = Role::where('slug', 'owner')->firstOrFail();
-            $user->roles()->attach($ownerRole);
+            $user->roles()->attach($ownerRole->id);
 
             $baseSlug = Str::slug($validated['business_name']);
             $slug = $baseSlug ?: 'outlet';
@@ -127,8 +127,18 @@ class AuthSessionController
             'email_verified' => (bool) $user->email_verified_at,
             'roles' => $user->roles->pluck('slug')->values()->all(),
             'primary_role' => $user->roles->pluck('slug')->first(),
+            'is_owner' => $user->isOwner(),
+            'is_admin' => $user->isAdmin(),
+            'is_staff' => $user->isStaff(),
+            'is_superadmin' => $user->isSuperAdmin(),
             'current_plan' => $user->currentPlan(),
             'remaining_orders' => $user->remainingOrders(),
+            'features' => [
+                'team_management' => $user->hasFeature('team_management'),
+                'promos' => $user->hasFeature('promos'),
+                'exports' => $user->hasFeature('exports'),
+                'multi_outlet_reports' => $user->hasFeature('multi_outlet_reports'),
+            ],
             'outlet' => $user->outlet
                 ? [
                     'id' => $user->outlet->id,

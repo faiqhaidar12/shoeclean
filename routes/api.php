@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('public')->group(function () {
     Route::get('/home', [PublicContentController::class, 'home']);
     Route::get('/pricing', [PublicContentController::class, 'pricing']);
+    Route::get('/track', [PublicTrackingController::class, 'show']);
     Route::get('/track/{invoice}', [PublicTrackingController::class, 'show'])
         ->where('invoice', '.*');
     Route::get('/surveys/{survey:slug}', [SurveyManagementController::class, 'publicShow']);
@@ -41,9 +42,11 @@ Route::middleware('web')->group(function () {
     Route::post('/auth/logout', [AuthSessionController::class, 'destroy'])
         ->withoutMiddleware([VerifyCsrfToken::class]);
 
-        Route::middleware(['auth', 'verified'])->group(function () {
+        Route::middleware(['auth'])->group(function () {
             Route::get('/auth/session', [AuthSessionController::class, 'show']);
             Route::get('/dashboard/summary', [DashboardSummaryController::class, 'show']);
+            Route::get('/subscription/summary', [SubscriptionManagementController::class, 'show']);
+            Route::post('/subscription/checkout/{plan}', [SubscriptionManagementController::class, 'checkout']);
             Route::middleware('role:owner,admin')->group(function () {
                 Route::get('/outlets', [OutletManagementController::class, 'index']);
                 Route::post('/outlets', [OutletManagementController::class, 'store']);
@@ -54,7 +57,6 @@ Route::middleware('web')->group(function () {
                 Route::get('/reports/expenses/export', [ReportManagementController::class, 'exportExpenses']);
             });
             Route::middleware('role:owner')->group(function () {
-                Route::get('/subscription/summary', [SubscriptionManagementController::class, 'show']);
                 Route::get('/surveys', [SurveyManagementController::class, 'index']);
                 Route::post('/surveys', [SurveyManagementController::class, 'store']);
                 Route::get('/surveys/{survey:id}', [SurveyManagementController::class, 'show']);

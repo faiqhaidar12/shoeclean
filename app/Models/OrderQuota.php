@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class OrderQuota extends Model
 {
@@ -11,7 +12,10 @@ class OrderQuota extends Model
         'user_id',
         'quota_total',
         'quota_used',
+        'payment_gateway',
         'mayar_transaction_id',
+        'gateway_transaction_id',
+        'gateway_reference',
         'purchased_at',
     ];
 
@@ -25,6 +29,11 @@ class OrderQuota extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function paymentTransaction(): MorphOne
+    {
+        return $this->morphOne(PaymentTransaction::class, 'billable');
     }
 
     public function remainingQuota(): int

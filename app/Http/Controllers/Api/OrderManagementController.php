@@ -46,7 +46,7 @@ class OrderManagementController
 
         $order->load([
             'customer:id,name,phone,address,email',
-            'outlet:id,name,slug,address,phone,qris_image_path,qris_notes',
+            'outlet:id,name,slug,address,phone,latitude,longitude,qris_image_path,qris_notes',
             'items.service:id,name,unit',
             'payments',
             'paymentVerifier:id,name',
@@ -73,7 +73,7 @@ class OrderManagementController
             'message' => 'Status order berhasil diperbarui.',
             'order' => $this->transformOrderDetail($order->fresh()->load([
                 'customer:id,name,phone,address,email',
-                'outlet:id,name,slug,address,phone,qris_image_path,qris_notes',
+                'outlet:id,name,slug,address,phone,latitude,longitude,qris_image_path,qris_notes',
                 'items.service:id,name,unit',
                 'payments',
                 'paymentVerifier:id,name',
@@ -106,7 +106,7 @@ class OrderManagementController
             'message' => 'Pembayaran berhasil ditandai lunas.',
             'order' => $this->transformOrderDetail($order->fresh()->load([
                 'customer:id,name,phone,address,email',
-                'outlet:id,name,slug,address,phone,qris_image_path,qris_notes',
+                'outlet:id,name,slug,address,phone,latitude,longitude,qris_image_path,qris_notes',
                 'items.service:id,name,unit',
                 'payments',
                 'paymentVerifier:id,name',
@@ -152,7 +152,7 @@ class OrderManagementController
             'message' => 'Pembayaran berhasil diverifikasi.',
             'order' => $this->transformOrderDetail($order->fresh()->load([
                 'customer:id,name,phone,address,email',
-                'outlet:id,name,slug,address,phone,qris_image_path,qris_notes',
+                'outlet:id,name,slug,address,phone,latitude,longitude,qris_image_path,qris_notes',
                 'items.service:id,name,unit',
                 'payments',
                 'paymentVerifier:id,name',
@@ -204,7 +204,11 @@ class OrderManagementController
             'notes' => $order->notes,
             'order_type' => $order->order_type,
             'pickup_address' => $order->pickup_address,
+            'pickup_latitude' => $order->pickup_latitude,
+            'pickup_longitude' => $order->pickup_longitude,
             'delivery_address' => $order->delivery_address,
+            'delivery_latitude' => $order->delivery_latitude,
+            'delivery_longitude' => $order->delivery_longitude,
             'discount_amount' => $order->discount_amount,
             'payment_notes' => $order->payment_notes,
             'payment_verified_at' => optional($order->payment_verified_at)->toIso8601String(),
@@ -226,6 +230,8 @@ class OrderManagementController
                 'slug' => $order->outlet->slug,
                 'address' => $order->outlet->address,
                 'phone' => $order->outlet->phone,
+                'latitude' => $order->outlet->latitude,
+                'longitude' => $order->outlet->longitude,
                 'qris_image_url' => $order->outlet->qris_image_path ? url('storage/' . ltrim($order->outlet->qris_image_path, '/')) : null,
                 'qris_notes' => $order->outlet->qris_notes,
             ] : null,

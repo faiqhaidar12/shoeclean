@@ -66,7 +66,11 @@
                             @endforeach
                         </ul>
                         <div class="mt-auto pt-8">
-                            <a href="{{ route('register') }}" class="btn-artisan-primary w-full text-center">Pilih Pro</a>
+                            @if($planDetails['pro']['is_published'] ?? true)
+                                <a href="{{ route('register') }}" class="btn-artisan-primary w-full text-center">Pilih Pro</a>
+                            @else
+                                <span class="btn-artisan-secondary w-full text-center opacity-70">Coming Soon</span>
+                            @endif
                         </div>
                     </article>
 
@@ -81,7 +85,11 @@
                             @endforeach
                         </ul>
                         <div class="mt-auto pt-8">
-                            <a href="{{ route('register') }}" class="btn-artisan-primary w-full text-center">Pilih Business</a>
+                            @if($planDetails['business']['is_published'] ?? true)
+                                <a href="{{ route('register') }}" class="btn-artisan-primary w-full text-center">Pilih Business</a>
+                            @else
+                                <span class="btn-artisan-secondary w-full text-center opacity-70">Coming Soon</span>
+                            @endif
                         </div>
                     </article>
                 </div>

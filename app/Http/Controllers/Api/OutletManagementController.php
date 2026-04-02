@@ -104,6 +104,8 @@ class OutletManagementController
             'city_name' => $validated['city_name'],
             'district_id' => $validated['district_id'] ?? null,
             'district_name' => $validated['district_name'] ?? null,
+            'latitude' => $validated['latitude'] ?? null,
+            'longitude' => $validated['longitude'] ?? null,
             'qris_image_path' => $qris['path'],
             'qris_image_original_name' => $qris['original_name'],
             'qris_notes' => $validated['qris_notes'] ?? null,
@@ -158,6 +160,8 @@ class OutletManagementController
             'city_name' => $validated['city_name'],
             'district_id' => $validated['district_id'] ?? null,
             'district_name' => $validated['district_name'] ?? null,
+            'latitude' => $validated['latitude'] ?? null,
+            'longitude' => $validated['longitude'] ?? null,
             'qris_image_path' => $qrisPath,
             'qris_image_original_name' => $qrisOriginalName,
             'qris_notes' => $validated['qris_notes'] ?? null,
@@ -195,6 +199,8 @@ class OutletManagementController
             'city_name' => ['required', 'string'],
             'district_id' => ['nullable', 'string'],
             'district_name' => ['nullable', 'string'],
+            'latitude' => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude' => ['nullable', 'numeric', 'between:-180,180'],
         ]);
     }
 
@@ -228,6 +234,8 @@ class OutletManagementController
             'city_name' => $outlet->city_name,
             'district_id' => $outlet->district_id,
             'district_name' => $outlet->district_name,
+            'latitude' => $outlet->latitude,
+            'longitude' => $outlet->longitude,
             'qris_image_url' => $outlet->qris_image_path ? url(Storage::url($outlet->qris_image_path)) : null,
             'qris_image_original_name' => $outlet->qris_image_original_name,
             'qris_notes' => $outlet->qris_notes,

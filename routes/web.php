@@ -40,6 +40,7 @@ Route::get('/survey/{survey:slug}', \App\Livewire\FillSurvey::class)->name('surv
 
 // Mayar Webhook (public, no auth)
 Route::post('/webhook/mayar', [\App\Http\Controllers\MayarWebhookController::class, 'handle'])->name('webhook.mayar');
+Route::post('/webhook/duitku', [\App\Http\Controllers\DuitkuWebhookController::class, 'handle'])->name('webhook.duitku');
 
 Route::get('dashboard', \App\Livewire\Dashboard::class)
     ->middleware(['auth', 'verified'])
@@ -54,6 +55,8 @@ Route::middleware(['auth', 'verified', 'role:superadmin'])->prefix('superadmin')
     Route::get('/', \App\Livewire\SuperAdminDashboard::class)->name('superadmin.dashboard');
     Route::get('/orders', \App\Livewire\SuperAdmin\ListOrders::class)->name('superadmin.orders.index');
     Route::get('/subscriptions', \App\Livewire\SuperAdmin\SubscriptionInsights::class)->name('superadmin.subscriptions.index');
+    Route::get('/pricing', \App\Livewire\SuperAdmin\PricingManager::class)->name('superadmin.pricing.index');
+    Route::get('/payments', \App\Livewire\SuperAdmin\PaymentTransactions::class)->name('superadmin.payments.index');
     Route::get('/surveys', \App\Livewire\Surveys\ListSurveys::class)->name('superadmin.surveys.index');
     Route::get('/surveys/create', \App\Livewire\Surveys\CreateSurvey::class)->name('superadmin.surveys.create');
     Route::get('/surveys/{survey}/results', \App\Livewire\Surveys\SurveyResults::class)->name('superadmin.surveys.results');

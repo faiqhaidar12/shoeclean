@@ -76,6 +76,14 @@
                             <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.21 0-4 .895-4 2s1.79 2 4 2 4 .895 4 2-1.79 2-4 2m0-8V7m0 1v8m0 0v1m0-1c-2.21 0-4-.895-4-2m8-8a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             Langganan
                         </a>
+                        <a href="{{ route('superadmin.pricing.index') }}" class="flex items-center gap-3 px-5 py-4 rounded-2xl font-bold text-sm transition-all duration-300 {{ request()->routeIs('superadmin.pricing.*') ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white hover:bg-white/5' }}">
+                            <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-2.21 0-4 .895-4 2s1.79 2 4 2 4 .895 4 2-1.79 2-4 2m0-8V7m0 1v8m0 0v1m0-1c-2.21 0-4-.895-4-2"/></svg>
+                            Harga SaaS
+                        </a>
+                        <a href="{{ route('superadmin.payments.index') }}" class="flex items-center gap-3 px-5 py-4 rounded-2xl font-bold text-sm transition-all duration-300 {{ request()->routeIs('superadmin.payments.*') ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white hover:bg-white/5' }}">
+                            <svg class="w-5 h-5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 00-10 0v2m-2 0h14a1 1 0 011 1v9a2 2 0 01-2 2H6a2 2 0 01-2-2v-9a1 1 0 011-1z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 13v3"/></svg>
+                            Transaksi
+                        </a>
                     </div>
 
                     <div class="py-4">

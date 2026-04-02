@@ -30,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'payment/notification',
             'webhook/mayar',
+            'webhook/duitku',
             'api/auth/register',
             'api/auth/login',
             'api/auth/logout',
@@ -48,6 +49,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/surveys/*',
             'api/team',
             'api/team/*',
+            'api/subscription/checkout/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

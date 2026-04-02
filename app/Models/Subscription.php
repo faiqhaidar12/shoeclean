@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Subscription extends Model
 {
@@ -11,8 +12,11 @@ class Subscription extends Model
         'user_id',
         'plan',
         'status',
+        'payment_gateway',
         'mayar_transaction_id',
         'mayar_member_id',
+        'gateway_transaction_id',
+        'gateway_reference',
         'started_at',
         'expires_at',
     ];
@@ -28,6 +32,11 @@ class Subscription extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function paymentTransaction(): MorphOne
+    {
+        return $this->morphOne(PaymentTransaction::class, 'billable');
     }
 
     // Scopes

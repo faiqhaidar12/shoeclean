@@ -20,7 +20,11 @@ class Order extends Model
         'notes',
         'order_type',
         'pickup_address',
+        'pickup_latitude',
+        'pickup_longitude',
         'delivery_address',
+        'delivery_latitude',
+        'delivery_longitude',
         'pickup_fee',
         'delivery_fee',
         'promo_id',
@@ -38,6 +42,10 @@ class Order extends Model
     protected $casts = [
         'payment_proof_uploaded_at' => 'datetime',
         'payment_verified_at' => 'datetime',
+        'pickup_latitude' => 'float',
+        'pickup_longitude' => 'float',
+        'delivery_latitude' => 'float',
+        'delivery_longitude' => 'float',
     ];
 
     public function outlet()
