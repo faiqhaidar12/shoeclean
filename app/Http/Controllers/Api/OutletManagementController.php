@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Outlet;
+use App\Services\DistancePricingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -12,6 +13,13 @@ use Illuminate\Validation\Rule;
 
 class OutletManagementController
 {
+    protected DistancePricingService $distancePricing;
+
+    public function __construct(DistancePricingService $distancePricing)
+    {
+        $this->distancePricing = $distancePricing;
+    }
+
     public function index(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -95,8 +103,16 @@ class OutletManagementController
             'slug' => $this->makeUniqueSlug($validated['slug'] ?? $validated['name']),
             'address' => $validated['address'],
             'phone' => $validated['phone'],
+            'pickup_enabled' => $validated['pickup_enabled'],
+            'delivery_enabled' => $validated['delivery_enabled'],
             'pickup_fee' => $validated['pickup_fee'],
             'delivery_fee' => $validated['delivery_fee'],
+            'pickup_base_distance_km' => $validated['pickup_base_distance_km'],
+            'pickup_base_fee' => $validated['pickup_base_fee'],
+            'pickup_extra_fee_per_km' => $validated['pickup_extra_fee_per_km'],
+            'delivery_base_distance_km' => $validated['delivery_base_distance_km'],
+            'delivery_base_fee' => $validated['delivery_base_fee'],
+            'delivery_extra_fee_per_km' => $validated['delivery_extra_fee_per_km'],
             'status' => $validated['status'] ?? 'active',
             'province_id' => $validated['province_id'],
             'province_name' => $validated['province_name'],
@@ -151,8 +167,16 @@ class OutletManagementController
             'slug' => $this->makeUniqueSlug($validated['slug'] ?? $validated['name'], $outlet->id),
             'address' => $validated['address'],
             'phone' => $validated['phone'],
+            'pickup_enabled' => $validated['pickup_enabled'],
+            'delivery_enabled' => $validated['delivery_enabled'],
             'pickup_fee' => $validated['pickup_fee'],
             'delivery_fee' => $validated['delivery_fee'],
+            'pickup_base_distance_km' => $validated['pickup_base_distance_km'],
+            'pickup_base_fee' => $validated['pickup_base_fee'],
+            'pickup_extra_fee_per_km' => $validated['pickup_extra_fee_per_km'],
+            'delivery_base_distance_km' => $validated['delivery_base_distance_km'],
+            'delivery_base_fee' => $validated['delivery_base_fee'],
+            'delivery_extra_fee_per_km' => $validated['delivery_extra_fee_per_km'],
             'status' => $validated['status'],
             'province_id' => $validated['province_id'],
             'province_name' => $validated['province_name'],
@@ -187,8 +211,16 @@ class OutletManagementController
             ],
             'address' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:20'],
+            'pickup_enabled' => ['nullable', 'boolean'],
+            'delivery_enabled' => ['nullable', 'boolean'],
             'pickup_fee' => ['required', 'numeric', 'min:0'],
             'delivery_fee' => ['required', 'numeric', 'min:0'],
+            'pickup_base_distance_km' => ['required', 'numeric', 'min:0'],
+            'pickup_base_fee' => ['required', 'numeric', 'min:0'],
+            'pickup_extra_fee_per_km' => ['required', 'numeric', 'min:0'],
+            'delivery_base_distance_km' => ['required', 'numeric', 'min:0'],
+            'delivery_base_fee' => ['required', 'numeric', 'min:0'],
+            'delivery_extra_fee_per_km' => ['required', 'numeric', 'min:0'],
             'qris_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'qris_notes' => ['nullable', 'string', 'max:1000'],
             'remove_qris' => ['nullable', 'boolean'],
@@ -226,8 +258,18 @@ class OutletManagementController
             'address' => $outlet->address,
             'phone' => $outlet->phone,
             'status' => $outlet->status,
+            'pickup_enabled' => (bool) $outlet->pickup_enabled,
+            'delivery_enabled' => (bool) $outlet->delivery_enabled,
             'pickup_fee' => (int) $outlet->pickup_fee,
             'delivery_fee' => (int) $outlet->delivery_fee,
+            'pickup_base_distance_km' => (float) ($outlet->pickup_base_distance_km ?? 0),
+            'pickup_base_fee' => (int) ($outlet->pickup_base_fee ?? $outlet->pickup_fee ?? 0),
+            'pickup_extra_fee_per_km' => (int) ($outlet->pickup_extra_fee_per_km ?? 0),
+            'delivery_base_distance_km' => (float) ($outlet->delivery_base_distance_km ?? 0),
+            'delivery_base_fee' => (int) ($outlet->delivery_base_fee ?? $outlet->delivery_fee ?? 0),
+            'delivery_extra_fee_per_km' => (int) ($outlet->delivery_extra_fee_per_km ?? 0),
+            'delivery_pricing' => $this->distancePricing->calculateDelivery($outlet, null, null),
+            'pickup_pricing' => $this->distancePricing->calculatePickup($outlet, null, null),
             'province_id' => $outlet->province_id,
             'province_name' => $outlet->province_name,
             'city_id' => $outlet->city_id,

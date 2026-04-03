@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-artisan-bg font-manrope selection:bg-artisan-secondary selection:text-white">
+<div class="min-h-screen public-shell font-manrope selection:bg-artisan-secondary selection:text-white">
     <header class="sticky top-0 z-50 border-b border-artisan-outline/20 bg-artisan-bg/90 backdrop-blur-xl">
         <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
             <a href="/" class="flex min-w-0 items-center gap-3 group">
@@ -7,7 +7,7 @@
                 </div>
                 <div class="min-w-0">
                     <p class="text-lg font-black tracking-tighter text-artisan-primary sm:text-2xl">ShoeClean<span class="italic text-artisan-secondary">.</span></p>
-                    <p class="text-[9px] font-black uppercase tracking-[0.24em] text-artisan-primary/30">Track Order</p>
+                    <p class="text-[9px] font-black uppercase tracking-[0.24em] text-artisan-primary/30">Lacak Pesanan</p>
                 </div>
             </a>
 
@@ -26,7 +26,7 @@
 
                 <div class="relative z-10 space-y-5">
                     <div class="max-w-3xl rounded-[1.75rem] border border-white/10 bg-white/8 p-4 backdrop-blur-md sm:p-6">
-                        <p class="inline-flex rounded-full bg-artisan-secondary px-3 py-1 text-[9px] font-black uppercase tracking-[0.28em] text-artisan-primary shadow-sm">Order Tracking</p>
+                        <p class="inline-flex rounded-full bg-artisan-secondary px-3 py-1 text-[9px] font-black uppercase tracking-[0.28em] text-artisan-primary shadow-sm">Cek Pesanan</p>
                         <h1 class="mt-4 text-3xl font-black leading-tight text-white sm:text-4xl lg:text-5xl">Cek Progres Pesanan Tanpa Perlu Chat Admin</h1>
                         <p class="mt-3 max-w-2xl text-[11px] font-semibold leading-relaxed text-white/80 sm:text-sm">
                             Masukkan nomor invoice untuk melihat status pengerjaan, pembayaran, dan informasi outlet dalam satu halaman yang mudah dibaca dari HP.
@@ -50,7 +50,7 @@
 
                     @if($error)
                         <div class="rounded-[1.5rem] border border-red-200 bg-red-50 px-4 py-4 text-red-700">
-                            <p class="text-[10px] font-black uppercase tracking-[0.22em]">Invoice Belum Ketemu</p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.22em]">Invoice Belum Ditemukan</p>
                             <p class="mt-2 text-sm font-semibold leading-relaxed text-red-700/80">{{ $error }} Pastikan nomor invoice sesuai dengan yang Anda terima dari outlet.</p>
                         </div>
                     @endif
@@ -171,8 +171,8 @@
                                         <p class="text-[9px] font-black uppercase tracking-[0.28em] text-artisan-secondary">Detail Layanan</p>
                                     <p class="mt-2 text-sm font-bold text-artisan-primary/60">Ringkasan layanan yang sedang atau sudah dikerjakan untuk pesanan ini.</p>
                                     </div>
-                                    <div class="rounded-full bg-artisan-surface-low px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/50">
-                                        {{ $order->items->count() }} item
+                                        <div class="rounded-full bg-artisan-surface-low px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/50">
+                                        {{ $order->items->count() }} layanan
                                     </div>
                                 </div>
 
@@ -265,7 +265,7 @@
     <footer class="px-4 pb-10 pt-2 text-center sm:px-6 lg:px-8">
         <div class="mx-auto max-w-5xl">
             <p class="text-[9px] font-black uppercase tracking-[0.35em] text-artisan-primary/20">
-                &copy; {{ date('Y') }} ShoeClean Artisan Collection. All Rights Reserved.
+                &copy; {{ date('Y') }} ShoeClean. Lacak pesanan lebih mudah tanpa perlu chat admin berulang kali.
             </p>
         </div>
     </footer>

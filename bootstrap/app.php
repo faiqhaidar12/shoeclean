@@ -47,6 +47,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/outlets/*',
             'api/surveys',
             'api/surveys/*',
+            'api/superadmin/*',
             'api/team',
             'api/team/*',
             'api/subscription/checkout/*',

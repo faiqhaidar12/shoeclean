@@ -6,40 +6,147 @@
 
 /* Custom base styles */
 @layer base {
+    :root {
+        --brand-900: #002045;
+        --brand-800: #0d2d57;
+        --brand-700: #143a69;
+        --accent: #81f2eb;
+        --accent-ink: #0d5f67;
+        --accent-soft: rgba(129, 242, 235, 0.18);
+        --surface: #f7f4ee;
+        --surface-soft: #f2eee6;
+        --surface-strong: #ffffff;
+        --line-soft: rgba(0, 32, 69, 0.08);
+        --line-strong: rgba(0, 32, 69, 0.15);
+        --text-soft: rgba(0, 32, 69, 0.62);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
     body {
-        @apply font-sans antialiased bg-artisan-background text-artisan-primary;
+        @apply font-sans antialiased text-artisan-primary;
+        background:
+            radial-gradient(circle at top left, rgba(129, 242, 235, 0.14), transparent 30%),
+            radial-gradient(circle at bottom right, rgba(0, 32, 69, 0.06), transparent 34%),
+            linear-gradient(180deg, #f9f6f1 0%, #f5f1e8 100%);
+    }
+
+    ::selection {
+        background: rgba(129, 242, 235, 0.35);
+        color: var(--brand-900);
     }
 }
 
 /* Custom component classes */
 @layer components {
+    .public-shell {
+        @apply min-h-screen text-artisan-primary;
+    }
+
+    .public-topbar {
+        @apply sticky top-0 z-50 border-b border-artisan-outline/20 bg-white/80 backdrop-blur-2xl;
+        box-shadow: 0 10px 30px rgba(0, 32, 69, 0.05);
+    }
+
+    .public-nav-link {
+        @apply text-[11px] font-black uppercase tracking-[0.22em] text-artisan-primary/45 transition-colors hover:text-artisan-primary;
+    }
+
+    .public-nav-link-active {
+        @apply text-artisan-primary;
+    }
+
+    .public-main-shell {
+        @apply mx-auto w-full max-w-[1280px] px-4 pb-24 pt-8 sm:px-6 lg:px-8;
+    }
+
+    .public-hero-intro {
+        @apply pt-8 sm:pt-10 lg:pt-12;
+    }
+
+    .public-card {
+        @apply rounded-[2rem] border border-artisan-outline/10 bg-white/95 shadow-artisan;
+    }
+
+    .section-label {
+        @apply text-[10px] font-black uppercase tracking-[0.28em] text-artisan-primary/35;
+    }
+
+    .section-label-dark {
+        @apply text-[10px] font-black uppercase tracking-[0.28em] text-white/45;
+    }
+
+    .status-chip-soft {
+        @apply inline-flex items-center rounded-full bg-artisan-surface-low px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-artisan-primary/55;
+    }
+
+    .status-chip-brand {
+        @apply inline-flex items-center rounded-full bg-artisan-primary px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white;
+    }
+
+    .status-chip-mint {
+        @apply inline-flex items-center rounded-full bg-artisan-secondary/15 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-artisan-primary;
+    }
+
+    .tablet-balance-card {
+        @apply rounded-[2rem] border border-artisan-outline/10 bg-white/95 p-6 shadow-artisan sm:p-8;
+    }
+
+    .tablet-balance-grid {
+        @apply grid gap-6 xl:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)];
+    }
+
     .headline-editorial {
         @apply font-manrope font-black tracking-tighter text-artisan-primary antialiased;
     }
 
     .btn-artisan-primary {
-        @apply px-8 py-4 bg-artisan-primary text-white font-black uppercase tracking-[0.2em] text-[10px] 
-               rounded-2xl hover:bg-artisan-secondary transition-all duration-500 
+        @apply px-8 py-4 text-white font-black uppercase tracking-[0.2em] text-[10px] 
+               rounded-2xl transition-all duration-500 
                shadow-artisan active:scale-95 leading-none;
+        background: linear-gradient(135deg, #002045 0%, #103661 100%);
+    }
+
+    .btn-artisan-primary:hover {
+        background: linear-gradient(135deg, #0c315b 0%, #81f2eb 100%);
+        color: #002045;
     }
     
     .btn-artisan-secondary {
         @apply px-8 py-4 bg-white text-artisan-primary font-black uppercase tracking-[0.2em] text-[10px]
-               rounded-2xl border border-artisan-outline/50 hover:bg-artisan-surface-low transition-all duration-500 active:scale-95 shadow-artisan-sm leading-none;
+               rounded-2xl border border-artisan-outline/60 hover:bg-artisan-surface-low transition-all duration-500 active:scale-95 shadow-artisan-sm leading-none;
+    }
+
+    .btn-primary {
+        @apply inline-flex items-center justify-center rounded-[1.2rem] bg-artisan-primary px-5 py-4 text-sm font-bold text-white transition-all duration-300 hover:bg-artisan-secondary active:scale-[0.98];
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center rounded-[1.2rem] border border-artisan-outline/20 bg-white px-5 py-4 text-sm font-bold text-artisan-primary transition-all duration-300 hover:border-artisan-secondary/25 hover:bg-artisan-surface-low active:scale-[0.98];
+    }
+
+    .btn-accent {
+        @apply inline-flex items-center justify-center rounded-[1.2rem] bg-artisan-secondary px-5 py-4 text-sm font-bold text-artisan-primary transition-all duration-300 hover:bg-artisan-primary hover:text-white active:scale-[0.98];
     }
     
     .card-artisan {
-        @apply bg-artisan-surface-lowest rounded-[2.5rem] shadow-artisan border border-artisan-outline/35;
+        @apply bg-artisan-surface-lowest rounded-[2.5rem] shadow-artisan border border-artisan-outline/50;
     }
 
     .card-artisan-low {
-        @apply bg-artisan-surface-low rounded-[2rem] p-10 border border-artisan-outline/25;
+        @apply bg-artisan-surface-low rounded-[2rem] p-10 border border-artisan-outline/40;
     }
     
     .artisan-input {
-        @apply block w-full bg-artisan-surface-lowest border border-artisan-outline/45 rounded-2xl
-               focus:bg-white focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary
+        @apply block w-full bg-artisan-surface-lowest border border-artisan-outline/55 rounded-2xl
+               focus:bg-white focus:ring-2 focus:ring-artisan-secondary/20 focus:border-artisan-secondary
                text-sm font-semibold py-4 px-6 transition-all placeholder:text-artisan-primary/40 shadow-artisan-sm;
+    }
+
+    .field-soft {
+        @apply block w-full rounded-[1.2rem] border border-artisan-outline/15 bg-white px-4 py-4 text-sm font-semibold text-artisan-primary shadow-artisan-sm outline-none transition-all placeholder:text-artisan-primary/30 focus:border-artisan-secondary/30 focus:ring-4 focus:ring-artisan-secondary/10;
     }
     
     .nav-link-artisan {
@@ -53,6 +160,21 @@
 
     .artisan-table-row {
         @apply hover:bg-artisan-surface-low transition-all duration-300;
+    }
+
+    .dashboard-surface {
+        @apply min-h-screen bg-transparent;
+    }
+
+    .dashboard-page-shell {
+        @apply mx-auto w-full max-w-[1480px] px-4 pb-10 sm:px-6 lg:px-8;
+    }
+
+    .dashboard-glass {
+        background: linear-gradient(180deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.74) 100%);
+        border: 1px solid rgba(0, 32, 69, 0.1);
+        box-shadow: 0 20px 48px rgba(0, 32, 69, 0.08);
+        backdrop-filter: blur(20px);
     }
 
     .artisan-scrollbar {

@@ -8,6 +8,7 @@ use App\Models\OrderItem;
 use App\Models\Outlet;
 use App\Models\Promo;
 use App\Models\Service;
+use App\Services\DistancePricingService;
 use App\Services\SubscriptionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,6 +17,10 @@ use Illuminate\Validation\ValidationException;
 
 class InternalOrderCreateController
 {
+    public function __construct(protected DistancePricingService $distancePricing)
+    {
+    }
+
     public function meta(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -27,7 +32,23 @@ class InternalOrderCreateController
         $outlets = Outlet::query()
             ->whereIn('id', $allowedOutletIds)
             ->orderBy('name')
-            ->get(['id', 'name', 'slug', 'pickup_fee', 'delivery_fee', 'latitude', 'longitude']);
+            ->get([
+                'id',
+                'name',
+                'slug',
+                'pickup_enabled',
+                'delivery_enabled',
+                'pickup_fee',
+                'delivery_fee',
+                'pickup_base_distance_km',
+                'pickup_base_fee',
+                'pickup_extra_fee_per_km',
+                'delivery_base_distance_km',
+                'delivery_base_fee',
+                'delivery_extra_fee_per_km',
+                'latitude',
+                'longitude',
+            ]);
 
         $services = Service::query()
             ->whereIn('outlet_id', $allowedOutletIds)
@@ -42,8 +63,12 @@ class InternalOrderCreateController
                 'id' => $outlet->id,
                 'name' => $outlet->name,
                 'slug' => $outlet->slug,
+                'pickup_enabled' => (bool) $outlet->pickup_enabled,
+                'delivery_enabled' => (bool) $outlet->delivery_enabled,
                 'pickup_fee' => $outlet->pickup_fee,
                 'delivery_fee' => $outlet->delivery_fee,
+                'pickup_pricing' => $this->distancePricing->calculatePickup($outlet, null, null),
+                'delivery_pricing' => $this->distancePricing->calculateDelivery($outlet, null, null),
                 'latitude' => $outlet->latitude,
                 'longitude' => $outlet->longitude,
             ])->values(),
@@ -181,6 +206,26 @@ class InternalOrderCreateController
             'items.*.quantity' => ['required', 'integer', 'min:1'],
         ]);
 
+        if ($validated['order_type'] === 'pickup' && (
+            empty($validated['pickup_address']) ||
+            !isset($validated['pickup_latitude']) ||
+            !isset($validated['pickup_longitude'])
+        )) {
+            throw ValidationException::withMessages([
+                'pickup_address' => ['Alamat dan titik jemput wajib dipilih untuk order pickup.'],
+            ]);
+        }
+
+        if ($validated['order_type'] === 'delivery' && (
+            empty($validated['delivery_address']) ||
+            !isset($validated['delivery_latitude']) ||
+            !isset($validated['delivery_longitude'])
+        )) {
+            throw ValidationException::withMessages([
+                'delivery_address' => ['Alamat dan titik antar wajib dipilih untuk order delivery.'],
+            ]);
+        }
+
         $outletId = $this->sanitizeOutletId($request, (int) $validated['outlet_id']);
         $customer = Customer::query()->findOrFail((int) $validated['customer_id']);
         abort_unless(in_array((int) $customer->outlet_id, $this->visibleOutletIds($request), true), 403);
@@ -199,6 +244,18 @@ class InternalOrderCreateController
         }
 
         $outlet = Outlet::query()->findOrFail($outletId);
+        if ($validated['order_type'] === 'pickup' && !$outlet->pickup_enabled) {
+            throw ValidationException::withMessages([
+                'order_type' => ['Layanan jemput sedang dinonaktifkan untuk cabang ini.'],
+            ]);
+        }
+
+        if ($validated['order_type'] === 'delivery' && !$outlet->delivery_enabled) {
+            throw ValidationException::withMessages([
+                'order_type' => ['Layanan antar sedang dinonaktifkan untuk cabang ini.'],
+            ]);
+        }
+
         $subtotal = 0;
 
         foreach ($validated['items'] as $item) {
@@ -221,8 +278,23 @@ class InternalOrderCreateController
             $discountAmount = $promo->calculateDiscount($subtotal);
         }
 
-        $pickupFee = $validated['order_type'] === 'pickup' ? (int) $outlet->pickup_fee : 0;
-        $deliveryFee = $validated['order_type'] === 'delivery' ? (int) $outlet->delivery_fee : 0;
+        $pickupPricing = $validated['order_type'] === 'pickup'
+            ? $this->distancePricing->calculatePickup(
+                $outlet,
+                isset($validated['pickup_latitude']) ? (float) $validated['pickup_latitude'] : null,
+                isset($validated['pickup_longitude']) ? (float) $validated['pickup_longitude'] : null,
+            )
+            : null;
+        $deliveryPricing = $validated['order_type'] === 'delivery'
+            ? $this->distancePricing->calculateDelivery(
+                $outlet,
+                isset($validated['delivery_latitude']) ? (float) $validated['delivery_latitude'] : null,
+                isset($validated['delivery_longitude']) ? (float) $validated['delivery_longitude'] : null,
+            )
+            : null;
+
+        $pickupFee = $pickupPricing['final_fee'] ?? 0;
+        $deliveryFee = $deliveryPricing['final_fee'] ?? 0;
         $totalPrice = max(0, $subtotal + $pickupFee + $deliveryFee - $discountAmount);
 
         $order = DB::transaction(function () use (
@@ -257,9 +329,11 @@ class InternalOrderCreateController
                 'pickup_address' => $validated['order_type'] === 'pickup' ? ($validated['pickup_address'] ?? null) : null,
                 'pickup_latitude' => $validated['order_type'] === 'pickup' ? ($validated['pickup_latitude'] ?? null) : null,
                 'pickup_longitude' => $validated['order_type'] === 'pickup' ? ($validated['pickup_longitude'] ?? null) : null,
+                'pickup_distance_km' => $validated['order_type'] === 'pickup' ? ($pickupPricing['distance_km'] ?? null) : null,
                 'delivery_address' => $validated['order_type'] === 'delivery' ? ($validated['delivery_address'] ?? null) : null,
                 'delivery_latitude' => $validated['order_type'] === 'delivery' ? ($validated['delivery_latitude'] ?? null) : null,
                 'delivery_longitude' => $validated['order_type'] === 'delivery' ? ($validated['delivery_longitude'] ?? null) : null,
+                'delivery_distance_km' => $validated['order_type'] === 'delivery' ? ($deliveryPricing['distance_km'] ?? null) : null,
                 'pickup_fee' => $pickupFee,
                 'delivery_fee' => $deliveryFee,
                 'promo_id' => $promo?->id,

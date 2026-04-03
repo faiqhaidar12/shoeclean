@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Outlet;
 use App\Models\Service;
+use App\Services\DistancePricingService;
 use App\Services\SubscriptionService;
 use Illuminate\Http\JsonResponse;
 
 class PublicContentController extends Controller
 {
+    public function __construct(protected DistancePricingService $distancePricing)
+    {
+    }
+
     public function home(): JsonResponse
     {
         $services = Service::query()
@@ -34,12 +39,12 @@ class PublicContentController extends Controller
         return response()->json([
             'meta' => [
                 'product_name' => 'ShoeClean',
-                'tagline' => 'Operasional outlet lebih rapi',
+                'tagline' => 'Kurangi chat manual, rapikan operasional outlet',
             ],
             'hero' => [
-                'badge' => 'Operasional Outlet Lebih Rapi',
-                'title' => 'Kelola order, pembayaran, dan outlet lebih mudah.',
-                'description' => 'Web app untuk bisnis shoe care dan laundry yang ingin order lebih tertata, customer bisa tracking sendiri, pembayaran QRIS lebih rapi, dan owner punya laporan yang siap dipakai setiap hari.',
+                'badge' => 'Kurangi Chat Manual, Rapikan Operasional',
+                'title' => 'Software operasional untuk shoe care yang ingin tumbuh.',
+                'description' => 'Catat order lebih rapi, biarkan customer cek status sendiri, dan bantu owner memantau omzet serta performa outlet tanpa rekap manual yang melelahkan.',
                 'primary_cta' => [
                     'label' => 'Mulai Gratis',
                     'href' => '/register',
@@ -51,16 +56,16 @@ class PublicContentController extends Controller
             ],
             'features' => [
                 [
-                    'title' => 'Manajemen Multi-Cabang',
-                    'description' => 'Kelola satu atau banyak cabang dengan alur yang konsisten, termasuk QRIS per outlet dan kontrol owner lintas outlet.',
+                    'title' => 'Kontrol Multi-Cabang',
+                    'description' => 'Owner bisa mengawasi satu atau banyak cabang dengan alur kerja yang sama, tanpa rekap manual yang memakan waktu.',
                 ],
                 [
-                    'title' => 'Order & Tracking',
-                    'description' => 'Customer bisa order lebih rapi, tim outlet lebih mudah memproses, dan status pesanan bisa dicek kapan saja lewat invoice.',
+                    'title' => 'Order Lebih Rapi',
+                    'description' => 'Pesanan masuk lebih tertata, tim outlet lebih mudah proses, dan customer bisa cek status sendiri tanpa bolak-balik chat admin.',
                 ],
                 [
-                    'title' => 'Pembayaran & Laporan',
-                    'description' => 'QRIS outlet, verifikasi bukti bayar, export laporan, dan insight bisnis untuk membantu owner mengambil keputusan lebih cepat.',
+                    'title' => 'Pembayaran & Insight',
+                    'description' => 'QRIS per outlet, verifikasi pembayaran, dan laporan yang membantu owner melihat omzet serta performa cabang lebih cepat.',
                 ],
             ],
             'services' => $services,
@@ -77,8 +82,8 @@ class PublicContentController extends Controller
             ],
             'hero' => [
                 'badge' => 'Pricing',
-                'title' => 'Pilih paket sesuai tahap bisnis Anda.',
-                'description' => 'Mulai dari Free untuk mencoba alur operasional, lanjut ke Pro untuk 1 outlet yang sudah aktif, atau gunakan Business saat Anda mulai mengelola banyak cabang.',
+                'title' => 'Pilih paket yang membuat operasional lebih untung.',
+                'description' => 'Mulai dari Free untuk trial, lanjut ke Pro saat satu outlet Anda sudah sibuk, dan gunakan Business ketika owner perlu kontrol cabang serta laporan gabungan tanpa rekap manual.',
             ],
             'plans' => $subscriptionService->getPlanDetails(),
             'outlets' => $this->publicOutlets(),
@@ -99,8 +104,12 @@ class PublicContentController extends Controller
                 'slug' => $outlet->slug,
                 'address' => $outlet->address,
                 'phone' => $outlet->phone,
+                'pickup_enabled' => (bool) $outlet->pickup_enabled,
+                'delivery_enabled' => (bool) $outlet->delivery_enabled,
                 'pickup_fee' => (int) ($outlet->pickup_fee ?? 0),
                 'delivery_fee' => (int) ($outlet->delivery_fee ?? 0),
+                'pickup_pricing' => $this->distancePricing->calculatePickup($outlet, null, null),
+                'delivery_pricing' => $this->distancePricing->calculateDelivery($outlet, null, null),
                 'has_qris' => filled($outlet->qris_image_path),
                 'services_count' => (int) $outlet->services_count,
             ])

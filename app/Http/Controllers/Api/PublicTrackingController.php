@@ -57,9 +57,11 @@ class PublicTrackingController extends Controller
                 'pickup_address' => $order->pickup_address,
                 'pickup_latitude' => $order->pickup_latitude,
                 'pickup_longitude' => $order->pickup_longitude,
+                'pickup_distance_km' => $order->pickup_distance_km,
                 'delivery_address' => $order->delivery_address,
                 'delivery_latitude' => $order->delivery_latitude,
                 'delivery_longitude' => $order->delivery_longitude,
+                'delivery_distance_km' => $order->delivery_distance_km,
                 'customer' => $order->customer ? [
                     'name' => $order->customer->name,
                     'phone' => $order->customer->phone,

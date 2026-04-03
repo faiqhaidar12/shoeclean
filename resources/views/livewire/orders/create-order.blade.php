@@ -167,15 +167,15 @@
                         <span class="text-xs font-black uppercase tracking-widest {{ $order_type === 'regular' ? 'text-white' : 'text-artisan-primary' }}">Antar ke Outlet</span>
                         <span class="text-[10px] mt-2 {{ $order_type === 'regular' ? 'text-white/60' : 'text-artisan-primary/40' }} font-bold uppercase">Pelanggan datang</span>
                     </label>
-                    <label class="group relative flex flex-col p-8 rounded-[2rem] cursor-pointer transition-all border-2 {{ $order_type === 'pickup' ? 'bg-artisan-primary border-artisan-primary' : 'bg-artisan-surface-low border-transparent hover:border-artisan-outline' }}">
-                        <input type="radio" wire:model.live="order_type" value="pickup" class="sr-only">
+                    <label class="group relative flex flex-col p-8 rounded-[2rem] cursor-pointer transition-all border-2 {{ !$pickup_enabled ? 'opacity-50 cursor-not-allowed' : '' }} {{ $order_type === 'pickup' ? 'bg-artisan-primary border-artisan-primary' : 'bg-artisan-surface-low border-transparent hover:border-artisan-outline' }}">
+                        <input type="radio" wire:model.live="order_type" value="pickup" class="sr-only" @disabled(!$pickup_enabled)>
                         <span class="text-xs font-black uppercase tracking-widest {{ $order_type === 'pickup' ? 'text-white' : 'text-artisan-primary' }}">Layanan Penjemputan (Pickup)</span>
-                        <span class="text-[10px] mt-2 {{ $order_type === 'pickup' ? 'text-white/60' : 'text-artisan-primary/40' }} font-bold uppercase">+Rp {{ number_format($pickup_fee, 0, ',', '.') }}</span>
+                        <span class="text-[10px] mt-2 {{ $order_type === 'pickup' ? 'text-white/60' : 'text-artisan-primary/40' }} font-bold uppercase">{{ $pickup_enabled ? 'Mulai dari Rp ' . number_format($pickupFee, 0, ',', '.') : 'Sedang Off' }}</span>
                     </label>
-                    <label class="group relative flex flex-col p-8 rounded-[2rem] cursor-pointer transition-all border-2 {{ $order_type === 'delivery' ? 'bg-artisan-primary border-artisan-primary' : 'bg-artisan-surface-low border-transparent hover:border-artisan-outline' }}">
-                        <input type="radio" wire:model.live="order_type" value="delivery" class="sr-only">
+                    <label class="group relative flex flex-col p-8 rounded-[2rem] cursor-pointer transition-all border-2 {{ !$delivery_enabled ? 'opacity-50 cursor-not-allowed' : '' }} {{ $order_type === 'delivery' ? 'bg-artisan-primary border-artisan-primary' : 'bg-artisan-surface-low border-transparent hover:border-artisan-outline' }}">
+                        <input type="radio" wire:model.live="order_type" value="delivery" class="sr-only" @disabled(!$delivery_enabled)>
                         <span class="text-xs font-black uppercase tracking-widest {{ $order_type === 'delivery' ? 'text-white' : 'text-artisan-primary' }}">Layanan Antar (Delivery)</span>
-                        <span class="text-[10px] mt-2 {{ $order_type === 'delivery' ? 'text-white/60' : 'text-artisan-primary/40' }} font-bold uppercase">+Rp {{ number_format($delivery_fee, 0, ',', '.') }}</span>
+                        <span class="text-[10px] mt-2 {{ $order_type === 'delivery' ? 'text-white/60' : 'text-artisan-primary/40' }} font-bold uppercase">{{ $delivery_enabled ? 'Mulai dari Rp ' . number_format($deliveryFee, 0, ',', '.') : 'Sedang Off' }}</span>
                     </label>
                 </div>
 
@@ -280,13 +280,13 @@
                     @if($order_type === 'pickup')
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Biaya Pickup</span>
-                            <span class="text-sm font-manrope font-bold">Rp {{ number_format($pickup_fee, 0, ',', '.') }}</span>
+                            <span class="text-sm font-manrope font-bold">Rp {{ number_format($pickupFee, 0, ',', '.') }}</span>
                         </div>
                     @endif
                     @if($order_type === 'delivery')
                         <div class="flex justify-between items-center">
                             <span class="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Biaya Antar</span>
-                            <span class="text-sm font-manrope font-bold">Rp {{ number_format($delivery_fee, 0, ',', '.') }}</span>
+                            <span class="text-sm font-manrope font-bold">Rp {{ number_format($deliveryFee, 0, ',', '.') }}</span>
                         </div>
                     @endif
                     @if($discount_amount > 0)

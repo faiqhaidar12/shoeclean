@@ -27,7 +27,7 @@
                     </div>
                     <div class="min-w-0">
                         <div class="mb-2 inline-flex items-center gap-2 rounded-full bg-artisan-secondary/10 px-3 py-1 text-[8px] font-black uppercase tracking-[0.2em] text-artisan-secondary sm:text-[9px]">
-                             Artisan Outlet
+                             Cabang ShoeClean
                         </div>
                         <h1 class="headline-editorial text-2xl italic leading-tight text-white sm:text-4xl">{{ $outlet->name }}</h1>
                     </div>
@@ -69,8 +69,8 @@
                         </div>
                         
                         <div class="flex flex-col">
-                            <span class="text-[8px] font-black uppercase tracking-[0.2em] {{ $step >= $num ? 'text-artisan-primary' : 'text-slate-300' }}">Tahap {{ $num }}</span>
-                            <span class="text-[10px] font-bold {{ $step >= $num ? 'text-artisan-primary' : 'text-artisan-primary/30' }}">{{ $label }}</span>
+                        <span class="text-[8px] font-black uppercase tracking-[0.2em] {{ $step >= $num ? 'text-artisan-primary' : 'text-slate-300' }}">Langkah {{ $num }}</span>
+                        <span class="text-[10px] font-bold {{ $step >= $num ? 'text-artisan-primary' : 'text-artisan-primary/30' }}">{{ $label }}</span>
                         </div>
 
                         @if($num < 3)
@@ -262,10 +262,10 @@
             <div class="space-y-8 py-6 animate-fade-in-right sm:space-y-12 sm:py-10">
                 <div class="max-w-xl">
                     <div class="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-3">
-                        <span class="w-4 h-[1px] bg-artisan-secondary"></span> Data Customer
+                        <span class="w-4 h-[1px] bg-artisan-secondary"></span> Data Pemesan
                     </div>
-                    <h2 class="headline-editorial text-3xl italic text-artisan-primary sm:text-4xl mb-2">Data Pelanggan</h2>
-                    <p class="text-[10px] leading-relaxed text-artisan-primary/55 font-black uppercase tracking-[0.2em]">Isi kontak yang aktif agar outlet bisa mengonfirmasi pesanan, memberi update progres, dan menghubungi Anda tanpa perlu tanya ulang.</p>
+                    <h2 class="headline-editorial text-3xl italic text-artisan-primary sm:text-4xl mb-2">Data Pemesan</h2>
+                    <p class="text-[10px] leading-relaxed text-artisan-primary/55 font-black uppercase tracking-[0.2em]">Isi kontak yang aktif agar outlet bisa mengonfirmasi pesanan, memberi kabar progres, dan menghubungi Anda tanpa perlu tanya ulang.</p>
                 </div>
 
                 <div class="bg-white rounded-[2.25rem] sm:rounded-[3rem] p-5 sm:p-8 lg:p-10 border border-slate-100 shadow-artisan-lg space-y-8 sm:space-y-10">
@@ -289,12 +289,12 @@
                     <div class="space-y-5">
                         <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/30 ml-2">Metode Layanan</label>
                         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
-                            @foreach(['regular' => ['Reguler', 'Datang Langsung ke Outlet'], 'pickup' => ['Pickup', 'Outlet Menjemput ke Lokasi Anda'], 'delivery' => ['Delivery', 'Sepatu Diantar Kembali ke Alamat Anda']] as $type => [$label, $desc])
+                            @foreach(['regular' => ['Reguler', 'Datang Langsung ke Outlet'], 'pickup' => ['Pickup', $pickupEnabled ? 'Outlet Menjemput ke Lokasi Anda' : 'Sedang Dinonaktifkan'], 'delivery' => ['Delivery', $deliveryEnabled ? 'Sepatu Diantar Kembali ke Alamat Anda' : 'Sedang Dinonaktifkan']] as $type => [$label, $desc])
                                 <label class="relative cursor-pointer group">
-                                    <input wire:model.live="order_type" type="radio" value="{{ $type }}" class="peer sr-only">
+                                    <input wire:model.live="order_type" type="radio" value="{{ $type }}" class="peer sr-only" @disabled(($type === 'pickup' && !$pickupEnabled) || ($type === 'delivery' && !$deliveryEnabled))>
                                     <div class="h-full p-5 sm:p-7 border-2 rounded-[2rem] text-center transition-all duration-500 
                                         peer-checked:border-artisan-secondary peer-checked:bg-artisan-secondary/5 peer-checked:shadow-artisan
-                                        border-slate-50 bg-white group-hover:border-artisan-secondary/20">
+                                        border-slate-50 bg-white group-hover:border-artisan-secondary/20 {{ ($type === 'pickup' && !$pickupEnabled) || ($type === 'delivery' && !$deliveryEnabled) ? 'opacity-50' : '' }}">
                                         <p class="headline-editorial text-lg italic text-artisan-primary mb-1">{{ $label }}</p>
                                         <p class="text-[9px] font-black uppercase tracking-widest text-artisan-primary/20">{{ $desc }}</p>
                                     </div>
@@ -317,7 +317,7 @@
                                     placeholder="Tuliskan alamat lengkap..." 
                                     class="w-full px-5 py-5 sm:px-6 sm:py-6 bg-white border border-artisan-outline/45 rounded-[2rem] text-[13px] font-bold text-artisan-primary shadow-artisan-sm focus:ring-2 focus:ring-artisan-secondary/15 focus:border-artisan-secondary transition-all outline-none placeholder:text-artisan-primary/40 resize-none"></textarea>
                                 <div class="mt-3 text-[9px] font-black uppercase tracking-widest text-artisan-secondary">
-                                    Biaya Tambahan: Rp {{ number_format($order_type === 'pickup' ? $pickup_fee : $delivery_fee, 0, ',', '.') }}
+                                    Biaya Mulai Dari: Rp {{ number_format($order_type === 'pickup' ? $pickupFee : $deliveryFee, 0, ',', '.') }}
                                 </div>
                             </div>
                         </div>

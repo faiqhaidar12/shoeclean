@@ -22,9 +22,11 @@ class Order extends Model
         'pickup_address',
         'pickup_latitude',
         'pickup_longitude',
+        'pickup_distance_km',
         'delivery_address',
         'delivery_latitude',
         'delivery_longitude',
+        'delivery_distance_km',
         'pickup_fee',
         'delivery_fee',
         'promo_id',
@@ -44,8 +46,10 @@ class Order extends Model
         'payment_verified_at' => 'datetime',
         'pickup_latitude' => 'float',
         'pickup_longitude' => 'float',
+        'pickup_distance_km' => 'float',
         'delivery_latitude' => 'float',
         'delivery_longitude' => 'float',
+        'delivery_distance_km' => 'float',
     ];
 
     public function outlet()

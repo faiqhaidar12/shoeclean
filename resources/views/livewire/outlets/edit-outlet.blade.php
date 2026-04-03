@@ -27,22 +27,60 @@
                             @error('phone') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Ongkos Penjemputan</label>
-                                <div class="relative">
-                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-artisan-primary/20">RP</span>
-                                    <input type="number" wire:model="pickup_fee" class="artisan-input !pl-10" placeholder="10000">
+                        <div class="rounded-[2rem] border border-slate-100 bg-slate-50/60 p-6">
+                            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/40 mb-3">Pengiriman Cabang</p>
+                            <p class="text-[11px] leading-relaxed text-artisan-primary/55 font-bold">Atur layanan jemput dan antar berdasarkan radius dasar serta biaya tambahan per km.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                        <div class="rounded-[2rem] border border-slate-100 bg-slate-50/50 p-6 space-y-5">
+                            <label class="flex items-start justify-between gap-4">
+                                <div>
+                                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary">Layanan Jemput</p>
+                                    <p class="mt-2 text-[11px] font-bold leading-relaxed text-artisan-primary/50">Cabang menjemput sepatu dari lokasi pelanggan.</p>
                                 </div>
-                                @error('pickup_fee') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                                <input type="checkbox" wire:model.live="pickup_enabled" class="mt-1 h-5 w-5 rounded border-slate-300 text-artisan-secondary focus:ring-artisan-secondary">
+                            </label>
+
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 {{ !$pickup_enabled ? 'opacity-50' : '' }}">
+                                <div>
+                                    <label class="block text-[10px] font-black text-artisan-primary/35 uppercase tracking-widest mb-3">Jarak Dasar (Km)</label>
+                                    <input type="number" min="0" step="0.1" wire:model="pickup_base_distance_km" class="artisan-input" @disabled(!$pickup_enabled)>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black text-artisan-primary/35 uppercase tracking-widest mb-3">Biaya Dasar</label>
+                                    <input type="number" min="0" wire:model="pickup_base_fee" class="artisan-input" @disabled(!$pickup_enabled)>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black text-artisan-primary/35 uppercase tracking-widest mb-3">Tambah / Km</label>
+                                    <input type="number" min="0" wire:model="pickup_extra_fee_per_km" class="artisan-input" @disabled(!$pickup_enabled)>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-[10px] font-black text-artisan-primary/40 uppercase tracking-widest mb-4">Ongkos Pengiriman</label>
-                                <div class="relative">
-                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-artisan-primary/20">RP</span>
-                                    <input type="number" wire:model="delivery_fee" class="artisan-input !pl-10" placeholder="10000">
+                        </div>
+
+                        <div class="rounded-[2rem] border border-slate-100 bg-slate-50/50 p-6 space-y-5">
+                            <label class="flex items-start justify-between gap-4">
+                                <div>
+                                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary">Layanan Antar</p>
+                                    <p class="mt-2 text-[11px] font-bold leading-relaxed text-artisan-primary/50">Cabang mengantar hasil perawatan ke lokasi pelanggan.</p>
                                 </div>
-                                @error('delivery_fee') <p class="text-red-500 text-[10px] mt-3 font-bold uppercase tracking-widest">{{ $message }}</p> @enderror
+                                <input type="checkbox" wire:model.live="delivery_enabled" class="mt-1 h-5 w-5 rounded border-slate-300 text-artisan-secondary focus:ring-artisan-secondary">
+                            </label>
+
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 {{ !$delivery_enabled ? 'opacity-50' : '' }}">
+                                <div>
+                                    <label class="block text-[10px] font-black text-artisan-primary/35 uppercase tracking-widest mb-3">Jarak Dasar (Km)</label>
+                                    <input type="number" min="0" step="0.1" wire:model="delivery_base_distance_km" class="artisan-input" @disabled(!$delivery_enabled)>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black text-artisan-primary/35 uppercase tracking-widest mb-3">Biaya Dasar</label>
+                                    <input type="number" min="0" wire:model="delivery_base_fee" class="artisan-input" @disabled(!$delivery_enabled)>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-black text-artisan-primary/35 uppercase tracking-widest mb-3">Tambah / Km</label>
+                                    <input type="number" min="0" wire:model="delivery_extra_fee_per_km" class="artisan-input" @disabled(!$delivery_enabled)>
+                                </div>
                             </div>
                         </div>
                     </div>

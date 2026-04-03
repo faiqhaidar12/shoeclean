@@ -4,7 +4,7 @@
         <div>
             <p class="text-[10px] font-black uppercase tracking-[0.3em] text-artisan-secondary mb-4">Pelanggan</p>
             <h1 class="headline-editorial text-4xl lg:text-5xl italic">Daftar Pelanggan</h1>
-            <p class="text-[10px] text-artisan-primary/40 font-black uppercase tracking-[0.2em] mt-4">Individu terhormat dalam ekosistem layanan kami</p>
+            <p class="text-[10px] text-artisan-primary/40 font-black uppercase tracking-[0.2em] mt-4">Semua pelanggan yang pernah memesan di outlet Anda</p>
         </div>
         <a href="{{ route('customers.create') }}" class="btn-artisan-primary">
             Tambah Pelanggan Baru

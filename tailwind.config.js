@@ -19,24 +19,24 @@ export default {
                     600: '#4F46E5',
                 },
                 artisan: {
-                    primary: '#16352D',      // Ink / Deep Green
-                    secondary: '#2F7A67',    // Action Sage
-                    tertiary: '#102521',     // Deep accent
-                    background: '#F7F4EE',   // Warm background
+                    primary: '#002045',      // Deep navy
+                    secondary: '#81F2EB',    // Mint accent
+                    tertiary: '#0D2D57',     // Deep accent
+                    background: '#F7F4EE',   // Warm ivory background
                     bg: '#F7F4EE',           // Background duplicate for convenience
                     surface: {
-                        low: '#F1ECE4',      // Surface container low
+                        low: '#F2EEE6',      // Surface container low
                         lowest: '#FFFFFF',   // Surface container lowest
-                        variant: '#E2DDD4'   // Surface variant
+                        variant: '#E4DED2'   // Surface variant
                     },
-                    outline: '#D6DDD8',      // Outline variant
+                    outline: '#D7D2C8',      // Outline variant
                 }
             },
             boxShadow: {
-                'soft': '0 2px 15px -3px rgba(22, 53, 45, 0.08), 0 10px 20px -2px rgba(22, 53, 45, 0.05)',
-                'artisan': '0px 12px 32px rgba(22, 53, 45, 0.08)',
-                'artisan-lg': '0px 24px 64px rgba(22, 53, 45, 0.12)',
-                'artisan-sm': '0px 4px 12px rgba(22, 53, 45, 0.05)',
+                'soft': '0 10px 26px rgba(0, 32, 69, 0.07), 0 2px 8px rgba(0, 32, 69, 0.04)',
+                'artisan': '0 18px 46px rgba(0, 32, 69, 0.09)',
+                'artisan-lg': '0 28px 72px rgba(0, 32, 69, 0.14)',
+                'artisan-sm': '0 6px 16px rgba(0, 32, 69, 0.06)',
             },
             animation: {
                 'spin-slow': 'spin 8s linear infinite',

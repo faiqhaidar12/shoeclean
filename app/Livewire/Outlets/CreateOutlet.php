@@ -19,8 +19,16 @@ class CreateOutlet extends Component
     public $slug;
     public $address;
     public $phone;
+    public $pickup_enabled = false;
+    public $delivery_enabled = false;
     public $pickup_fee = 10000;
     public $delivery_fee = 10000;
+    public $pickup_base_distance_km = 10;
+    public $pickup_base_fee = 20000;
+    public $pickup_extra_fee_per_km = 2000;
+    public $delivery_base_distance_km = 10;
+    public $delivery_base_fee = 20000;
+    public $delivery_extra_fee_per_km = 2000;
     public $qris_image;
     public $qris_notes = '';
 
@@ -125,8 +133,16 @@ class CreateOutlet extends Component
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
+            'pickup_enabled' => 'nullable|boolean',
+            'delivery_enabled' => 'nullable|boolean',
             'pickup_fee' => 'required|numeric|min:0',
             'delivery_fee' => 'required|numeric|min:0',
+            'pickup_base_distance_km' => 'required|numeric|min:0',
+            'pickup_base_fee' => 'required|numeric|min:0',
+            'pickup_extra_fee_per_km' => 'required|numeric|min:0',
+            'delivery_base_distance_km' => 'required|numeric|min:0',
+            'delivery_base_fee' => 'required|numeric|min:0',
+            'delivery_extra_fee_per_km' => 'required|numeric|min:0',
             'qris_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'qris_notes' => 'nullable|string|max:1000',
             'province_id' => 'required|string',
@@ -151,8 +167,16 @@ class CreateOutlet extends Component
             'slug' => $slug,
             'address' => $this->address,
             'phone' => $this->phone,
-            'pickup_fee' => $this->pickup_fee,
-            'delivery_fee' => $this->delivery_fee,
+            'pickup_enabled' => (bool) $this->pickup_enabled,
+            'delivery_enabled' => (bool) $this->delivery_enabled,
+            'pickup_fee' => $this->pickup_base_fee,
+            'delivery_fee' => $this->delivery_base_fee,
+            'pickup_base_distance_km' => $this->pickup_base_distance_km,
+            'pickup_base_fee' => $this->pickup_base_fee,
+            'pickup_extra_fee_per_km' => $this->pickup_extra_fee_per_km,
+            'delivery_base_distance_km' => $this->delivery_base_distance_km,
+            'delivery_base_fee' => $this->delivery_base_fee,
+            'delivery_extra_fee_per_km' => $this->delivery_extra_fee_per_km,
             'qris_image_path' => $qrisImagePath,
             'qris_image_original_name' => $this->qris_image?->getClientOriginalName(),
             'qris_notes' => $this->qris_notes ?: null,

@@ -3,6 +3,7 @@
 namespace App\Livewire\Orders;
 
 use Livewire\Component;
+use App\Services\DistancePricingService;
 use App\Services\SubscriptionService;
 
 use Livewire\Attributes\Layout;
@@ -23,6 +24,8 @@ class CreateOrder extends Component
     public $delivery_address = '';
     public $pickup_fee;
     public $delivery_fee;
+    public $pickup_enabled = false;
+    public $delivery_enabled = false;
     
     // Promo
     public $promo_code = '';
@@ -124,6 +127,8 @@ class CreateOrder extends Component
             ->get();
         
         $outlet = \App\Models\Outlet::find($this->outlet_id);
+        $this->pickup_enabled = (bool) $outlet->pickup_enabled;
+        $this->delivery_enabled = (bool) $outlet->delivery_enabled;
         $this->pickup_fee = $outlet->pickup_fee;
         $this->delivery_fee = $outlet->delivery_fee;
         
@@ -309,6 +314,16 @@ class CreateOrder extends Component
             'order_type' => 'required|in:regular,pickup,delivery',
         ]);
 
+        if ($this->order_type === 'pickup' && !$this->pickup_enabled) {
+            session()->flash('error', 'Layanan jemput sedang dinonaktifkan untuk cabang ini.');
+            return;
+        }
+
+        if ($this->order_type === 'delivery' && !$this->delivery_enabled) {
+            session()->flash('error', 'Layanan antar sedang dinonaktifkan untuk cabang ini.');
+            return;
+        }
+
         \Illuminate\Support\Facades\DB::transaction(function () {
             $date = date('Ymd');
             $count = \App\Models\Order::whereDate('created_at', today())
@@ -324,8 +339,16 @@ class CreateOrder extends Component
             }
 
             // Add fees
-            $pickupFee = $this->order_type === 'pickup' ? $this->pickup_fee : 0;
-            $deliveryFee = $this->order_type === 'delivery' ? $this->delivery_fee : 0;
+            $outlet = \App\Models\Outlet::findOrFail($this->outlet_id);
+            $distancePricing = app(DistancePricingService::class);
+            $pickupPricing = $this->order_type === 'pickup'
+                ? $distancePricing->calculatePickup($outlet, null, null)
+                : null;
+            $deliveryPricing = $this->order_type === 'delivery'
+                ? $distancePricing->calculateDelivery($outlet, null, null)
+                : null;
+            $pickupFee = $pickupPricing['final_fee'] ?? 0;
+            $deliveryFee = $deliveryPricing['final_fee'] ?? 0;
             
             $totalPrice = $subtotal + $pickupFee + $deliveryFee - $this->discount_amount;
 
@@ -341,6 +364,8 @@ class CreateOrder extends Component
                 'order_type' => $this->order_type,
                 'pickup_address' => $this->order_type === 'pickup' ? $this->pickup_address : null,
                 'delivery_address' => $this->order_type === 'delivery' ? $this->delivery_address : null,
+                'pickup_distance_km' => $this->order_type === 'pickup' ? ($pickupPricing['distance_km'] ?? null) : null,
+                'delivery_distance_km' => $this->order_type === 'delivery' ? ($deliveryPricing['distance_km'] ?? null) : null,
                 'pickup_fee' => $pickupFee,
                 'delivery_fee' => $deliveryFee,
                 'promo_id' => $this->applied_promo?->id,
@@ -374,13 +399,21 @@ class CreateOrder extends Component
     public function render()
     {
         $subtotal = $this->getSubtotal();
-        $pickupFee = $this->order_type === 'pickup' ? $this->pickup_fee : 0;
-        $deliveryFee = $this->order_type === 'delivery' ? $this->delivery_fee : 0;
+        $distancePricing = app(DistancePricingService::class);
+        $outlet = $this->outlet_id ? \App\Models\Outlet::find($this->outlet_id) : null;
+        $pickupFee = $this->order_type === 'pickup' && $outlet
+            ? ($distancePricing->calculatePickup($outlet, null, null)['final_fee'] ?? 0)
+            : 0;
+        $deliveryFee = $this->order_type === 'delivery' && $outlet
+            ? ($distancePricing->calculateDelivery($outlet, null, null)['final_fee'] ?? 0)
+            : 0;
         $total = $subtotal + $pickupFee + $deliveryFee - $this->discount_amount;
 
         return view('livewire.orders.create-order', [
             'subtotal' => $subtotal,
             'total' => max(0, $total),
+            'pickupFee' => $pickupFee,
+            'deliveryFee' => $deliveryFee,
         ]);
     }
 }

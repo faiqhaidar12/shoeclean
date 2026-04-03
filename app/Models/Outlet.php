@@ -33,12 +33,20 @@ class Outlet extends Model
         'owner_id', 'name', 'slug', 'address', 'phone', 'status',
         'province_id', 'province_name', 'city_id', 'city_name', 'district_id', 'district_name',
         'latitude', 'longitude',
-        'pickup_fee', 'delivery_fee', 'qris_image_path', 'qris_image_original_name', 'qris_notes'
+        'pickup_enabled', 'delivery_enabled',
+        'pickup_fee', 'delivery_fee',
+        'pickup_base_distance_km', 'pickup_base_fee', 'pickup_extra_fee_per_km',
+        'delivery_base_distance_km', 'delivery_base_fee', 'delivery_extra_fee_per_km',
+        'qris_image_path', 'qris_image_original_name', 'qris_notes'
     ];
 
     protected $casts = [
         'latitude' => 'float',
         'longitude' => 'float',
+        'pickup_enabled' => 'bool',
+        'delivery_enabled' => 'bool',
+        'pickup_base_distance_km' => 'float',
+        'delivery_base_distance_km' => 'float',
     ];
 
     public function getRouteKeyName(): string

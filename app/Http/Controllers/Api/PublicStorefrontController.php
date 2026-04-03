@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\Outlet;
 use App\Models\Promo;
 use App\Models\Service;
+use App\Services\DistancePricingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -19,6 +20,10 @@ use Illuminate\Validation\ValidationException;
 
 class PublicStorefrontController extends Controller
 {
+    public function __construct(protected DistancePricingService $distancePricing)
+    {
+    }
+
     public function index(Request $request): JsonResponse
     {
         $search = trim((string) $request->query('search', ''));
@@ -221,6 +226,18 @@ class PublicStorefrontController extends Controller
             ]);
         }
 
+        if ($payload['order_type'] === 'pickup' && !$outlet->pickup_enabled) {
+            throw ValidationException::withMessages([
+                'order_type' => ['Layanan jemput sedang dinonaktifkan oleh outlet ini.'],
+            ]);
+        }
+
+        if ($payload['order_type'] === 'delivery' && !$outlet->delivery_enabled) {
+            throw ValidationException::withMessages([
+                'order_type' => ['Layanan antar sedang dinonaktifkan oleh outlet ini.'],
+            ]);
+        }
+
         $paymentProofPath = $payload['payment_proof'] instanceof UploadedFile
             ? $payload['payment_proof']->store('payment-proofs', 'public')
             : null;
@@ -257,8 +274,23 @@ class PublicStorefrontController extends Controller
                 ]);
             }
 
-            $pickupFee = $payload['order_type'] === 'pickup' ? (int) $outlet->pickup_fee : 0;
-            $deliveryFee = $payload['order_type'] === 'delivery' ? (int) $outlet->delivery_fee : 0;
+            $pickupPricing = $payload['order_type'] === 'pickup'
+                ? $this->distancePricing->calculatePickup(
+                    $outlet,
+                    isset($payload['pickup_latitude']) ? (float) $payload['pickup_latitude'] : null,
+                    isset($payload['pickup_longitude']) ? (float) $payload['pickup_longitude'] : null,
+                )
+                : null;
+            $deliveryPricing = $payload['order_type'] === 'delivery'
+                ? $this->distancePricing->calculateDelivery(
+                    $outlet,
+                    isset($payload['delivery_latitude']) ? (float) $payload['delivery_latitude'] : null,
+                    isset($payload['delivery_longitude']) ? (float) $payload['delivery_longitude'] : null,
+                )
+                : null;
+
+            $pickupFee = $pickupPricing['final_fee'] ?? 0;
+            $deliveryFee = $deliveryPricing['final_fee'] ?? 0;
             $totalPrice = max(0, $subtotal + $pickupFee + $deliveryFee - $discountAmount);
 
             $order = Order::create([
@@ -273,17 +305,19 @@ class PublicStorefrontController extends Controller
                 'payment_proof_original_name' => $payload['payment_proof']?->getClientOriginalName(),
                 'payment_proof_uploaded_at' => $paymentProofPath ? now() : null,
             'payment_notes' => $payload['payment_notes'] ?: null,
-            'pickup_latitude' => $payload['order_type'] === 'pickup' ? ($payload['pickup_latitude'] ?? null) : null,
-            'pickup_longitude' => $payload['order_type'] === 'pickup' ? ($payload['pickup_longitude'] ?? null) : null,
-            'total_price' => $totalPrice,
-            'notes' => $payload['notes'] ?: null,
-            'order_type' => $payload['order_type'],
-            'pickup_address' => $payload['order_type'] === 'pickup' ? ($payload['pickup_address'] ?: null) : null,
-            'delivery_latitude' => $payload['order_type'] === 'delivery' ? ($payload['delivery_latitude'] ?? null) : null,
-            'delivery_longitude' => $payload['order_type'] === 'delivery' ? ($payload['delivery_longitude'] ?? null) : null,
-            'delivery_address' => $payload['order_type'] === 'delivery' ? ($payload['delivery_address'] ?: null) : null,
-            'pickup_fee' => $pickupFee,
-            'delivery_fee' => $deliveryFee,
+                'pickup_latitude' => $payload['order_type'] === 'pickup' ? ($payload['pickup_latitude'] ?? null) : null,
+                'pickup_longitude' => $payload['order_type'] === 'pickup' ? ($payload['pickup_longitude'] ?? null) : null,
+                'pickup_distance_km' => $payload['order_type'] === 'pickup' ? ($pickupPricing['distance_km'] ?? null) : null,
+                'total_price' => $totalPrice,
+                'notes' => $payload['notes'] ?: null,
+                'order_type' => $payload['order_type'],
+                'pickup_address' => $payload['order_type'] === 'pickup' ? ($payload['pickup_address'] ?: null) : null,
+                'delivery_latitude' => $payload['order_type'] === 'delivery' ? ($payload['delivery_latitude'] ?? null) : null,
+                'delivery_longitude' => $payload['order_type'] === 'delivery' ? ($payload['delivery_longitude'] ?? null) : null,
+                'delivery_distance_km' => $payload['order_type'] === 'delivery' ? ($deliveryPricing['distance_km'] ?? null) : null,
+                'delivery_address' => $payload['order_type'] === 'delivery' ? ($payload['delivery_address'] ?: null) : null,
+                'pickup_fee' => $pickupFee,
+                'delivery_fee' => $deliveryFee,
                 'promo_id' => $promo?->id,
                 'discount_amount' => $discountAmount,
                 'order_source' => 'customer',
@@ -414,8 +448,16 @@ class PublicStorefrontController extends Controller
                 $validator->errors()->add('pickup_address', 'Alamat penjemputan wajib diisi untuk order pickup.');
             }
 
+            if (($data['order_type'] ?? null) === 'pickup' && (empty($data['pickup_latitude']) || empty($data['pickup_longitude']))) {
+                $validator->errors()->add('pickup_latitude', 'Titik jemput wajib dipilih di peta untuk order pickup.');
+            }
+
             if (($data['order_type'] ?? null) === 'delivery' && empty($data['delivery_address'])) {
                 $validator->errors()->add('delivery_address', 'Alamat pengantaran wajib diisi untuk order delivery.');
+            }
+
+            if (($data['order_type'] ?? null) === 'delivery' && (empty($data['delivery_latitude']) || empty($data['delivery_longitude']))) {
+                $validator->errors()->add('delivery_latitude', 'Titik antar wajib dipilih di peta untuk order delivery.');
             }
         });
 
@@ -447,8 +489,12 @@ class PublicStorefrontController extends Controller
             'province_name' => $outlet->province_name,
             'city_id' => $outlet->city_id,
             'city_name' => $outlet->city_name,
+            'pickup_enabled' => (bool) $outlet->pickup_enabled,
+            'delivery_enabled' => (bool) $outlet->delivery_enabled,
             'pickup_fee' => (int) ($outlet->pickup_fee ?? 0),
             'delivery_fee' => (int) ($outlet->delivery_fee ?? 0),
+            'pickup_pricing' => $this->distancePricing->calculatePickup($outlet, null, null),
+            'delivery_pricing' => $this->distancePricing->calculateDelivery($outlet, null, null),
             'latitude' => $outlet->latitude,
             'longitude' => $outlet->longitude,
             'has_qris' => filled($outlet->qris_image_path),
@@ -466,8 +512,12 @@ class PublicStorefrontController extends Controller
             'phone' => $outlet->phone,
             'latitude' => $outlet->latitude,
             'longitude' => $outlet->longitude,
+            'pickup_enabled' => (bool) $outlet->pickup_enabled,
+            'delivery_enabled' => (bool) $outlet->delivery_enabled,
             'pickup_fee' => (int) ($outlet->pickup_fee ?? 0),
             'delivery_fee' => (int) ($outlet->delivery_fee ?? 0),
+            'pickup_pricing' => $this->distancePricing->calculatePickup($outlet, null, null),
+            'delivery_pricing' => $this->distancePricing->calculateDelivery($outlet, null, null),
             'has_qris' => filled($outlet->qris_image_path),
             'qris_image_url' => $outlet->qris_image_path ? url(Storage::url($outlet->qris_image_path)) : null,
             'qris_notes' => $outlet->qris_notes,

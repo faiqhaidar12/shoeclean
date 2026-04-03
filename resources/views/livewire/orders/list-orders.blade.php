@@ -20,7 +20,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
-                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari Invois atau Pelanggan..." 
+                <input wire:model.live.debounce.300ms="search" type="text" placeholder="Cari invoice atau pelanggan..." 
                     class="artisan-input !pl-16 !bg-white">
             </div>
             
@@ -56,7 +56,7 @@
                 <table class="min-w-full">
                     <thead>
                         <tr class="bg-artisan-surface-low/50">
-                            <th class="px-8 py-6 text-left text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/40">Invois</th>
+                            <th class="px-8 py-6 text-left text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/40">Invoice</th>
                             <th class="px-8 py-6 text-left text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/40">Pelanggan</th>
                             <th class="px-8 py-6 text-left text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/40">Status</th>
                             <th class="px-8 py-6 text-left text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/40">Pembayaran</th>
@@ -72,7 +72,7 @@
                                     <div class="flex items-center gap-2 mt-1">
                                         <p class="text-[10px] text-artisan-primary/30 font-black uppercase tracking-widest">{{ $order->created_at->format('M d, Y') }}</p>
                                         @if($order->order_source === 'customer')
-                                            <span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[9px] font-black uppercase tracking-widest rounded-full">🌐 Online</span>
+                                            <span class="px-2 py-0.5 bg-blue-50 text-blue-600 text-[9px] font-black uppercase tracking-widest rounded-full">Online</span>
                                         @endif
                                     </div>
                                 </td>
@@ -100,7 +100,7 @@
                                             'cancelled' => 'text-red-700',
                                             'ready' => 'text-blue-700',
                                             default => 'text-orange-700'
-                                        } }}">{{ $order->status }}</span>
+                                        } }}">{{ $order->statusLabel() }}</span>
                                     </div>
                                 </td>
                                 <td class="px-8 py-8 whitespace-nowrap">

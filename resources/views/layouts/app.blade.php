@@ -11,7 +11,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body
-        class="bg-artisan-background text-artisan-primary antialiased font-sans"
+        class="dashboard-surface text-artisan-primary antialiased font-sans"
         x-data="{
             sidebarOpen: false,
             lockedFeature: null,
@@ -44,20 +44,24 @@
             <!-- Sidebar -->
             <aside 
                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-                class="fixed inset-y-0 left-0 w-72 bg-artisan-primary text-white z-50 lg:translate-x-0 lg:static lg:z-auto transition-transform duration-500 ease-in-out flex flex-col shadow-artisan"
+                class="fixed inset-y-0 left-0 w-72 overflow-hidden bg-artisan-primary text-white z-50 lg:translate-x-0 lg:static lg:z-auto transition-transform duration-500 ease-in-out flex flex-col shadow-artisan-lg"
             >
+                <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(129,242,235,0.22),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.08),transparent_32%)] pointer-events-none"></div>
                 <!-- Logo -->
-                <div class="p-8 mb-4">
+                <div class="relative p-8 mb-4">
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-4 group">
-                        <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-white backdrop-blur-md group-hover:bg-artisan-secondary transition-colors duration-300">
+                        <div class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white backdrop-blur-md group-hover:bg-artisan-secondary group-hover:text-artisan-primary transition-colors duration-300 shadow-artisan-sm border border-white/10">
                              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
                         </div>
-                        <span class="text-2xl font-manrope font-extrabold tracking-tighter uppercase whitespace-nowrap">ShoeClean<span class="text-artisan-secondary">.</span></span>
+                        <div>
+                            <span class="text-2xl font-manrope font-extrabold tracking-tighter uppercase whitespace-nowrap">ShoeClean<span class="text-artisan-secondary">.</span></span>
+                            <p class="mt-1 text-[9px] font-black uppercase tracking-[0.26em] text-white/35">Dasbor Operasional</p>
+                        </div>
                     </a>
                 </div>
 
                 <!-- Navigation -->
-                <nav class="flex-1 px-4 space-y-2 overflow-y-auto artisan-scrollbar">
+                <nav class="relative flex-1 px-4 space-y-2 overflow-y-auto artisan-scrollbar">
                     <div class="pb-4">
                         <p class="px-5 text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Ringkasan Menu</p>
                         <a href="{{ route('dashboard') }}" class="nav-link-artisan {{ request()->routeIs('dashboard') ? 'active bg-white/10 text-white' : 'text-white/60 hover:text-white' }}">
@@ -179,7 +183,7 @@
                 </nav>
 
                 <!-- User Section -->
-                <div class="p-6 bg-white/5 backdrop-blur-md">
+                <div class="relative p-6 border-t border-white/10 bg-white/5 backdrop-blur-md">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-artisan-secondary rounded-full flex items-center justify-center text-white font-manrope font-extrabold shadow-artisan border-2 border-white/10">
                             {{ substr(auth()->user()->name, 0, 1) }}
@@ -199,11 +203,11 @@
             </aside>
 
             <!-- Main Content Area -->
-            <div class="flex-1 flex flex-col min-w-0 bg-artisan-background relative">
+            <div class="flex-1 flex min-w-0 flex-col bg-transparent relative">
                 <!-- Top Nav / Headless Header -->
-                <header class="flex items-center justify-between px-8 h-24 lg:h-32">
+                <header class="flex items-center justify-between px-4 sm:px-6 lg:px-8 h-24 lg:h-32">
                     <div class="lg:hidden">
-                        <button @click="sidebarOpen = true" class="p-3 bg-white rounded-xl shadow-artisan text-artisan-primary">
+                        <button @click="sidebarOpen = true" class="p-3 bg-white rounded-2xl shadow-artisan text-artisan-primary border border-artisan-outline/40">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                         </button>
                     </div>
@@ -214,16 +218,18 @@
                         @endif
                     </div>
 
-                    <div class="flex items-center gap-4">
-                        <a href="{{ route('profile') }}" class="w-12 h-12 bg-white rounded-xl shadow-artisan flex items-center justify-center text-artisan-secondary hover:text-artisan-primary transition-all">
+                    <div class="dashboard-glass flex items-center gap-4 rounded-[1.6rem] px-3 py-3">
+                        <a href="{{ route('profile') }}" class="w-12 h-12 bg-white rounded-2xl shadow-artisan-sm flex items-center justify-center text-artisan-secondary hover:text-artisan-primary transition-all border border-artisan-outline/30">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </a>
                     </div>
                 </header>
 
                 <!-- Page Content -->
-                <main class="flex-1 px-8 pb-12 overflow-y-auto artisan-scrollbar">
-                    {{ $slot }}
+                <main class="flex-1 overflow-y-auto artisan-scrollbar">
+                    <div class="dashboard-page-shell">
+                        {{ $slot }}
+                    </div>
                 </main>
             </div>
             

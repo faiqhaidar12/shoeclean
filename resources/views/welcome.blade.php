@@ -3,304 +3,252 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ShoeClean - Sistem Manajemen Artisan Restorasi Sepatu</title>
+        <title>ShoeClean | Software Operasional Shoe Care dan Laundry Sepatu</title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        <style>
-            [x-cloak] { display: none !important; }
-            .bg-noise { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
-        </style>
     </head>
-    <body class="antialiased bg-artisan-background text-artisan-primary selection:bg-artisan-secondary/20 font-sans">
-        <!-- Navigation -->
-        <nav class="fixed w-full bg-artisan-background/80 backdrop-blur-xl z-50">
-            <div class="max-w-7xl mx-auto px-8 h-24 flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-artisan-primary rounded-xl flex items-center justify-center text-white shadow-artisan">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-                    </div>
-                    <span class="text-2xl font-manrope font-extrabold tracking-tighter uppercase whitespace-nowrap">ShoeClean<span class="text-artisan-secondary">.</span></span>
-                </div>
-                
-                <div class="flex items-center gap-10">
-                    <div class="hidden md:flex items-center gap-8 text-sm font-bold uppercase tracking-widest text-artisan-secondary/80">
-                        <a href="#features" class="hover:text-artisan-primary transition-colors">Fitur</a>
-                        <a href="{{ route('pricing') }}" class="hover:text-artisan-primary transition-colors">Harga</a>
-                        <a href="#tracking" class="hover:text-artisan-primary transition-colors">Lacak Pesanan</a>
-                    </div>
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="btn-artisan-primary text-sm uppercase tracking-widest px-8 py-3.5">
-                            Dashboard
-                        </a>
-                    @else
-                        <div class="flex items-center gap-6">
-                            <a href="{{ route('login') }}" class="text-sm font-bold uppercase tracking-widest text-artisan-secondary hover:text-artisan-primary transition-colors">
-                                Masuk
-                            </a>
-                            <a href="{{ route('register') }}" class="btn-artisan-primary text-sm uppercase tracking-widest px-8 py-3.5">
-                                Daftar Gratis
-                            </a>
-                        </div>
-                    @endauth
-                </div>
+    <body class="public-shell antialiased">
+        <header class="public-topbar">
+            <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+                <div class="text-2xl font-bold tracking-tighter text-artisan-primary font-manrope">ShoeClean</div>
+                @include('livewire.welcome.navigation')
             </div>
-        </nav>
+        </header>
 
-        <!-- Hero Section -->
-        <main class="relative pt-48 lg:pt-64 pb-32">
-            <div class="max-w-7xl mx-auto px-8 relative">
-                <div class="grid lg:grid-cols-2 gap-24 items-start">
-                    <div class="relative z-10">
-                        <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-artisan-primary text-white text-[10px] font-bold uppercase tracking-[0.2em] mb-10 shadow-artisan">
-                            <span class="relative flex h-2 w-2">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-artisan-secondary opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2 w-2 bg-artisan-secondary"></span>
-                            </span>
-                            Operasional Outlet Lebih Rapi
+        <main class="pt-16">
+            <section class="relative overflow-hidden py-24 md:py-32">
+                <div class="mx-auto grid max-w-7xl grid-cols-1 gap-16 px-6 lg:grid-cols-12 lg:items-center lg:px-8">
+                    <div class="lg:col-span-7">
+                        <div class="mb-8 inline-flex items-center space-x-2 rounded-full bg-artisan-secondary/20 px-4 py-1.5">
+                            <span class="h-2.5 w-2.5 rounded-full bg-artisan-secondary"></span>
+                            <span class="text-xs font-black uppercase tracking-[0.24em] text-artisan-primary">Operasional Masa Depan</span>
                         </div>
-                        
-                        <h1 class="text-6xl lg:text-8xl headline-editorial mb-10 leading-[0.95] -ml-1">
-                            Kelola Order, <br>
-                            Pembayaran, dan <br>
-                            <span class="text-artisan-secondary italic">Outlet</span> Lebih Mudah.
+
+                        <h1 class="font-manrope text-5xl font-extrabold tracking-tighter text-artisan-primary sm:text-6xl lg:text-7xl leading-[1.08]">
+                            Otomatiskan <span class="bg-gradient-to-r from-artisan-primary to-artisan-tertiary bg-clip-text text-transparent">operasional outlet</span> Anda dengan presisi yang lebih rapi.
                         </h1>
-                        
-                        <p class="text-xl text-artisan-secondary/80 max-w-lg mb-14 leading-relaxed font-medium">
-                            Web app untuk bisnis shoe care dan laundry yang ingin order lebih tertata, customer bisa tracking sendiri, pembayaran QRIS lebih rapi, dan owner punya laporan yang siap dipakai setiap hari.
+
+                        <p class="mt-8 max-w-xl text-lg leading-relaxed text-artisan-primary/62">
+                            Platform manajemen all-in-one untuk bisnis shoe care modern. Kelola pesanan, staf, cabang, pembayaran, dan laporan usaha dalam satu alur yang lebih jelas.
                         </p>
 
-                        <div class="flex flex-wrap gap-6 mb-24">
-                            <a href="{{ route('register') }}" class="btn-artisan-primary text-base py-5 px-10">
-                                Mulai Gratis
-                            </a>
-                            <a href="{{ route('pricing') }}" class="btn-artisan-secondary text-base py-5 px-10">
+                        <div class="mt-12 flex flex-col gap-4 sm:flex-row">
+                            @auth
+                                <a href="{{ url('/dashboard') }}" class="btn-artisan-primary px-8 py-4 text-lg normal-case tracking-normal">Buka Dasbor</a>
+                            @else
+                                <a href="{{ route('register') }}" class="btn-artisan-primary px-8 py-4 text-lg normal-case tracking-normal">Mulai Sekarang</a>
+                            @endauth
+                            <a href="{{ route('pricing') }}" class="btn-artisan-secondary flex items-center justify-center gap-2 px-8 py-4 text-lg normal-case tracking-normal">
                                 Lihat Paket
                             </a>
                         </div>
-
-                        <!-- Artisan Tracking Tool -->
-                        <div id="tracking" class="p-10 card-artisan shadow-artisan relative overflow-hidden">
-                            <div class="absolute top-0 right-0 w-32 h-32 bg-artisan-surface-low rounded-full -translate-y-1/2 translate-x-1/2 opacity-50"></div>
-                            <div class="relative">
-                                <h3 class="text-2xl font-manrope font-extrabold text-artisan-primary mb-6 flex items-center gap-3">
-                                    Lacak Pesanan Customer
-                                    <span class="text-artisan-secondary">/</span>
-                                </h3>
-                                <p class="text-sm text-artisan-secondary/70 font-semibold leading-relaxed mb-5">
-                                    Customer cukup masukkan nomor invoice untuk cek progres order, status pembayaran, dan info outlet tanpa perlu chat admin berulang.
-                                </p>
-                                <form onsubmit="event.preventDefault(); const invoice = document.getElementById('invoice').value; if(invoice) window.location.href = '/track?invoice=' + encodeURIComponent(invoice);" 
-                                    class="flex flex-col sm:flex-row gap-4">
-                                    <div class="flex-1 relative">
-                                        <input 
-                                            type="text" 
-                                            id="invoice"
-                                            placeholder="Masukkan Nomor Invois (INV/...)" 
-                                            class="artisan-input font-bold"
-                                            required
-                                        >
-                                    </div>
-                                    <button type="submit" class="btn-artisan-primary whitespace-nowrap px-10">
-                                        Lacak
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
                     </div>
 
-                    <div class="relative mt-12 lg:mt-0">
-                        <!-- Asymmetrical Layering -->
-                        <div class="absolute -top-12 -left-12 w-32 h-32 bg-artisan-secondary/10 rounded-full blur-3xl animate-pulse"></div>
-                        <div class="absolute -bottom-12 -right-12 w-64 h-64 bg-artisan-primary/5 rounded-full blur-3xl"></div>
-                        
-                        <div class="relative group">
-                            <div class="absolute inset-0 bg-artisan-primary/5 rounded-[40px] translate-x-6 translate-y-6 -z-10 transition-transform group-hover:translate-x-4 group-hover:translate-y-4"></div>
-                            <div class="rounded-[40px] overflow-hidden shadow-artisan relative">
-                                <img src="{{ asset('images/hero_artisan.png') }}" alt="Artisan Management System" class="w-full h-auto scale-105 group-hover:scale-100 transition-transform duration-700">
-                                <div class="absolute inset-0 bg-gradient-to-t from-artisan-primary/40 to-transparent"></div>
-                                <div class="absolute bottom-10 left-10 right-10 flex justify-between items-end">
-                                    <div>
-                                        <p class="text-white/60 text-[10px] font-bold uppercase tracking-widest mb-1">Kualitas Restorasi</p>
-                                        <p class="text-white text-2xl font-manrope font-bold italic tracking-tight">Restorasi Lebih Dari Sekadar Cuci.</p>
-                                    </div>
-                                    <div class="w-12 h-12 glass rounded-full flex items-center justify-center text-white">
-                                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-                                    </div>
+                    <div class="relative lg:col-span-5">
+                        <div class="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-artisan-secondary/15 blur-3xl"></div>
+                        <div class="relative z-10 rounded-[2rem] bg-white p-6 shadow-[0_20px_60px_rgba(0,32,69,0.12)]">
+                            <img src="{{ asset('images/hero_artisan.png') }}" alt="Preview ShoeClean" class="h-[450px] w-full rounded-2xl object-cover">
+                            <div class="absolute -bottom-6 -left-6 flex items-center gap-4 rounded-2xl border border-artisan-outline/20 bg-white p-6 shadow-xl">
+                                <div class="rounded-full bg-artisan-secondary/20 p-3">
+                                    <svg class="h-6 w-6 text-artisan-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-bold text-artisan-primary">Pendapatan Lebih Terpantau</div>
+                                    <div class="text-xs text-artisan-primary/55">Owner melihat pertumbuhan dan performa outlet lebih cepat</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </section>
 
-        <section class="py-28 px-8 bg-white">
-            <div class="max-w-7xl mx-auto">
-                <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-14">
-                    <div class="max-w-2xl">
-                        <p class="text-artisan-secondary text-xs font-black uppercase tracking-[0.3em] mb-5">/ Pilih Outlet</p>
-                        <h2 class="text-4xl lg:text-5xl headline-editorial">Langsung Order ke Cabang yang Sudah Aktif.</h2>
+            <section class="bg-artisan-surface-low py-24">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div class="mx-auto mb-20 max-w-3xl text-center">
+                        <h2 class="font-manrope text-3xl font-extrabold text-artisan-primary md:text-4xl">Kuasai setiap aspek operasional outlet Anda.</h2>
+                        <p class="mt-6 text-lg text-artisan-primary/60">Kami membangun fitur yang menyelesaikan masalah nyata dalam order, pelayanan customer, dan kontrol cabang.</p>
                     </div>
-                    <div class="max-w-xl space-y-4">
-                        <p class="text-base font-semibold leading-relaxed text-artisan-secondary/65">
-                            Pilih outlet terdekat untuk mulai order, lihat QRIS cabang, dan kirim pesanan tanpa perlu chat admin terlebih dahulu.
-                        </p>
-                        <a href="{{ route('public.order.select') }}" class="inline-flex items-center gap-3 text-sm font-black uppercase tracking-[0.22em] text-artisan-primary hover:text-artisan-secondary transition-colors">
-                            Lihat Semua Outlet
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
-                        </a>
+
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                        <div class="md:col-span-2 rounded-[2rem] bg-white p-10">
+                            <div class="max-w-md">
+                                <div class="mb-8 flex h-12 w-12 items-center justify-center rounded-xl bg-artisan-primary">
+                                    <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.243-4.243a8 8 0 1111.313 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="mb-4 text-2xl font-bold text-artisan-primary">Pelacakan Pesanan yang Lebih Jelas</h3>
+                                <p class="text-artisan-primary/60">Customer dapat memantau status pesanan sendiri, sementara outlet tetap punya kontrol penuh atas progres layanan.</p>
+                            </div>
+                            <div class="mt-12 rounded-xl border border-artisan-outline/15 bg-artisan-surface-low p-4">
+                                <div class="mb-4 flex items-center justify-between">
+                                    <span class="text-xs font-black text-artisan-primary">PESANAN #9942</span>
+                                    <span class="rounded-full bg-artisan-secondary/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary">Diproses</span>
+                                </div>
+                                <div class="h-2 w-full overflow-hidden rounded-full bg-artisan-outline/20">
+                                    <div class="h-full w-2/3 bg-artisan-secondary"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col justify-between rounded-[2rem] bg-artisan-primary p-10 text-white">
+                            <div>
+                                <div class="mb-8 flex h-12 w-12 items-center justify-center rounded-xl bg-white/10">
+                                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <h3 class="mb-4 text-2xl font-bold">Optimalisasi Tim</h3>
+                                <p class="text-white/72">Bagi peran admin dan staf outlet, atur tugas, dan jaga operasional tetap terarah tanpa kekacauan chat manual.</p>
+                            </div>
+                            <div class="mt-8 flex -space-x-3">
+                                <div class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-artisan-primary bg-white/10 text-sm font-black">A</div>
+                                <div class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-artisan-primary bg-white/10 text-sm font-black">S</div>
+                                <div class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-artisan-primary bg-white/10 text-sm font-black">T</div>
+                                <div class="flex h-12 w-12 items-center justify-center rounded-full border-2 border-artisan-primary bg-artisan-secondary text-sm font-black text-artisan-primary">+12</div>
+                            </div>
+                        </div>
+
+                        <div class="rounded-[2rem] border border-artisan-outline/15 bg-white p-10">
+                            <div class="mb-8 flex h-12 w-12 items-center justify-center rounded-xl bg-artisan-secondary/20">
+                                <svg class="h-6 w-6 text-artisan-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <h3 class="mb-4 text-2xl font-bold text-artisan-primary">Pembayaran dan Laporan</h3>
+                            <p class="text-artisan-primary/60">QRIS cabang, langganan SaaS, pengeluaran, dan insight bisnis tersedia dalam satu alur yang rapi.</p>
+                        </div>
+
+                        <div class="md:col-span-2 rounded-[2rem] bg-gradient-to-br from-artisan-secondary to-artisan-primary p-10 text-white">
+                            <div class="flex flex-col gap-12 md:flex-row md:items-center">
+                                <div class="flex-1">
+                                    <h3 class="mb-4 text-2xl font-bold">Analitik Real-time</h3>
+                                    <p class="mb-8 text-white/80">Pantau omzet, total order, performa cabang, dan penggunaan layanan dari satu dasbor yang enak dibaca owner.</p>
+                                    <a href="{{ route('pricing') }}" class="inline-flex rounded-full bg-white px-6 py-3 text-sm font-bold text-artisan-primary">Lihat Modul Analitik</a>
+                                </div>
+                                <div class="flex h-32 flex-1 items-end justify-around gap-2">
+                                    <div class="h-[40%] w-full rounded-t-lg bg-white/20"></div>
+                                    <div class="h-[60%] w-full rounded-t-lg bg-white/35"></div>
+                                    <div class="h-[90%] w-full rounded-t-lg bg-white/55"></div>
+                                    <div class="h-[75%] w-full rounded-t-lg bg-white/75"></div>
+                                    <div class="h-[100%] w-full rounded-t-lg bg-white"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </section>
 
-                @if($outlets->isNotEmpty())
-                    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                        @foreach($outlets as $outlet)
-                            <a href="{{ route('public.order', $outlet) }}" class="group rounded-[2rem] border border-artisan-secondary/10 bg-artisan-background p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-artisan-secondary/25 hover:shadow-artisan">
-                                <div class="flex items-start justify-between gap-4">
-                                    <div class="w-14 h-14 rounded-2xl bg-artisan-primary text-white flex items-center justify-center text-xl font-black italic shadow-artisan">
-                                        {{ strtoupper(substr($outlet->name, 0, 1)) }}
+            <section class="bg-white py-24">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div class="mb-16 flex flex-col justify-between gap-8 md:flex-row md:items-end">
+                        <div class="max-w-xl">
+                            <h2 class="font-manrope text-3xl font-extrabold text-artisan-primary md:text-4xl">Dipakai oleh owner yang ingin outletnya lebih tertata.</h2>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                        <div class="rounded-3xl border border-artisan-outline/10 bg-white p-8 shadow-sm">
+                            <div class="mb-6 flex text-artisan-secondary">★★★★★</div>
+                            <p class="mb-8 italic leading-relaxed text-artisan-primary/65">"Sekarang order lebih rapi, customer tidak lagi terus-terusan tanya progres, dan saya bisa lihat performa outlet dengan cepat."</p>
+                            <div class="flex items-center gap-4">
+                                <div class="h-12 w-12 rounded-full bg-artisan-surface-low"></div>
+                                <div>
+                                    <div class="font-bold text-artisan-primary">Owner Shoe Care</div>
+                                    <div class="text-xs text-artisan-primary/45">Jakarta</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rounded-3xl border border-artisan-outline/10 bg-white p-8 shadow-sm">
+                            <div class="mb-6 flex text-artisan-secondary">★★★★★</div>
+                            <p class="mb-8 italic leading-relaxed text-artisan-primary/65">"Bukan cuma software kasir, tapi benar-benar membantu kami mengatur layanan, staf, dan cabang dalam satu tempat."</p>
+                            <div class="flex items-center gap-4">
+                                <div class="h-12 w-12 rounded-full bg-artisan-surface-low"></div>
+                                <div>
+                                    <div class="font-bold text-artisan-primary">Admin Outlet</div>
+                                    <div class="text-xs text-artisan-primary/45">Bandung</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rounded-3xl border border-artisan-outline/10 bg-white p-8 shadow-sm">
+                            <div class="mb-6 flex text-artisan-secondary">★★★★★</div>
+                            <p class="mb-8 italic leading-relaxed text-artisan-primary/65">"Customer sekarang bisa pesan dan lacak sendiri. Tim outlet juga lebih fokus kerja daripada menjawab chat yang berulang."</p>
+                            <div class="flex items-center gap-4">
+                                <div class="h-12 w-12 rounded-full bg-artisan-surface-low"></div>
+                                <div>
+                                    <div class="font-bold text-artisan-primary">Pemilik Cabang</div>
+                                    <div class="text-xs text-artisan-primary/45">Surabaya</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-artisan-surface-low py-24">
+                <div class="mx-auto max-w-7xl px-6 lg:px-8">
+                    <div class="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                        <div class="max-w-2xl">
+                            <p class="section-label">Pilih Outlet</p>
+                            <h2 class="mt-4 font-manrope text-4xl font-extrabold text-artisan-primary">Arahkan customer langsung ke cabang yang siap menerima order.</h2>
+                        </div>
+                        <a href="{{ route('public.order.select') }}" class="btn-artisan-secondary">Lihat Semua Outlet</a>
+                    </div>
+
+                    @if($outlets->isNotEmpty())
+                        <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                            @foreach($outlets as $outlet)
+                                <a href="{{ route('public.order', $outlet) }}" class="rounded-[2rem] border border-artisan-outline/15 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-artisan">
+                                    <div class="flex items-start justify-between gap-4">
+                                        <div class="flex h-14 w-14 items-center justify-center rounded-[1.4rem] bg-artisan-primary text-xl font-manrope font-extrabold italic text-white">
+                                            {{ strtoupper(substr($outlet->name, 0, 1)) }}
+                                        </div>
+                                        <div class="flex flex-wrap justify-end gap-2">
+                                            <span class="rounded-full bg-artisan-secondary/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary">Order</span>
+                                            @if($outlet->qris_image_path)
+                                                <span class="rounded-full bg-artisan-surface-low px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-artisan-primary/60">QRIS</span>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <div class="flex flex-wrap justify-end gap-2">
-                                        <span class="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">Siap Order</span>
-                                        @if($outlet->qris_image_path)
-                                            <span class="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">QRIS Tersedia</span>
+                                    <h3 class="mt-5 text-2xl font-manrope font-extrabold text-artisan-primary">{{ $outlet->name }}</h3>
+                                    <p class="mt-3 text-sm font-semibold leading-7 text-artisan-primary/60">{{ $outlet->address }}</p>
+                                    <div class="mt-5 flex flex-wrap gap-2">
+                                        <span class="rounded-full bg-artisan-surface-low px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-artisan-primary/60">{{ $outlet->services_count }} layanan</span>
+                                        @if($outlet->pickup_fee > 0)
+                                            <span class="rounded-full bg-artisan-surface-low px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-artisan-primary/60">Pickup</span>
                                         @endif
                                     </div>
-                                </div>
-                                <h3 class="mt-6 text-2xl font-manrope font-extrabold text-artisan-primary group-hover:text-artisan-secondary transition-colors">
-                                    {{ $outlet->name }}
-                                </h3>
-                                <p class="mt-3 text-sm font-semibold leading-relaxed text-artisan-secondary/70">
-                                    {{ $outlet->address }}
-                                </p>
-                                <div class="mt-5 flex flex-wrap gap-2">
-                                    <span class="rounded-full bg-artisan-surface-low px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-artisan-secondary/75">
-                                        {{ $outlet->services_count }} Layanan Aktif
-                                    </span>
-                                    @if($outlet->pickup_fee > 0)
-                                        <span class="rounded-full bg-artisan-surface-low px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-artisan-secondary/75">
-                                            Pickup Tersedia
-                                        </span>
-                                    @endif
-                                </div>
-                                <div class="mt-6 flex items-center justify-between gap-4">
-                                    <span class="text-[11px] font-black uppercase tracking-[0.22em] text-artisan-secondary/70">{{ $outlet->phone }}</span>
-                                    <span class="text-sm font-black text-artisan-primary group-hover:text-artisan-secondary transition-colors">Pesan Sekarang</span>
-                                </div>
-                            </a>
-                        @endforeach
-                    </div>
-                @else
-                    <div class="rounded-[2.5rem] border border-dashed border-artisan-secondary/20 bg-artisan-surface-low px-8 py-14 text-center">
-                        <h3 class="text-2xl font-manrope font-extrabold text-artisan-primary">Outlet publik belum tersedia.</h3>
-                        <p class="mt-4 text-sm font-semibold leading-relaxed text-artisan-secondary/65">
-                            Outlet yang aktif akan tampil di sini agar customer bisa langsung masuk ke halaman order per cabang.
-                        </p>
-                    </div>
-                @endif
-            </div>
-        </section>
-
-        <!-- Features Section (The Fluid Grid) -->
-        <section id="features" class="py-48 bg-artisan-surface-low relative overflow-hidden">
-             <div class="bg-noise absolute inset-0 opacity-[0.03] pointer-events-none"></div>
-            <div class="max-w-7xl mx-auto px-8 relative">
-                <div class="lg:flex items-end justify-between mb-24 gap-12">
-                    <div class="max-w-2xl">
-                        <p class="text-artisan-secondary text-xs font-black uppercase tracking-[0.3em] mb-6">/ Fitur Utama</p>
-                        <h2 class="text-5xl lg:text-6xl headline-editorial">Sistem Digital <br> untuk Outlet yang Ingin Tumbuh.</h2>
-                    </div>
-                    <p class="text-artisan-secondary/60 text-lg font-medium max-w-sm lg:mb-4">Dari order masuk sampai laporan, semua dibuat lebih jelas untuk tim outlet dan lebih nyaman untuk customer.</p>
-                </div>
-
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-                    <!-- Feature: Multi-Outlet -->
-                    <div class="group py-12 px-2 transition-all">
-                        <div class="w-16 h-16 bg-artisan-primary/10 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-artisan-primary group-hover:text-white transition-all duration-500">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                    <div class="mt-6 flex items-center justify-between gap-4">
+                                        <span class="text-[11px] font-black uppercase tracking-[0.2em] text-artisan-primary/35">{{ $outlet->phone }}</span>
+                                        <span class="text-sm font-bold text-artisan-primary">Pesan Sekarang</span>
+                                    </div>
+                                </a>
+                            @endforeach
                         </div>
-                        <h3 class="text-2xl font-manrope font-extrabold text-artisan-primary mb-6">Manajemen Multi-Cabang</h3>
-                        <p class="text-artisan-secondary/70 leading-relaxed font-medium mb-8">Kelola satu atau banyak cabang dengan alur yang konsisten, termasuk QRIS per outlet dan kontrol owner lintas outlet.</p>
-                        <div class="h-0.5 bg-artisan-secondary/10 w-0 group-hover:w-full transition-all duration-700"></div>
-                    </div>
-
-                    <!-- Feature: POS -->
-                    <div class="group py-12 px-2 transition-all">
-                        <div class="w-16 h-16 bg-artisan-primary/10 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-artisan-primary group-hover:text-white transition-all duration-500 text-artisan-primary">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                    @else
+                        <div class="rounded-[2rem] border border-dashed border-artisan-outline/25 bg-white p-10 text-center">
+                            <h3 class="text-2xl font-manrope font-extrabold text-artisan-primary">Outlet publik belum tersedia.</h3>
+                            <p class="mt-4 text-sm font-semibold leading-7 text-artisan-primary/60">Saat cabang sudah aktif menerima order online, daftar outlet akan muncul di sini.</p>
                         </div>
-                        <h3 class="text-2xl font-manrope font-extrabold text-artisan-primary mb-6">Order & Tracking</h3>
-                        <p class="text-artisan-secondary/70 leading-relaxed font-medium mb-8">Customer bisa order lebih rapi, tim outlet lebih mudah memproses, dan status pesanan bisa dicek kapan saja lewat invoice.</p>
-                        <div class="h-0.5 bg-artisan-secondary/10 w-0 group-hover:w-full transition-all duration-700"></div>
-                    </div>
+                    @endif
+                </div>
+            </section>
 
-                    <!-- Feature: Finances -->
-                    <div class="group py-12 px-2 transition-all">
-                        <div class="w-16 h-16 bg-artisan-primary/10 rounded-2xl flex items-center justify-center mb-10 group-hover:bg-artisan-primary group-hover:text-white transition-all duration-500">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-                        </div>
-                        <h3 class="text-2xl font-manrope font-extrabold text-artisan-primary mb-6">Pembayaran & Laporan</h3>
-                        <p class="text-artisan-secondary/70 leading-relaxed font-medium mb-8">QRIS outlet, verifikasi bukti bayar, export laporan, dan insight bisnis untuk membantu owner mengambil keputusan lebih cepat.</p>
-                        <div class="h-0.5 bg-artisan-secondary/10 w-0 group-hover:w-full transition-all duration-700"></div>
+            <section class="bg-artisan-primary py-24 text-white">
+                <div class="mx-auto max-w-5xl px-6 text-center lg:px-8">
+                    <p class="mb-8 text-[10px] font-black uppercase tracking-[0.32em] text-artisan-secondary">Mulai Sekarang</p>
+                    <h2 class="font-manrope text-5xl font-extrabold leading-[1] sm:text-6xl">Rapikan order, kurangi chat manual, dan kontrol outlet dengan lebih tenang.</h2>
+                    <div class="mt-12 flex flex-col justify-center gap-4 sm:flex-row">
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="rounded-full bg-white px-8 py-4 text-lg font-bold text-artisan-primary shadow-lg">Buka Dasbor</a>
+                        @else
+                            <a href="{{ route('register') }}" class="rounded-full bg-white px-8 py-4 text-lg font-bold text-artisan-primary shadow-lg">Coba Gratis Sekarang</a>
+                        @endauth
+                        <a href="{{ route('pricing') }}" class="rounded-full border border-white/20 px-8 py-4 text-lg font-bold text-white">Bandingkan Paket</a>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Final CTA -->
-        <section class="py-48 px-8 bg-artisan-primary text-white relative overflow-hidden">
-            <div class="absolute -top-64 -right-64 w-[600px] h-[600px] bg-artisan-secondary/20 rounded-full blur-[120px]"></div>
-            <div class="max-w-4xl mx-auto text-center relative">
-                <p class="text-artisan-secondary font-black uppercase tracking-[0.4em] mb-10">/ Mulai Sekarang</p>
-                <h2 class="text-5xl lg:text-7xl headline-editorial text-white mb-14 leading-[0.9]">Buat Operasional Outlet Anda Lebih Cepat, Lebih Rapi, dan Lebih Mudah Dikontrol.</h2>
-                <div class="flex flex-wrap justify-center gap-8">
-                    <a href="{{ route('register') }}" class="btn-artisan-primary bg-white text-artisan-primary hover:bg-artisan-secondary hover:text-white text-lg py-5 px-12">
-                        Coba Gratis Sekarang
-                    </a>
-                    <a href="{{ route('pricing') }}" class="btn-artisan-secondary border-white/20 text-white hover:bg-white hover:text-artisan-primary text-lg py-5 px-12">
-                        Bandingkan Paket
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="bg-artisan-background py-24 px-8 border-t border-artisan-secondary/5">
-            <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-16">
-                <div class="col-span-2">
-                    <div class="flex items-center gap-3 mb-10">
-                        <div class="w-8 h-8 bg-artisan-primary rounded-lg flex items-center justify-center text-white">
-                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-                        </div>
-                        <span class="text-xl font-manrope font-extrabold text-artisan-primary uppercase tracking-tighter">ShoeClean<span class="text-artisan-secondary italic">.</span></span>
-                    </div>
-                    <p class="text-artisan-secondary/60 font-medium max-w-sm">Web app operasional untuk bisnis shoe care dan laundry yang ingin order lebih tertata, customer lebih tenang, dan owner lebih mudah membaca bisnis.</p>
-                </div>
-                
-                <div>
-                    <h4 class="text-xs font-black uppercase tracking-[0.3em] text-artisan-primary mb-8">Sosial</h4>
-                    <div class="flex flex-col gap-6 text-sm font-bold text-artisan-secondary/60">
-                         <a href="#" class="hover:text-artisan-primary transition-colors">Instagram</a>
-                         <a href="#" class="hover:text-artisan-primary transition-colors">Twitter</a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-xs font-black uppercase tracking-[0.3em] text-artisan-primary mb-8">Tautan</h4>
-                    <div class="flex flex-col gap-6 text-sm font-bold text-artisan-secondary/60">
-                         <a href="#features" class="hover:text-artisan-primary transition-colors">Fitur</a>
-                         <a href="{{ route('pricing') }}" class="hover:text-artisan-primary transition-colors">Harga</a>
-                         <a href="{{ route('login') }}" class="hover:text-artisan-primary transition-colors">Masuk</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="max-w-7xl mx-auto mt-24 pt-12 border-t border-artisan-secondary/5 flex flex-col md:flex-row justify-between items-center gap-8">
-                <p class="text-[10px] font-black uppercase tracking-[0.5em] text-artisan-secondary/40">© {{ date('Y') }} Sistem Artisan ShoeClean. Dibangun untuk Preservasi.</p>
-                <div class="flex gap-10 text-[10px] font-black uppercase tracking-[0.5em] text-artisan-secondary/40">
-                    <a href="#" class="hover:text-artisan-primary">Privasi</a>
-                    <a href="#" class="hover:text-artisan-primary">Ketentuan Web</a>
-                </div>
-            </div>
-        </footer>
+            </section>
+        </main>
     </body>
 </html>

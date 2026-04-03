@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\PublicStorefrontController;
 use App\Http\Controllers\Api\PublicTrackingController;
 use App\Http\Controllers\Api\ServiceManagementController;
 use App\Http\Controllers\Api\SubscriptionManagementController;
+use App\Http\Controllers\Api\SuperAdminManagementController;
 use App\Http\Controllers\Api\SurveyManagementController;
 use App\Http\Controllers\Api\UserManagementController;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -47,6 +48,24 @@ Route::middleware('web')->group(function () {
             Route::get('/dashboard/summary', [DashboardSummaryController::class, 'show']);
             Route::get('/subscription/summary', [SubscriptionManagementController::class, 'show']);
             Route::post('/subscription/checkout/{plan}', [SubscriptionManagementController::class, 'checkout']);
+
+            Route::prefix('superadmin')->middleware('role:superadmin')->group(function () {
+                Route::get('/dashboard', [SuperAdminManagementController::class, 'dashboard']);
+                Route::get('/orders', [SuperAdminManagementController::class, 'orders']);
+                Route::get('/subscriptions', [SuperAdminManagementController::class, 'subscriptions']);
+                Route::get('/pricing', [SuperAdminManagementController::class, 'pricingIndex']);
+                Route::post('/pricing', [SuperAdminManagementController::class, 'pricingStore']);
+                Route::put('/pricing/{plan}', [SuperAdminManagementController::class, 'pricingUpdate']);
+                Route::delete('/pricing/{plan}', [SuperAdminManagementController::class, 'pricingDestroy']);
+                Route::get('/payments', [SuperAdminManagementController::class, 'payments']);
+                Route::get('/feedbacks', [SuperAdminManagementController::class, 'feedbacks']);
+                Route::get('/surveys', [SuperAdminManagementController::class, 'surveys']);
+                Route::post('/surveys', [SuperAdminManagementController::class, 'surveyStore']);
+                Route::get('/surveys/{survey:id}', [SuperAdminManagementController::class, 'surveyShow']);
+                Route::patch('/surveys/{survey:id}/toggle', [SuperAdminManagementController::class, 'surveyToggle']);
+                Route::delete('/surveys/{survey:id}', [SuperAdminManagementController::class, 'surveyDestroy']);
+            });
+
             Route::middleware('role:owner,admin')->group(function () {
                 Route::get('/outlets', [OutletManagementController::class, 'index']);
                 Route::post('/outlets', [OutletManagementController::class, 'store']);

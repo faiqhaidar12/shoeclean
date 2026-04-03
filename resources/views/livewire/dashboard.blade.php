@@ -14,13 +14,13 @@
                     <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-xl mb-6">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
                     </div>
-                    <h2 class="font-manrope font-extrabold text-2xl text-artisan-primary mb-2">Ada Survey Untuk Anda! 📋</h2>
-                    <p class="text-artisan-primary/50 text-sm leading-relaxed mb-2">{{ $pendingSurvey->description ?: 'Bantu kami meningkatkan platform dengan mengisi survey singkat ini.' }}</p>
+                    <h2 class="font-manrope font-extrabold text-2xl text-artisan-primary mb-2">Ada survei untuk Anda.</h2>
+                    <p class="text-artisan-primary/50 text-sm leading-relaxed mb-2">{{ $pendingSurvey->description ?: 'Bantu kami meningkatkan platform dengan mengisi survei singkat ini.' }}</p>
                     <p class="font-manrope font-bold text-indigo-600 text-lg">"{{ $pendingSurvey->title }}"</p>
                 </div>
                 <div class="mt-8 space-y-3">
                     <a href="{{ route('survey.fill', $pendingSurvey) }}" class="block w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all active:scale-[0.98] text-sm text-center">
-                        Isi Survey Sekarang →
+                        Isi Survei Sekarang
                     </a>
                     <button wire:click="dismissSurveyModal" @click="open = false" class="block w-full py-4 bg-gray-100 text-artisan-primary/60 font-bold rounded-2xl hover:bg-gray-200 transition-all active:scale-[0.98] text-sm">
                         Nanti saja
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <a href="{{ route('subscription') }}" class="px-6 py-3 bg-white text-red-600 font-bold rounded-2xl hover:bg-red-50 transition-all active:scale-95 whitespace-nowrap shadow-lg text-sm">
-                    Upgrade Sekarang →
+                    Upgrade Sekarang
                 </a>
             </div>
         @elseif($currentPlan === 'free' && $orderLimitInfo['remaining'] !== null && $orderLimitInfo['remaining'] <= 20)
@@ -82,10 +82,10 @@
                         <span class="text-sm font-manrope font-bold {{ $currentPlan === 'pro' ? 'text-indigo-700' : 'text-purple-700' }}">
                             Paket {{ ucfirst($currentPlan) }} Aktif
                         </span>
-                        <span class="text-xs text-artisan-primary/40 ml-2">Unlimited Order ∞</span>
+                        <span class="text-xs text-artisan-primary/40 ml-2">Pesanan tanpa batas</span>
                     </div>
                 </div>
-                <a href="{{ route('subscription') }}" class="text-xs font-bold {{ $currentPlan === 'pro' ? 'text-indigo-500' : 'text-purple-500' }} hover:underline">Kelola →</a>
+                <a href="{{ route('subscription') }}" class="text-xs font-bold {{ $currentPlan === 'pro' ? 'text-indigo-500' : 'text-purple-500' }} hover:underline">Kelola Paket</a>
             </div>
         @endif
     @endif
@@ -160,7 +160,7 @@
                         </svg>
                     </div>
                     <div>
-                        <p class="text-[10px] font-black uppercase tracking-[0.24em] text-purple-600">Business Feature</p>
+                        <p class="text-[10px] font-black uppercase tracking-[0.24em] text-purple-600">Fitur Bisnis</p>
                         <h3 class="mt-2 font-manrope text-xl font-extrabold text-artisan-primary">Laporan Gabungan Semua Cabang Tersedia di Business</h3>
                         <p class="mt-2 max-w-3xl text-sm font-semibold leading-relaxed text-artisan-primary/65">
                             Paket Pro Anda saat ini fokus ke 1 outlet aktif. Karena akun ini punya {{ $ownedOutletCount }} cabang, dashboard dan export sedang dibatasi ke outlet yang dipilih agar tetap konsisten. Upgrade ke Business untuk melihat ringkasan gabungan semua cabang sekaligus.
