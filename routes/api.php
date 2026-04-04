@@ -21,6 +21,8 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('public')->group(function () {
+    // api cek
+    Route::get('/cek',[PublicContentController::class,'cek']);
     Route::get('/home', [PublicContentController::class, 'home']);
     Route::get('/pricing', [PublicContentController::class, 'pricing']);
     Route::get('/track', [PublicTrackingController::class, 'show']);

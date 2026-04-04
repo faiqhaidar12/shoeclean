@@ -15,6 +15,9 @@ class PublicContentController extends Controller
     {
     }
 
+    public function cek(){
+        return 'cek';
+    }
     public function home(): JsonResponse
     {
         $services = Service::query()
