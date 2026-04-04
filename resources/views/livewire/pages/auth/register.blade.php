@@ -42,8 +42,8 @@ new #[Layout('layouts.guest')] class extends Component
             ]);
 
             // Auto-assign Owner role
-            $ownerRole = Role::where('slug', 'owner')->first();
-            $user->roles()->attach($ownerRole);
+            $ownerRole = Role::where('slug', 'owner')->firstOrFail();
+            $user->roles()->attach($ownerRole->id);
 
             // Auto-create first outlet with business name
             $baseSlug = \Illuminate\Support\Str::slug($validated['business_name']);
@@ -54,7 +54,7 @@ new #[Layout('layouts.guest')] class extends Component
                 $counter++;
             }
 
-            Outlet::create([
+            $outlet = Outlet::create([
                 'owner_id' => $user->id,
                 'name' => $validated['business_name'],
                 'slug' => $slug,
@@ -62,6 +62,10 @@ new #[Layout('layouts.guest')] class extends Component
                 'phone' => '-',
                 'status' => 'active',
             ]);
+
+            $user->forceFill([
+                'outlet_id' => $outlet->id,
+            ])->save();
 
             event(new Registered($user));
             Auth::login($user);

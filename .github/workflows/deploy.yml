@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+    branches:
+      - master
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script: |
+            set -euo pipefail
+
+            cd /var/www/shoeclean
+            git pull --ff-only origin master
+
+            export COMPOSER_ALLOW_SUPERUSER=1
+            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+            npm ci
+            npm run build
+
+            php artisan migrate --force
+            php artisan db:seed --class=RoleSeeder --force
+            php artisan storage:link || true
+            php artisan optimize:clear
+
+            chown -R www-data:www-data storage bootstrap/cache
+            find storage bootstrap/cache -type d -exec chmod 775 {} \;
+            find storage bootstrap/cache -type f -exec chmod 664 {} \;
+
+            systemctl reload php8.3-fpm
+            systemctl reload nginx

@@ -47,7 +47,7 @@ class AuthSessionController
                 $counter++;
             }
 
-            Outlet::create([
+            $outlet = Outlet::create([
                 'owner_id' => $user->id,
                 'name' => $validated['business_name'],
                 'slug' => $slug,
@@ -55,6 +55,10 @@ class AuthSessionController
                 'phone' => '-',
                 'status' => 'active',
             ]);
+
+            $user->forceFill([
+                'outlet_id' => $outlet->id,
+            ])->save();
 
             event(new Registered($user));
 
